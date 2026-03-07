@@ -1,16 +1,16 @@
 name: Build and Deploy
 run-name:  ${{ github.ref_name }} - "${{ github.event.head_commit.message }}"
 on:
-#  pull_request:
-#    paths:
-#      - 'generator/**'
-#      - '.github/workflows/build**'
-  push:
-#    branches: # TODO: reenable
-#      - main
+pull_request:
     paths:
       - 'generator/**'
       - '.github/workflows/build**'
+#  push:
+#    branches: # TODO: reenable
+#      - main
+#    paths:
+#      - 'generator/**'
+#      - '.github/workflows/build**'
 
 permissions:
   contents: read # TODO: or write??
