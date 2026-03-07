@@ -373,18 +373,19 @@ func alphabetizedLinks[T any](inpMap map[string]T, dir string) string {
 }
 
 func main() {
-	//createLanguagesPages()
 	if err := os.MkdirAll("./quartz/content", 777); err != nil {
 		panic("failed to create content dir: " + err.Error())
 	}
+	// Create data structures representing the content of the pages to write
 	// initSchools() // Done outside of init
 	// initClientsFirst() // Done in vars
 	initProjectsAfterClients()
-	initProjectsFinal() // TODO: ok here?
+	initProjectsFinal()
+	initClientsAfterProjectsComplete() // Sets client on projects as well // TODO: may need to go after positions (worked that way before)
 	initPositionsAfterProjects()
-	initClientsAfterProjectsComplete() // Sets client on projects as well
-	initCompaniesAfterPositions()      // Must be done after positions and project setup, but before projects pages. What about clients?
+	initCompaniesAfterPositions() // Must be done after positions and project setup, but before projects pages. What about clients?
 
+	// Start creating actual pages
 	createLanguagesPages()
 	createSchoolsPages()
 	createPositionsPages()
