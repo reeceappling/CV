@@ -48,9 +48,11 @@ jobs:
       - name: Create Generator
         run: go build -o generate ./generator && chmod 777 generate
       - name: Generate
-        run: sudo ./generate && sudo chown -R $USER:$USER .
-#      - name: Set folder permissions
-#        run: chmod -R 777 ./quartz/content
+        run: sudo ./generate
+#      - name: Fix permissions
+#        run: sudo chown -R $USER:$USER .
+      - name: Set folder permissions
+        run: chmod -R 777 ./quartz/content
       - uses: actions/upload-artifact@v4
         with:
           name: markdownFiles
