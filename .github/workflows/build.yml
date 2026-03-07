@@ -27,8 +27,8 @@ concurrency:
 
 jobs:
   generate-markdown:
-    env:
-      GH_TOKEN: ${{ secrets.CICD_TOKEN }}
+#    env:
+#      GH_TOKEN: ${{ secrets.CICD_TOKEN }}
     runs-on: ubuntu-22.04
     permissions:
       contents: write
@@ -48,17 +48,12 @@ jobs:
       - name: Create Generator
         run: go build -o generate ./generator && chmod 777 generate
       - name: Generate
-        run: sudo ./generate
-      - name: Fix permissions
-        run: sudo chown -R $USER:$USER .
-      - name: Set folder permissions
-        run: chmod -R 777 ./quartz/content
-      - name: LS
-        run: ls ./quartz/content
+        run: sudo ./generate && sudo chown -R $USER:$USER .
+#      - name: Set folder permissions
+#        run: chmod -R 777 ./quartz/content
       - uses: actions/upload-artifact@v4
         with:
           name: markdownFiles
-          github-token: ${{ secrets.CICD_TOKEN }}
           path: quartz/content
           if-no-files-found: error
           retention-days: 1
