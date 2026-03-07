@@ -374,6 +374,9 @@ func alphabetizedLinks[T any](inpMap map[string]T, dir string) string {
 
 func main() {
 	//createLanguagesPages()
+	if err := os.MkdirAll("./quartz/content", 777); err != nil {
+		panic("failed to create content dir: " + err.Error())
+	}
 	// initSchools() // Done outside of init
 	// initClientsFirst() // Done in vars
 	initProjectsAfterClients()

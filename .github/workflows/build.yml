@@ -35,11 +35,6 @@ jobs:
           token: ${{ github.token }}
           cache: true
           cache-dependency-path: 'go.sum'
-      # TODO: install go dependencies?
-      - name: PWD
-        run: pwd
-      - name: LS
-        run: ls
       - name: Generate
         run: go run ./generator
       - uses: actions/upload-artifact@v4
