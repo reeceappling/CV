@@ -12,6 +12,9 @@ on:
       - 'generator/**'
       - '.github/workflows/build**'
 
+env:
+  GLOBAL_PAT: ${{ secrets.CICD_TOKEN }} # Set PAT as a global environment variable
+
 permissions:
   contents: write
 #  pages: write
@@ -23,6 +26,8 @@ concurrency:
 
 jobs:
   generate-markdown:
+    env:
+      GH_TOKEN: ${{ secrets.CICD_TOKEN }}
     runs-on: ubuntu-22.04
     permissions:
       contents: write
