@@ -1,7 +1,6 @@
 package main
 
 import (
-	"appli.ng/cv/generator/utils/this"
 	"errors"
 	"fmt"
 	"maps"
