@@ -353,7 +353,7 @@ func (tr *tracked) String() string {
 }
 
 // Create project, add project to client, add project to position, add position to company (client will be automatically linked this way)
-const root = "quartz/content/" // TODO: ./???
+const root = "./quartz/content/"
 
 func alphabetizedLinksCompressed[T any](inpMap map[string]T, dir string) string {
 	allKeys := slices.Collect(maps.Keys(inpMap))
@@ -427,7 +427,7 @@ func createLanguagesPages() {
 }
 
 func writeFileFromScratch(filepathFromRoot, toWrite string) error {
-	err := os.WriteFile(root+filepathFromRoot, []byte(toWrite), 777)
+	err := os.WriteFile(root+filepathFromRoot, []byte(toWrite), 777) // TODO; FAILING HERE
 	if err != nil {
 		return errors.Join(errors.New("failed to create "+filepathFromRoot), err)
 	}
