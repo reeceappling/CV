@@ -1,6 +1,7 @@
 package main
 
 import (
+	"appli.ng/cv/generator/utils/this"
 	"errors"
 	"fmt"
 	"maps"
@@ -373,7 +374,7 @@ func alphabetizedLinks[T any](inpMap map[string]T, dir string) string {
 }
 
 func main() {
-	if err := os.MkdirAll("./quartz/content", 777); err != nil {
+	if err := os.MkdirAll("quartz/content", 777); err != nil {
 		panic("failed to create content dir: " + err.Error())
 	}
 	// Create data structures representing the content of the pages to write
