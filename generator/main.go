@@ -376,9 +376,12 @@ func main() {
 	if err := os.MkdirAll("./quartz/content", 777); err != nil {
 		panic("failed to create content dir: " + err.Error())
 	}
-	if err := os.MkdirAll("./quartz/content/school", 777); err != nil {
-		panic("failed to create school dir: " + err.Error())
+	for _, dir := range []string{"school", "client", "project", "company", "position", "language", "platform", "db", "cache", "provider", "service", "technology", "miscSkill"} {
+		if err := os.MkdirAll("./quartz/content/"+dir, 777); err != nil {
+			panic("failed to create " + dir + " dir: " + err.Error())
+		}
 	}
+
 	// Create data structures representing the content of the pages to write
 	// initSchools() // Done outside of init
 	// initClientsFirst() // Done in vars
