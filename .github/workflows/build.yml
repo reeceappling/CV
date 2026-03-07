@@ -22,7 +22,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  generate:
+  generate-markdown:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
@@ -55,10 +55,9 @@ jobs:
           # enabled this to avoid uploading sensitive information.
           # Optional. Default is 'false'
           include-hidden-files: false
-      # TODO: start building quartz
 
-  build:
-    needs: [ generate ]
+  build-quartz:
+    needs: [ generate-markdown ]
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
@@ -94,11 +93,11 @@ jobs:
 #          path: public
 
   deploy:
-    needs: [build, generate]
+    needs: [build-quartz, generate-markdown]
     if: |
       always() && !cancelled()
-      && (needs.generate.result == 'success')
-      && needs.build.result == 'success'
+      && (needs.generate-markdown.result == 'success')
+      && needs.build-quartz.result == 'success'
     environment:
       # TODO: ANY ENV VARS TO PUT IT ON S3 or GHP?
 #      name: github-pages

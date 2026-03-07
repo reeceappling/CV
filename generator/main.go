@@ -148,6 +148,13 @@ func createMainPage() { // TODO: TAGS EVERYWHERE????
 	}
 	b.WriteString(strings.Join(tempLogging, ", ") + "\n")
 
+	b.WriteString("#### Miscellaneous Skills\n")
+	alphabetizedSkills := slices.Collect(maps.Keys(miscSkills))
+	sort.Strings(alphabetizedSkills)
+	for _, name := range alphabetizedSkills {
+		b.WriteString(fmt.Sprintf("- %s\n", miscSkills[name].Link()))
+	}
+
 	b.WriteString("# Blog\n")
 	b.WriteString("[Blog](blog/blog.md)\n")
 	b.WriteString("# Notes\n")
@@ -402,7 +409,7 @@ func createLanguagesPages() {
 	}
 	b.WriteString("# All\n")
 	b.WriteString(alphabetizedLinks(langs, "language"))
-	err := os.WriteFile(root+"languages.md", []byte(b.String()), 777)
+	err := os.WriteFile(root+"Languages.md", []byte(b.String()), 777)
 	if err != nil {
 		panic(err)
 	}
