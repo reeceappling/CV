@@ -78,7 +78,7 @@ jobs:
         with:
           fetch-depth: 0 # Fetch all history for git info # TODO: likely no
       - name: Fix permissions
-        run: sudo chown -R $USER:$USER . && chmod -R 777 ./quartz/content
+        run: sudo chown -R $USER:$USER . && chmod -R 777 ./quartz
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -87,7 +87,7 @@ jobs:
           name: markdownFiles
           path: /quartz/content # TODO: ensure ok
       - name: Install Dependencies
-        run: npm ci
+        run: npm ci # TODO: i?
       - name: Build Quartz
         run: npx quartz build
         working-directory: ./quartz
