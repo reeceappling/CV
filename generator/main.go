@@ -408,7 +408,7 @@ func createLanguagesPages() {
 	}
 	b.WriteString("# All\n")
 	b.WriteString(alphabetizedLinks(langs, "language"))
-	err := writeFileFromScratch(root+"Languages.md", b.String()) // TODO: use this everywhere!
+	err := writeFileFromScratch("Languages.md", b.String()) // TODO: use this everywhere!
 	if err != nil {
 		panic(err.Error())
 	}
