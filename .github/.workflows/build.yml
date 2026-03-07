@@ -5,7 +5,7 @@ pull_request:
     paths:
       - 'generator/**'
       - '.github/workflows/build**'
-#  push:
+push:
 #    branches: # TODO: reenable
 #      - main
 #    paths:
