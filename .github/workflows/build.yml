@@ -35,7 +35,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Fetch all history for git info # TODO: ok???
+          fetch-depth: 0 # Fetch all history for git info # TODO: ok??? probably dont
       - name: Fix workspace permissions
         run: sudo chown -R $USER:$USER ${{ github.workspace }}
       - uses: actions/setup-go@v6
@@ -47,12 +47,10 @@ jobs:
           cache-dependency-path: 'go.sum'
       - name: Create Generator
         run: go build -o generate ./generator && chmod 777 generate
-      - name: Generate
+      - name: Generate and fix permissions
         run: sudo ./generate
       - name: Fix permissions
-        run: sudo chown -R $USER:$USER .
-      - name: Set folder permissions
-        run: chmod -R 777 ./quartz/content
+        run: sudo chown -R $USER:$USER . && chmod -R 777 ./quartz/content
       - uses: actions/upload-artifact@v4
         with:
           name: markdownFiles
@@ -78,7 +76,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Fetch all history for git info
+          fetch-depth: 0 # Fetch all history for git info # TODO: likely no
+      - name: Fix permissions
+        run: sudo chown -R $USER:$USER . && chmod -R 777 ./quartz/content
       - uses: actions/setup-node@v4
         with:
           node-version: 22
