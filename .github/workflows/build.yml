@@ -1,16 +1,16 @@
 name: Build and Deploy
 run-name:  ${{ github.ref_name }} - "${{ github.event.head_commit.message }}"
 on:
-pull_request:
+  pull_request:
     paths:
       - 'generator/**'
       - '.github/workflows/build**'
-push:
-#    branches: # TODO: reenable
-#      - main
-#    paths:
-#      - 'generator/**'
-#      - '.github/workflows/build**'
+  push:
+    branches:
+      - main
+    paths:
+      - 'generator/**'
+      - '.github/workflows/build**'
 
 permissions:
   contents: read # TODO: or write??
@@ -94,7 +94,11 @@ jobs:
 #          path: public
 
   deploy:
-    needs: build
+    needs: [build, generate]
+    if: |
+      always() && !cancelled()
+      && (needs.generate.result == 'success')
+      && needs.build.result == 'success'
     environment:
       # TODO: ANY ENV VARS TO PUT IT ON S3 or GHP?
 #      name: github-pages
