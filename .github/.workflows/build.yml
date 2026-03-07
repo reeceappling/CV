@@ -6,8 +6,8 @@ on:
 #      - 'generator/**'
 #      - '.github/workflows/build**'
   push:
-    branches:
-      - main
+#    branches: # TODO: reenable
+#      - main
     paths:
       - 'generator/**'
       - '.github/workflows/build**'
