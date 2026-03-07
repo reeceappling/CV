@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"maps"
 	"os"
@@ -377,9 +378,7 @@ func main() {
 	// initClientsFirst() // Done in vars
 	initProjectsAfterClients()
 	initProjectsFinal() // TODO: ok here?
-
 	initPositionsAfterProjects()
-
 	initClientsAfterProjectsComplete() // Sets client on projects as well
 	initCompaniesAfterPositions()      // Must be done after positions and project setup, but before projects pages. What about clients?
 
@@ -409,9 +408,9 @@ func createLanguagesPages() {
 	}
 	b.WriteString("# All\n")
 	b.WriteString(alphabetizedLinks(langs, "language"))
-	err := os.WriteFile(root+"Languages.md", []byte(b.String()), 777)
+	err := writeFileFromScratch(root+"Languages.md", b.String()) // TODO: use this everywhere!
 	if err != nil {
-		panic(err)
+		panic(err.Error())
 	}
 	if len(langs) > 0 {
 		if err = os.MkdirAll(root+"language", 777); err != nil {
@@ -421,6 +420,14 @@ func createLanguagesPages() {
 	for name, lang := range langs {
 		writePage("language", withoutSpaces(name)+".md", lang.Bytes())
 	}
+}
+
+func writeFileFromScratch(filepathFromRoot, toWrite string) error {
+	err := os.WriteFile(root+filepathFromRoot, []byte(toWrite), 777)
+	if err != nil {
+		return errors.Join(errors.New("failed to create "+filepathFromRoot), err)
+	}
+	return nil
 }
 
 func createProjectsPages() {
