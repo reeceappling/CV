@@ -353,7 +353,7 @@ func (tr *tracked) String() string {
 }
 
 // Create project, add project to client, add project to position, add position to company (client will be automatically linked this way)
-const root = "./quartz/content/"
+const root = "quartz/content/" // TODO: ./???
 
 func alphabetizedLinksCompressed[T any](inpMap map[string]T, dir string) string {
 	allKeys := slices.Collect(maps.Keys(inpMap))
