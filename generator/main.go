@@ -1,0 +1,877 @@
+package main
+
+import (
+	"fmt"
+	"maps"
+	"os"
+	"slices"
+	"sort"
+	"strconv"
+	"strings"
+)
+
+/* TODO:
+---
+title: Example Title
+draft: false
+tags:
+  - example-tag
+---
+https://github.com/jackyzha0/quartz/blob/v4/docs/authoring%20content.md
+*/
+
+const fixmeLink = "[FIX ME](fixme.md)"
+
+func createMainPage() { // TODO: TAGS EVERYWHERE????
+	b := strings.Builder{}
+	// TODO: HEADER AREA FOR LINKS TO CV, RESUME, BLOG, NOTES
+	b.WriteString("# Home\n") // TODO: PUT LINK TO HOME ON EVERY PAGE
+	b.WriteString("# CV\n")
+	b.WriteString("## About\n")
+	b.WriteString(fixmeLink + "\n") // TODO: SUMMARY/About
+
+	// TODO: ADD OTHER JOBS, UNRELATED TO SOFTWARE
+	b.WriteString("## Work History ([Companies](companies.md), [Positions](positions.md))\n") // TODO: RENAME
+	b.WriteString("Latest Position | Company | Start Date | End Date\n")
+	b.WriteString(":-- | :-- | --: | :--\n")
+	for _, companyName := range companiesOrder {
+		company := companies[companyName]
+		endDate := company.Positions[0].End.String()
+		if endDate == "current" {
+			endDate = ""
+		}
+		b.WriteString(fmt.Sprintf("%s | %s | %s | %s\n", company.Positions[0].Link(), company.Link(), company.Positions[len(company.Positions)-1].Start.String(), endDate))
+	}
+
+	b.WriteString("## Education\n")
+	for _, schoolName := range []string{
+		"North Carolina State University",
+		"Central Academy of Technology and Arts",
+	} {
+		school := schools[schoolName]
+		temp := make([]string, len(school.Degrees))
+		for i, d := range school.Degrees {
+			temp[i] = d.StringShort()
+		}
+		b.WriteString(fmt.Sprintf("- [%s](school/%s) %s\n", school.Name, withoutSpaces(school.Name), strings.Join(temp, ", ")))
+	}
+
+	b.WriteString("## Certifications\n")
+	b.WriteString("Cert | Certification Date | Expiration Date | link\n")
+	b.WriteString(":-- | :-- | :-- | :--\n")
+	for _, cert := range []*Certification{
+		certAwsSaa,
+		certOWASP,
+		certComtrain2,
+		certComtrain,
+		certLifeguard,
+		certCPR,
+	} {
+		link := ""
+		if cert.Link != nil {
+			link = fmt.Sprintf(`[certification](%s)`, *cert.Link)
+		}
+		expiryDate := cert.ExpiryDate.String()
+		if expiryDate == "current" {
+			expiryDate = "unknown"
+		}
+		b.WriteString(fmt.Sprintf("%s | %s | %s | %s\n", cert.Name, cert.CertDate.String(), expiryDate, link))
+	}
+	// TODO: any others?
+
+	b.WriteString("## Languages\n[Full Page](Languages.md)\n")
+	b.WriteString("### Preferred (in order)\n")
+	for _, name := range []string{"Go", "Typescript", "Terraform", "Bash"} {
+		b.WriteString(fmt.Sprintf("- [%s](language/%s)\n", name, withoutSpaces(name)))
+	}
+	b.WriteString("### All\n")
+	b.WriteString(alphabetizedLinksCompressed(langs, "language"))
+
+	b.WriteString("## Databases\n[Full Page](dbs.md)\n")
+	b.WriteString(alphabetizedLinksCompressed(dbs, "db"))
+
+	b.WriteString("## Caches\n[Full Page](caches.md)\n")
+	b.WriteString(alphabetizedLinksCompressed(caches, "cache"))
+
+	b.WriteString("## Cloud Providers\n[Full Page](providers.md)\n")
+	b.WriteString("### Preferred\n")
+	for _, name := range []string{"AWS"} {
+		b.WriteString(fmt.Sprintf("- [%s](provider/%s)\n", name, withoutSpaces(name)))
+	}
+	b.WriteString("### All\n")
+	b.WriteString(alphabetizedLinksCompressed(providers, "provider"))
+	// TODO: ADD GCP! Azure!
+
+	b.WriteString("## Technologies and Libraries\n[Full Page](technologies.md)\n")
+	b.WriteString(alphabetizedLinksCompressed(techs, "technology")) // TODO: dir correct?
+
+	b.WriteString("### Containerization and Distributed Computing\n")
+	// TODO: POPULATE THIS AREA!!!!!!!!!!!!!
+
+	b.WriteString("## Platforms\n[Full Page](platforms.md)\n")
+	b.WriteString(alphabetizedLinksCompressed(platforms, "platform"))
+
+	b.WriteString("### CI/CD\n")
+	cicdThings := map[string]string{
+		"Github Actions": "technology",
+		"Gitlab CI":      "technology",
+		"Drone CI":       "technology",
+	}
+	temp := make([]string, len(cicdThings))
+	for i, key := range slices.Collect(maps.Keys(cicdThings)) {
+		temp[i] = fmt.Sprintf("[%s](%s/%s)", key, cicdThings[key], withoutSpaces(key))
+	}
+	b.WriteString(strings.Join(temp, ", ") + "\n")
+
+	b.WriteString("### Observability and Monitoring\n")
+	b.WriteString("#### Observability\n")
+	observabilityThings := map[string]string{
+		"Cloudwatch": "service",  // TODO: ok?
+		"Datadog":    "platform", // TODO: ok?
+		"Grafana":    "platform", // TODO: ok?
+		"Prometheus": "platform", // TODO: ok?
+		"ServiceNow": "platform", // TODO: ok?
+		// TODO: Elastic/Elasticsearch
+	}
+	tempObs := make([]string, len(observabilityThings))
+	for i, key := range slices.Collect(maps.Keys(observabilityThings)) {
+		tempObs[i] = fmt.Sprintf("[%s](%s/%s)", key, observabilityThings[key], withoutSpaces(key))
+	}
+	b.WriteString(strings.Join(tempObs, ", ") + "\n")
+	b.WriteString("#### Logs\n") // TODO: Logs
+	loggingThings := map[string]string{
+		"LogCentral": "platform", // TODO: ok?
+	}
+	tempLogging := make([]string, len(loggingThings))
+	for i, key := range slices.Collect(maps.Keys(loggingThings)) {
+		tempLogging[i] = fmt.Sprintf("[%s](%s/%s)", key, loggingThings[key], withoutSpaces(key))
+	}
+	b.WriteString(strings.Join(tempLogging, ", ") + "\n")
+
+	b.WriteString("# Blog\n")
+	b.WriteString("[Blog](blog/blog.md)\n")
+	b.WriteString("# Notes\n")
+	b.WriteString("[Notes](notes/notes.md)\n")
+	if err := os.WriteFile(root+"index.md", []byte(b.String()), 777); err != nil {
+		panic("failed to write main.md file: " + err.Error())
+	}
+
+	b.WriteString("#### Footer\n") // TODO: FIX
+	b.WriteString("This page was made with [Obsidian](https://obsidian.md) and deployed with [Quartz 4](https://quartz.jzhao.xyz)")
+	b.WriteString("INSERT COPYRIGHT HERE")
+	b.WriteString("INSERT CONTACT INFO SOMEWHERE") // TODO: THIS!
+
+}
+
+func createErrorPage() {
+	b := strings.Builder{}
+	b.WriteString("Page does not exist!\n") // TODO: PUT LINK TO HOME ON EVERY PAGE
+	if err := os.WriteFile(root+"error.md", []byte(b.String()), 777); err != nil {
+		panic("failed to write main.md file: " + err.Error())
+	}
+}
+
+// Company -> position -> client -> project ->>>>
+// languages, platforms, providers(and services), dbs, caches
+
+// TODO: PUT TAGS ALL OVER PROJECTS!!!!!!
+
+type showAll interface {
+	GetAllLowest() (outCaches map[string]*CachePage, outDbs map[string]*DbPage, outLanguages map[string]Frequency, outPlatforms map[string]*PlatformPage, outProviders map[string]*CloudProviderPage, outServices map[string]map[string]*CloudServicePage, outTechnologies map[string]*TechologyPage)
+	NameValue() string
+}
+
+func bytesForAll(item showAll, showFrequencies bool) string {
+	b := strings.Builder{}
+	tempC, tempD, tempL, tempP, _, tempS, tempT := item.GetAllLowest()
+	if len(tempL) > 0 {
+		b.WriteString("# Languages\n")
+		showFreqLink := ""
+		if showFrequencies {
+			showFreqLink = "[[" + withoutSpaces(item.NameValue()) + "#^usageFrequencies\\|*]]"
+		}
+		b.WriteString("Language | Usage Frequency" + showFreqLink + "\n")
+		b.WriteString(":-- | :--\n")
+		freqs := make(map[Frequency][]string, 6)
+		for name, freq := range tempL {
+			if freqs[freq] == nil {
+				freqs[freq] = []string{name}
+			} else {
+				freqs[freq] = append(freqs[freq], name)
+			}
+		}
+		for f := 5; f >= 0; f-- {
+			for _, name := range freqs[Frequency(f)] {
+				b.WriteString(fmt.Sprintf("[%s](language/%s) | %s\n", name, withoutSpaces(name), Frequency(f).String()))
+			}
+		}
+	}
+	if len(tempC) > 0 {
+		b.WriteString("# Caches\n")
+		for name, _ := range tempC {
+			b.WriteString(fmt.Sprintf("[%s](cache/%s)\n", name, withoutSpaces(name)))
+		}
+	}
+	if len(tempD) > 0 {
+		b.WriteString("# Databases\n")
+		for name, _ := range tempD {
+			b.WriteString(fmt.Sprintf("[%s](db/%s)\n", name, withoutSpaces(name)))
+		}
+	}
+	if len(tempP) > 0 {
+		b.WriteString("# Platforms\n")
+		for name, _ := range tempP {
+			b.WriteString(fmt.Sprintf("[%s](platform/%s)\n", name, withoutSpaces(name)))
+		}
+	}
+	if len(tempT) > 0 {
+		b.WriteString("# Technologies\n")
+		for name, _ := range tempT {
+			b.WriteString(fmt.Sprintf("[%s](technology/%s)\n", name, withoutSpaces(name)))
+		}
+	}
+	if len(tempS) > 0 {
+		b.WriteString("# Providers\n")
+		for name, svcs := range tempS {
+			tempSvcs := make([]string, len(svcs))
+			for i, svc := range slices.Collect(maps.Keys(svcs)) {
+				tempSvcs[i] = fmt.Sprintf("[%s](service/%s)", svc, withoutSpaces(name))
+			}
+			b.WriteString(fmt.Sprintf("[%s](provider/%s): %s\n", name, withoutSpaces(name), strings.Join(tempSvcs, ", ")))
+		}
+	}
+	if showFrequencies {
+		b.WriteString(definitionsArea())
+		b.WriteString(usageFrequencyDefinitions())
+	}
+	return b.String()
+}
+
+type tracked struct { // TODO: use this to backlink (Ex: where a platform was used)
+	Companies map[string]*CompanyPage
+	Positions map[string]*Position
+	Clients   map[string]*Client
+	Schools   map[string]*SchoolPage
+	Projects  map[string]*Project
+}
+
+func newTracked() *tracked {
+	return &tracked{
+		Companies: map[string]*CompanyPage{},
+		Positions: map[string]*Position{},
+		Clients:   map[string]*Client{},
+		Schools:   map[string]*SchoolPage{},
+		Projects:  map[string]*Project{},
+	}
+}
+func (pg *tracked) Bytes() []byte {
+	builder := strings.Builder{}
+	if pg.Companies != nil && len(pg.Companies) > 0 {
+		builder.WriteString("# Companies\n")
+		for _, com := range pg.Companies {
+			builder.WriteString(fmt.Sprintf("- %s\n", com.Link()))
+		}
+	}
+	if pg.Positions != nil && len(pg.Positions) > 0 {
+		builder.WriteString("# Positions\n")
+		for _, pos := range pg.Positions {
+			builder.WriteString(fmt.Sprintf("- %s\n", pos.Link()))
+		}
+	}
+	if pg.Clients != nil && len(pg.Clients) > 0 {
+		builder.WriteString("# Clients\n")
+		for _, cli := range pg.Clients {
+			builder.WriteString(fmt.Sprintf("- %s\n", cli.Link()))
+		}
+	}
+	if pg.Projects != nil && len(pg.Projects) > 0 {
+		builder.WriteString("# Projects\n")
+		//builder.WriteString("Project | Usage Frequency | Project Type\n")
+		//builder.WriteString(":-- | :--: | :--\n")
+		for _, proj := range pg.Projects {
+			builder.WriteString(fmt.Sprintf("- %s\n", proj.Link()))
+		}
+	}
+	return []byte(builder.String())
+}
+
+func (pg *tracked) AddClient(client *Client) {
+	pg.Clients[client.Name] = client
+}
+func (pg *tracked) AddSchool(school *SchoolPage) {
+	pg.Schools[school.Name] = school
+}
+func (pg *tracked) AddProject(proj *Project) {
+	pg.Projects[proj.Name] = proj
+}
+
+func (pg *tracked) AddPosition(pos *Position) {
+	pg.Positions[pos.Name] = pos
+}
+func (pg *tracked) AddCompany(comp *CompanyPage) {
+	pg.Companies[comp.Name] = comp
+}
+
+func (tr *tracked) String() string {
+	if tr == nil {
+		return ""
+	}
+	b := strings.Builder{}
+	if tr.Projects != nil {
+		b.WriteString("# Projects\n")
+		for _, proj := range tr.Projects {
+			b.WriteString(fmt.Sprintf("- [%s](project/%s)\n", proj.Name, withoutSpaces(proj.Name)))
+		}
+	}
+	if tr.Positions != nil {
+		b.WriteString("# Positions\n")
+		for _, pos := range tr.Positions { // TODO: ENSURE THESE ARE IN ORDER
+			b.WriteString(fmt.Sprintf("- [%s](position/%s) at [%s](company/%s)\n", pos.Name, withoutSpaces(pos.MapName()), pos.company.Name, withoutSpaces(pos.company.Name)))
+		}
+	}
+	if tr.Companies != nil {
+		b.WriteString("# Companies\n")
+		for _, item := range tr.Companies {
+			b.WriteString(fmt.Sprintf("- [%s](company/%s)\n", item.Name, withoutSpaces(item.Name)))
+		}
+	}
+	if tr.Clients != nil {
+		b.WriteString("# Clients\n")
+		for _, client := range tr.Clients {
+			b.WriteString(fmt.Sprintf("- [%s](client/%s)\n", client.Name, withoutSpaces(client.Name)))
+		}
+	}
+	return b.String()
+}
+
+// Create project, add project to client, add project to position, add position to company (client will be automatically linked this way)
+const root = "./quartz/content/"
+
+func alphabetizedLinksCompressed[T any](inpMap map[string]T, dir string) string {
+	allKeys := slices.Collect(maps.Keys(inpMap))
+	sort.Strings(allKeys)
+	for i, db := range allKeys {
+		allKeys[i] = fmt.Sprintf("[%s](%s/%s)", db, dir, withoutSpaces(db))
+	}
+	return strings.Join(allKeys, ", ") + "\n"
+}
+func alphabetizedLinks[T any](inpMap map[string]T, dir string) string {
+	allKeys := slices.Collect(maps.Keys(inpMap))
+	sort.Strings(allKeys)
+	for i, db := range allKeys {
+		allKeys[i] = fmt.Sprintf("- [%s](%s/%s)\n", db, dir, withoutSpaces(db))
+	}
+	return strings.Join(allKeys, "") + "\n"
+}
+
+func main() {
+	//createLanguagesPages()
+	// initSchools() // Done outside of init
+	// initClientsFirst() // Done in vars
+	initProjectsAfterClients()
+	initProjectsFinal() // TODO: ok here?
+
+	initPositionsAfterProjects()
+
+	initClientsAfterProjectsComplete() // Sets client on projects as well
+	initCompaniesAfterPositions()      // Must be done after positions and project setup, but before projects pages. What about clients?
+
+	createLanguagesPages()
+	createSchoolsPages()
+	createPositionsPages()
+	createProjectsPages()
+	createClientsPages()
+	createCompaniesPages()
+	createPlatformsPages()
+	createDbsPages()
+	createCachesPages()
+	createProvidersPages()
+	createServicesPages()
+	createTechnologiesPages()
+	createMiscSkillsPages()
+	createMainPage()
+	createErrorPage()
+}
+
+func createLanguagesPages() {
+	b := strings.Builder{}
+	b.WriteString("# Preferred (in order)\n")
+	for _, name := range []string{"Go", "Typescript", "Terraform", "Bash"} {
+		l := langs[name]
+		b.WriteString(fmt.Sprintf("- %s\n", l.Link()))
+	}
+	b.WriteString("# All\n")
+	b.WriteString(alphabetizedLinks(langs, "language"))
+	err := os.WriteFile(root+"languages.md", []byte(b.String()), 777)
+	if err != nil {
+		panic(err)
+	}
+	if len(langs) > 0 {
+		if err = os.MkdirAll(root+"language", 777); err != nil {
+			panic("failed to create languages dir: " + err.Error())
+		}
+	}
+	for name, lang := range langs {
+		writePage("language", withoutSpaces(name)+".md", lang.Bytes())
+	}
+}
+
+func createProjectsPages() {
+	b, bPersonal, bProfessional, bSchool := strings.Builder{}, strings.Builder{}, strings.Builder{}, strings.Builder{}
+
+	// TODO: FIX PROJECTS PAGE!!!
+
+	bProfessional.WriteString("# Professional Projects\n")
+	bProfessional.WriteString("Project | Company | Client\n")
+	bProfessional.WriteString(":-- | :--: | :--\n")
+	bPersonal.WriteString("# Personal Projects\n")
+	bSchool.WriteString("# Coursework-related Projects\n")
+
+	for _, proj := range projects {
+		switch proj.TypeInfo.Type() {
+		case projectTypePersonal:
+			bPersonal.WriteString(fmt.Sprintf("- %s\n", proj.Link()))
+		case projectTypeProfessional:
+			pr := proj.Link()
+			var co, cl = "none", "none"
+			client := proj.TypeInfo.getClient()
+			if client != nil {
+				cl = client.Link()
+				if client.company != nil {
+					co = client.company.Link()
+				}
+			}
+
+			bProfessional.WriteString(fmt.Sprintf("%s | %s | %s\n", pr, co, cl))
+		case projectTypeSchool:
+			bSchool.WriteString(fmt.Sprintf("- %s\n", proj.Link())) // TODO: school link???
+		default:
+			panic("unknown project type")
+
+		}
+	}
+	b.WriteString(bProfessional.String())
+	b.WriteString(bPersonal.String())
+	b.WriteString(bSchool.String())
+
+	err := os.WriteFile(root+"projects.md", []byte(b.String()), 777)
+	if err != nil {
+		panic(err)
+	}
+	if len(langs) > 0 {
+		if err = os.MkdirAll(root+"project", 777); err != nil {
+			panic("failed to create projects dir: " + err.Error())
+		}
+	}
+	for name, item := range projects {
+		writePage("project", withoutSpaces(name)+".md", item.Bytes())
+	}
+}
+
+func createSchoolsPages() {
+	// Create schools page
+	b := strings.Builder{}
+	for name, school := range schools {
+		b.WriteString(fmt.Sprintf("# %s\n", school.Link()))
+		// Write all degrees
+		b.WriteString(fmt.Sprintf("- Degrees:", name, withoutSpaces(name)))
+		for i, deg := range school.Degrees {
+			if i != 0 {
+				b.WriteString(", ")
+			}
+			b.WriteString(deg.StringShort())
+		}
+		b.WriteString("\n")
+		// Write all projects
+		b.WriteString(fmt.Sprintf("- Projects:\n", name, withoutSpaces(name)))
+		for _, proj := range school.Projects {
+			b.WriteString(fmt.Sprintf("- - %s\n", proj.Link()))
+		}
+		b.WriteString(fmt.Sprintf("- Extracurriculars:\n", name, withoutSpaces(name)))
+		// Write all extracurriculars
+		for _, ec := range school.Extracurriculars {
+			b.WriteString(fmt.Sprintf("- - %s\n", ec.Name))
+		}
+	}
+	// Write page for each school
+	for name, item := range schools {
+		writePage("school", withoutSpaces(name)+".md", item.Bytes())
+	}
+}
+
+func createPositionsPages() {
+	b := strings.Builder{}
+	b.WriteString("Most Current\n\n")
+	b.WriteString("Title | Company | StartDate | EndDate\n")
+	b.WriteString(":-- | :--: | :--: | :--\n")
+	psMap := positionsMap
+	if len(psMap) == 0 {
+		println("empty positions map")
+	}
+	for _, pos := range slices.SortedFunc(maps.Values(positionsMap), func(a *Position, b *Position) int {
+		if a.Start.Year == b.Start.Year {
+			if a.Start.Month > b.Start.Month {
+				return -1
+			}
+			if a.Start.Month < b.Start.Month {
+				return 1
+			}
+			return 0
+		} else {
+			if a.Start.Year > b.Start.Year {
+				return -1
+			}
+			if a.Start.Year < b.Start.Year {
+				return 1
+			}
+			return 0
+		}
+	}) {
+		end := pos.End.String()
+		if end == "current" {
+			end = ""
+		}
+		b.WriteString(fmt.Sprintf(" %s | %s | %s | %s\n", pos.Link(), pos.company.Name, pos.Start.String(), end))
+	}
+	b.WriteString("Earliest")
+
+	err := os.WriteFile(root+"positions.md", []byte(b.String()), 777)
+	if err != nil {
+		panic(err)
+	}
+	if len(langs) > 0 {
+		if err = os.MkdirAll(root+"position", 777); err != nil {
+			panic("failed to create position dir: " + err.Error())
+		}
+	}
+	for name, item := range positionsMap {
+		writePage("position", withoutSpaces(name)+".md", item.Bytes())
+	}
+}
+
+func createClientsPages() {
+	// Clients pages
+	b := strings.Builder{}
+	b.WriteString("(most recent at top)\n\nClient | Company\n")
+	b.WriteString(":-- | :--\n")
+	for _, clientName := range clientsOrder {
+		client := clients[clientName]
+		compLink := fmt.Sprintf("[%s](company/%s)", client.Name, withoutSpaces(client.Name))
+		if client.company != nil {
+			compLink = client.company.Link()
+		}
+		b.WriteString(fmt.Sprintf("%s | %s \n", client.Link(), compLink))
+	}
+	err := os.WriteFile(root+"clients.md", []byte(b.String()), 777)
+	if err != nil {
+		panic("failed to create clients page: " + err.Error())
+	}
+	if len(clients) > 0 {
+		if err = os.MkdirAll(root+"client", 777); err != nil {
+			panic("failed to create clients dir: " + err.Error())
+		}
+	}
+	for name, item := range clients {
+		writePage("client", withoutSpaces(name)+".md", item.Bytes())
+	}
+}
+
+func createCompaniesPages() {
+	// Companies pages
+	b := strings.Builder{}
+	b.WriteString("Latest Position | Company | Company Start Date | Company End Date\n")
+	b.WriteString(":-- | :-- | --: | :--\n")
+	// TODO: make this into a cool chart!
+	for _, companyName := range companiesOrder {
+		company := companies[companyName]
+		// TODO; is this ok?
+		b.WriteString(fmt.Sprintf("%s | %s | %s | %s\n", company.Positions[0].Link(), company.Link(), company.Start.String(), company.End.String()))
+	}
+	err := os.WriteFile(root+"companies.md", []byte(b.String()), 777)
+	if err != nil {
+		panic("failed to write companies file: " + err.Error())
+	}
+	if len(companies) > 0 {
+		if err = os.MkdirAll(root+"company", 777); err != nil {
+			panic("failed to create company dir: " + err.Error())
+		}
+	}
+	for name, company := range companies {
+		// TODO: ADD THE TIMES AND DATES!
+		writePage("company", withoutSpaces(name)+".md", company.Bytes())
+	}
+}
+
+type Linkable interface {
+	Link() string
+}
+
+func createPlatformsPages() {
+	// Platforms pages
+	b := strings.Builder{}
+	alphabetizedPlatforms := slices.Collect(maps.Keys(platforms))
+	sort.Strings(alphabetizedPlatforms)
+	for _, platName := range alphabetizedPlatforms {
+		platform := platforms[platName]
+		b.WriteString(fmt.Sprintf("- %s\n", platform.Link()))
+	}
+	err := os.WriteFile(root+"platforms.md", []byte(b.String()), 777)
+	if err != nil {
+		panic("failed to write platforms file: " + err.Error())
+	}
+	if len(platforms) > 0 {
+		if err = os.MkdirAll(root+"platform", 777); err != nil {
+			panic("failed to create platforms dir: " + err.Error())
+		}
+	}
+	for name, platform := range platforms {
+		writePage("platform", withoutSpaces(name)+".md", platform.Bytes())
+	}
+}
+
+func createDbsPages() {
+	// Databases pages
+	b := strings.Builder{}
+	alphabetized := slices.Collect(maps.Keys(dbs))
+	sort.Strings(alphabetized)
+	for _, name := range alphabetized {
+		db := dbs[name]
+		b.WriteString(fmt.Sprintf("- %s\n", db.Link()))
+	}
+	err := os.WriteFile(root+"dbs.md", []byte(b.String()), 777)
+	if err != nil {
+		panic("failed to write dbs file: " + err.Error())
+	}
+	if len(dbs) > 0 {
+		if err = os.MkdirAll(root+"db", 777); err != nil {
+			panic("failed to create db dir: " + err.Error())
+		}
+	}
+	for name, db := range dbs {
+		writePage("db", withoutSpaces(name)+".md", db.Bytes())
+	}
+}
+func createCachesPages() {
+	// Caches pages
+	b := strings.Builder{}
+	alphabetized := slices.Collect(maps.Keys(caches))
+	sort.Strings(alphabetized)
+	for _, name := range alphabetized {
+		cache := caches[name]
+		b.WriteString(fmt.Sprintf("- %s\n", cache.Link()))
+	}
+	err := os.WriteFile(root+"caches.md", []byte(b.String()), 777)
+	if err != nil {
+		panic("failed to write caches file: " + err.Error())
+	}
+	if len(caches) > 0 {
+		if err = os.MkdirAll(root+"cache", 777); err != nil {
+			panic("failed to create cache dir: " + err.Error())
+		}
+	}
+	for name, cache := range caches {
+		writePage("cache", withoutSpaces(name)+".md", cache.Bytes())
+	}
+}
+
+func createProvidersPages() {
+	// Providers pages
+	b := strings.Builder{}
+	// TODO: PREFERRED VS ALL
+	b.WriteString("# Preferred (in order)\n")
+	for _, name := range []string{"AWS"} {
+		provider := providers[name]
+		b.WriteString(fmt.Sprintf("- %s\n", provider.Link()))
+		// TODO: SUB-SERVICES!!!!!
+	}
+	b.WriteString("# All\n")
+	b.WriteString(alphabetizedLinksCompressed(providers, "provider")) // TODO: SUB-SERVICES!!!!
+	err := os.WriteFile(root+"providers.md", []byte(b.String()), 777)
+	if err != nil {
+		panic("failed to write providers file: " + err.Error())
+	}
+	if len(providers) > 0 {
+		if err = os.MkdirAll(root+"provider", 777); err != nil {
+			panic("failed to create provider dir: " + err.Error())
+		}
+	}
+	for name, provider := range providers {
+		writePage("provider", withoutSpaces(name)+".md", provider.Bytes())
+	}
+}
+
+func createServicesPages() {
+	// Services pages
+	b := strings.Builder{}
+	b.WriteString("Service | Provider\n")
+	b.WriteString(":-- | :--\n")
+	for _, service := range cloudServices { // TODO: alphabetize?!!!!!
+		b.WriteString(fmt.Sprintf("%s | %s\n", service.Link(), service.provider))
+	}
+	err := os.WriteFile(root+"services.md", []byte(b.String()), 777)
+	if err != nil {
+		panic("failed to write services file: " + err.Error())
+	}
+	if len(cloudServices) > 0 {
+		if err = os.MkdirAll(root+"service", 777); err != nil {
+			panic("failed to create service dir: " + err.Error())
+		}
+	}
+	for name, service := range cloudServices {
+		writePage("service", withoutSpaces(name)+".md", service.Bytes())
+	}
+}
+
+func createTechnologiesPages() {
+	// Technologies pages
+	b := strings.Builder{}
+	alphabetized := slices.Collect(maps.Keys(techs))
+	sort.Strings(alphabetized)
+	for _, name := range alphabetized {
+		tech := techs[name]
+		b.WriteString(fmt.Sprintf("- %s\n", tech.Link()))
+	}
+	err := os.WriteFile(root+"technologies.md", []byte(b.String()), 777)
+	if err != nil {
+		panic("failed to write technologies file: " + err.Error())
+	}
+	if len(techs) > 0 {
+		if err = os.MkdirAll(root+"technology", 777); err != nil {
+			panic("failed to create technology dir: " + err.Error())
+		}
+	}
+	for name, tech := range techs {
+		writePage("technology", withoutSpaces(name)+".md", tech.Bytes())
+	}
+}
+
+func createMiscSkillsPages() {
+	// Misc skills pages
+	b := strings.Builder{}
+	alphabetized := slices.Collect(maps.Keys(miscSkills))
+	sort.Strings(alphabetized)
+	for _, name := range alphabetized {
+		skill := miscSkills[name]
+		b.WriteString(fmt.Sprintf("- %s\n", skill.Link()))
+	}
+	err := os.WriteFile(root+"miscSkills.md", []byte(b.String()), 777)
+	if err != nil {
+		panic("failed to write miscSkills file: " + err.Error())
+	}
+	if len(miscSkills) > 0 {
+		if err = os.MkdirAll(root+"miscSkill", 777); err != nil {
+			panic("failed to create miscSkill dir: " + err.Error())
+		}
+	}
+	for name, skill := range miscSkills {
+		writePage("miscSkill", withoutSpaces(name)+".md", skill.Bytes())
+	}
+}
+
+//func camelCaseToSpaces(s string) string {
+//	// Add a space before any lowercase character that follows an uppercase one,
+//	// and before any uppercase character that follows a lowercase one or a number.
+//	// This handles cases like "userID" -> "user ID" and "APIResponse" -> "API Response"
+//	re := regexp.MustCompile("([a-z0-9])([A-Z])")
+//	spaced := re.ReplaceAllString(s, "$1 $2")
+//
+//	// Handle cases where a sequence of uppercase letters is followed by a lowercase letter,
+//	// like "HTTPRequest" -> "HTTP Request" (the previous regex gives "HTTPR equest").
+//	re2 := regexp.MustCompile("([A-Z])([A-Z][a-z])")
+//	spaced = re2.ReplaceAllString(spaced, "$1 $2")
+//
+//	return spaced
+//}
+
+func writePage(dirName, filename string, bs []byte) {
+	path := dirName + "/" + filename
+	err := os.WriteFile(root+path, bs, 777)
+	if err != nil {
+		panic(fmt.Sprintf("failed to write page %s: %s", path, err.Error()))
+	}
+}
+
+func withoutSpaces(s string) string {
+	return strings.Join(strings.Split(s, " "), "_")
+}
+
+func init() {
+	// Languages
+	//for _, l := range []string{
+	//	"Go", "Scala", "Java", "Kotlin", "Javascript", "Typescript", "Python", "Fortran", "C/C++", "HTML", "CSS", "Rust",
+	//	// TODO: add more?
+	//} {
+	//	_ = NewLanguage(l)
+	//}
+	// TODO: cloud providers
+	//providers["AWS"] = NewCloudProvider("AWS")
+
+}
+
+// TODO: add clients.
+
+//var comps = map[string]*CompanyPage{
+//	"Source Allies": sai,
+//	"Freelance":     freelanceCompany,
+//}
+
+// TODO: DB ADD
+
+type Frequency int
+
+const (
+	Minimal = iota
+	Rarely
+	Some
+	Regularly
+	Often
+	Extensively
+)
+
+func (f Frequency) String() string {
+	switch f {
+	case Minimal:
+		return "Minimal"
+	case Rarely:
+		return "Rarely"
+	case Some:
+		return "Some"
+	case Regularly:
+		return "Regularly"
+	case Often:
+		return "Often"
+	case Extensively:
+		return "Extensively"
+	default:
+		panic("unhandled frequency: " + strconv.Itoa(int(f)))
+	}
+}
+
+func FrequencyFromString(s string) Frequency {
+	switch s {
+	case "Minimal":
+		return Minimal
+	case "Rarely":
+		return Rarely
+	case "Some":
+		return Some
+	case "Regularly":
+		return Regularly
+	case "Often":
+		return Often
+	case "Extensively":
+		return Extensively
+	default:
+		panic("unhandled frequency: " + s)
+	}
+}
+
+type Page struct {
+	Path       string
+	Properties []pageProperty // TODO: may not need if not using dataViews
+	Body       string         // TODO: ok?
+}
+
+type pageProperty interface { // TODO: struct?
+	// TODO: fixMe
+}

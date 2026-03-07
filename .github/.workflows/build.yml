@@ -1,0 +1,110 @@
+name: Build and Deploy
+run-name:  ${{ github.ref_name }} - "${{ github.event.head_commit.message }}"
+on:
+pull_request:
+    paths:
+      - 'generator/**'
+      - '.github/workflows/build**'
+push:
+#    branches: # TODO: reenable
+#      - main
+#    paths:
+#      - 'generator/**'
+#      - '.github/workflows/build**'
+
+permissions:
+  contents: read # TODO: or write??
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  generate:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for git info # TODO: ok??
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: 'go.mod'
+          # GitHub token for authentication
+          token: ${{ github.token }}
+          cache: true
+          cache-dependency-path: 'go.sum'
+      # TODO: install go dependencies?
+      - name: Generate
+        run: go run ./generator
+      - uses: actions/upload-artifact@v4
+        with:
+          name: markdownFiles
+          path: quartz/content
+          if-no-files-found: error
+          retention-days: 1
+          # The level of compression for Zlib to be applied to the artifact archive.
+          # The value can range from 0 to 9.
+          # For large files that are not easily compressed, a value of 0 is recommended for significantly faster uploads.
+          # Optional. Default is '6'
+          compression-level: 6
+          overwrite: true
+          # Whether to include hidden files in the provided path in the artifact
+          # The file contents of any hidden files in the path should be validated before
+          # enabled this to avoid uploading sensitive information.
+          # Optional. Default is 'false'
+          include-hidden-files: false
+      # TODO: start building quartz
+
+  build:
+    needs: [ generate ]
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for git info
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@v5
+        with:
+          name: markdownFiles
+          path: /quartz/content # TODO: ensure ok
+      - name: Install Dependencies
+        run: npm ci
+      - name: Build Quartz
+        run: npx quartz build
+        working-directory: ./quartz
+      - uses: actions/upload-artifact@v4
+        with:
+          name: finalFiles
+          path: quartz/public
+          if-no-files-found: error
+          retention-days: 1 # TODO: ok????
+          # The level of compression for Zlib to be applied to the artifact archive.
+          # The value can range from 0 to 9. Default is '6'
+          compression-level: 6
+          overwrite: true
+          include-hidden-files: false
+#      - name: Upload artifact
+#        uses: actions/upload-pages-artifact@v3
+#        working-directory: ./quartz
+#        with:
+#          path: public
+
+  deploy:
+    needs: build
+    environment:
+      # TODO: ANY ENV VARS TO PUT IT ON S3 or GHP?
+#      name: github-pages
+#      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          name: finalFiles
+          path: public # TODO: ensure ok
+#      - name: Deploy to GitHub Pages
+#        id: deployment
+#        uses: actions/deploy-pages@v4
