@@ -14,7 +14,7 @@ on:
 
 permissions:
   contents: write
-  pages: write
+#  pages: write
   id-token: write
 
 concurrency:
@@ -24,6 +24,8 @@ concurrency:
 jobs:
   generate-markdown:
     runs-on: ubuntu-22.04
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
         with:
