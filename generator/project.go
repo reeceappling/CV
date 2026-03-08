@@ -530,8 +530,7 @@ var cvUrl = "github.com/reeceappling/cv"                     // TODO: ensure ok
 var nfcScannerUrl = "github.com/reeceappling/nfcScanner"     // TODO: ensure ok
 var coreShufflerUrl = "github.com/reeceappling/coreShuffler" // TODO: ensure ok
 
-// initProjectsAfterClients must be called after clients and schools have been initially created
-var ( //func initProjectsAfterClients() { // TODO: reenable func if this does not work
+var (
 	projectAgentSwarm          = NewPersonalProject("AI Agent Swarm", fixmeLink, nil)
 	polygonBuilderProject      = NewProfessionalProject("Polygon Builder", fixmeLink, jdClient, nil)
 	tileGenProject             = NewProfessionalProject("Tile Generator", fixmeLink, jdClient, nil)
@@ -562,7 +561,8 @@ var ( //func initProjectsAfterClients() { // TODO: reenable func if this does no
 	roboticsTeamProject        = NewSchoolProject("Robotics team 3720", fixmeLink, schoolCata, nil)
 	cncLaserCutterProject      = NewSchoolProject("CNC Laser Cutter", fixmeLink, schoolCata, nil)
 	aerospaceFinalProject      = NewSchoolProject("Aerospace senior design course", "Designed, created, and tested a rocket from scratch", schoolCata, nil)
-) //}
+	miscSmallPersonalProjects  = NewPersonalProject("Misc small personal projects", "A conglomeration of personal projects which did not each deserve their own entry", nil)
+)
 
 func initProjectsFinal() {
 	projectAgentSwarm = projectAgentSwarm.WithStatus(statusMaintaining).
@@ -670,7 +670,7 @@ func initProjectsFinal() {
 		WithLang("Rust", Minimal).
 		WithDbs("Aurora", "Postgres").
 		WithCaches("Redis", "memcached").
-		WithTechnologies("CUDA", "Github Actions", "Parquet", "Avro", "GraphQL").
+		WithTechnologies("CUDA", "Github Actions", "Parquet", "Avro", "GraphQL", "SIMD").
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "GraphQL Apollo").
 		WithCloudProvider("AWS",
 			"ECS", "S3", "EC2", "IAM", "SecretsManager", "DynamoDB", "DAX", "Cloudwatch", "Lambda", "ECR", "Route53", "Kinesis", "SQS", "SNS",
@@ -804,14 +804,14 @@ func initProjectsFinal() {
 		WithLang("Docker Compose", Often).
 		WithLang("Kubernetes", Some).
 		WithDbs("mongodb").
-		WithTechnologies("Github Actions", "React", "NextJs", "RFID", "NFC", "I2C", "Cloudflare Tunnels", "Grafana").
+		WithTechnologies("Github Actions", "React", "NextJs", "RFID", "NFC", "I2C", "SPI", "Cloudflare Tunnels", "Grafana").
 		WithPlatforms("Github", "Cloudflare").
 		WithCloudProvider("GCP", "Google Cloud DNS", "Identity Platform").
 		WithSubjectMatters(smContainerization, smDistributedComputing, smMycology, smFullStack).
 		WithInterests(string(smMycology)).
 		finalize()
 	cvProject = cvProject.WithStatus(statusBuilding).
-		WithSummary("This project! SUMMARY HERE"). // TODO: MORE!
+		WithSummary("This project! A generator which creates markdown files that can be viewed via Obsidian, or published to the web."). // TODO: MORE!
 		WithLang("Go", Extensively).
 		WithLang("Bash", Some).
 		WithLang("Javascript", Rarely).
@@ -831,7 +831,7 @@ func initProjectsFinal() {
 	nfcScannerProject = nfcScannerProject.WithStatus(statusBuilding).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!
 		WithLang("Go", Extensively).
-		WithTechnologies("Github Actions", "Webhooks", "Websockets", "Server-Sent Events", "Pub-Sub").
+		WithTechnologies("Github Actions", "Webhooks", "Websockets", "Server-Sent Events", "Pub-Sub", "NFC").
 		WithPlatforms("Github").
 		WithSubjectMatters(smContainerization, smDistributedComputing).
 		WithInterests(string(smMycology)).
@@ -929,5 +929,16 @@ func initProjectsFinal() {
 		WithLang("Java", Minimal).
 		WithLang("Javascript", Minimal).
 		WithSubjectMatters(smFluidMechanics).
+		finalize()
+	miscSmallPersonalProjects = miscSmallPersonalProjects.
+		WithStatus(statusShelved).
+		WithLang("Python", Regularly).
+		WithLang("Fortran", Some).
+		WithLang("Solidity", Some).
+		WithLang("Go", Extensively).
+		WithLang("Java", Some).
+		WithLang("Javascript", Often).
+		WithLang("Typescript", Often).
+		WithSubjectMatters(smCryptocurrency).
 		finalize()
 }
