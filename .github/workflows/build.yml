@@ -45,6 +45,8 @@ jobs:
           token: ${{ github.token }}
           cache: true
           cache-dependency-path: 'go.sum'
+      - name: Make quartz dirs
+        run: mkdir -p ./quartz/content
       - name: Create Generator
         run: go build -o generate ./generator && chmod 777 generate
       - name: Generate and fix permissions
@@ -77,24 +79,33 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0 # Fetch all history for git info # TODO: likely no
-      - name: Fix permissions
-        run: sudo chown -R $USER:$USER . && chmod -R 777 ./quartz
+      - name: clone quartz
+        run: git clone https://github.com/jackyzha0/quartz.git
+#      - name: Fix permissions
+#        run: sudo chown -R $USER:$USER . && chmod -R 777 ./quartz
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: install quartz deps
+        run: npm i
+        working-directory: quartz
+      - name: create quartz work area
+        # Create new quartz, using shortest links (shortest, relative, absolute). -s=dir?
+        run: npx quartz create -X new -l shortest
+        working-directory: quartz
       - uses: actions/download-artifact@v5
         with:
           name: markdownFiles
           path: ./quartz/content # TODO: ensure ok
-      - name: Install Dependencies
-        run: npm ci # TODO: i?
+#      - name: Install Dependencies
+#        run: npm ci # TODO: i?
       - name: Build Quartz
         run: npx quartz build
         working-directory: ./quartz
       - uses: actions/upload-artifact@v4
         with:
           name: finalFiles
-          path: quartz/public
+          path: ./quartz/public
           if-no-files-found: error
           retention-days: 1 # TODO: ok????
           # The level of compression for Zlib to be applied to the artifact archive.
