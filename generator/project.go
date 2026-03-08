@@ -10,29 +10,6 @@ import (
 
 var projects = map[string]*Project{}
 
-//func projectsList(projectType *projectType) []*Project {
-//	out := []*Project{}
-//	for _, p := range projects {
-//		if projectType == nil || p.Type == *projectType {
-//			out = append(out, p)
-//		}
-//	}
-//	return out
-//}
-
-//func personalProjects() []*Project {
-//	p := true
-//	return projectsList(&p)
-//}
-//func professionalProjects() []*Project {
-//	p := true
-//	return projectsList(&p)
-//}
-//func courseworkProjects() []*Project {
-//	p := true
-//	return projectsList(&p)
-//}
-
 type projectType string
 
 const (
@@ -171,6 +148,14 @@ func (pg *Project) WithStatus(status projectStatus) *Project {
 		return pg
 	}
 	pg.Status = status
+	return pg
+}
+
+func (pg *Project) WithSummary(summary string) *Project {
+	if pg == nil {
+		return pg
+	}
+	pg.Summary = summary
 	return pg
 }
 
@@ -528,6 +513,7 @@ func initProjectsAfterClients() {
 
 func initProjectsFinal() {
 	polygonBuilderProject = polygonBuilderProject.WithStatus(statusMaintaining).
+		WithSummary("SUMMARY HERE").
 		WithLang("Go", Extensively).
 		WithLang("Scala", Often).
 		WithLang("Terraform", Regularly).
@@ -545,10 +531,11 @@ func initProjectsFinal() {
 			// TODO: complete list (all of them)
 		).WithDbs("Aurora", "DynamoDB", "Postgres").
 		WithCaches("Redis", "memcached").
-		WithTechnologies("CUDA", "Github Actions").                     // TODO: NO CUDA ON POLYGONS
+		WithTechnologies("CUDA", "Github Actions"). // TODO: NO CUDA ON POLYGONS
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow"). // TODO: more?
 		finalize()
 	tileGenProject = tileGenProject.WithStatus(statusMaintaining).
+		WithSummary("SUMMARY HERE").
 		WithLang("Go", Extensively).
 		WithLang("Scala", Often).
 		WithLang("Terraform", Regularly).
@@ -559,10 +546,11 @@ func initProjectsFinal() {
 			// TODO: complete list (all of them)
 		).WithDbs("DynamoDB", "Postgres").
 		WithCaches("Redis", "memcached").
-		WithTechnologies("CUDA", "Github Actions").                     // TODO: NO CUDA ON POLYGONS
+		WithTechnologies("CUDA", "Github Actions").
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow"). // TODO: more?
 		finalize()
 	GhaRunnersProject = GhaRunnersProject.WithStatus(statusMaintaining).
+		WithSummary("SUMMARY HERE").
 		WithLang("Terraform", Regularly).
 		WithLang("Docker", Regularly).
 		WithLang("Bash", Some).
@@ -572,6 +560,7 @@ func initProjectsFinal() {
 		WithTechnologies("Github Actions").
 		finalize()
 	ogreProject = ogreProject.WithStatus(statusBuilding).
+		WithSummary("SUMMARY HERE").
 		WithLang("Go", Extensively).
 		WithLang("Terraform", Regularly).
 		WithLang("Docker", Regularly).
@@ -586,14 +575,16 @@ func initProjectsFinal() {
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow").
 		finalize()
 	renderProject = renderProject.WithStatus(statusMaintaining).
+		WithSummary("SUMMARY HERE").
 		WithLang("Go", Extensively).
-		WithLang("Terraform", Often).  // TODO: ADD IAC TAG
+		WithLang("Terraform", Often). // TODO: ADD IAC TAG
 		WithLang("Docker", Regularly). // TODO: add containerization tag
 		WithLang("Bash", Some).
 		WithLang("SQL", Some).
 		WithTechnologies("Github Actions").
 		finalize()
 	statsProject = statsProject.WithStatus(statusMaintaining).
+		WithSummary("SUMMARY HERE").
 		WithLang("Go", Extensively).
 		WithLang("Terraform", Often).
 		WithLang("Docker", Regularly).
@@ -613,6 +604,7 @@ func initProjectsFinal() {
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow"). // TODO: MORE!
 		finalize()
 	billingProject = billingProject.WithStatus(statusBuilding).
+		WithSummary("SUMMARY HERE").
 		WithLang("Go", Extensively).
 		WithLang("Terraform", Often).
 		WithLang("Docker", Regularly).
@@ -626,8 +618,9 @@ func initProjectsFinal() {
 		WithCaches("Redis", "memcached").
 		WithTechnologies("Github Actions").
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow"). // TODO: MORE!
-		finalize()                                                      // TODO: MORE!
+		finalize() // TODO: MORE!
 	explorerProject = explorerProject.WithStatus(statusMaintaining).
+		WithSummary("SUMMARY HERE").
 		WithLang("Scala", Often).
 		WithLang("Javascript", Often).
 		WithLang("Terraform", Often).
@@ -642,6 +635,7 @@ func initProjectsFinal() {
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow"). // TODO: MORE!
 		finalize()
 	wqdbProject = wqdbProject.WithStatus(statusComplete).
+		WithSummary("SUMMARY HERE").
 		WithLang("SQL", Often).
 		WithLang("Go", Often).
 		WithLang("Scala", Often).
@@ -655,8 +649,9 @@ func initProjectsFinal() {
 		WithCaches().
 		WithTechnologies("Github Actions").
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow"). // TODO: MORE!
-		finalize()                                                      // TODO: MORE!
+		finalize() // TODO: MORE!
 	supportProject = supportProject.WithStatus(statusComplete).
+		WithSummary("SUMMARY HERE").
 		WithLang("SQL", Regularly).
 		WithLang("Go", Often).
 		WithLang("Terraform", Often).
@@ -671,6 +666,7 @@ func initProjectsFinal() {
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow"). // TODO: MORE!
 		finalize()
 	scudsProject = scudsProject.WithStatus(statusComplete).
+		WithSummary("SUMMARY HERE").
 		WithLang("Scala", Extensively).
 		WithLang("Go", Often).
 		WithLang("Terraform", Often).
@@ -686,6 +682,7 @@ func initProjectsFinal() {
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow"). // TODO: MORE!
 		finalize()
 	ufoProject = ufoProject.WithStatus(statusMaintaining).
+		WithSummary("SUMMARY HERE").
 		WithLang("Scala", Extensively).
 		WithLang("Go", Regularly).
 		WithLang("Terraform", Regularly).
@@ -701,6 +698,7 @@ func initProjectsFinal() {
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow"). // TODO: MORE!
 		finalize()
 	goweProject = goweProject.WithStatus(statusMaintaining).
+		WithSummary("SUMMARY HERE").
 		WithLang("Go", Extensively).
 		WithLang("Terraform", Regularly).
 		WithLang("Bash", Some).
@@ -714,9 +712,11 @@ func initProjectsFinal() {
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow"). // TODO: MORE!
 		finalize()
 	saiCollegeProject = saiCollegeProject.WithStatus(statusComplete). // TODO: MORE!
-										finalize()
+		WithSummary("SUMMARY HERE").
+		finalize()
 	// TODO: sai project for JAMF
 	mushDbProject = mushDbProject.WithStatus(statusBuilding).
+		WithSummary("SUMMARY HERE").
 		WithLang("Go", Extensively).
 		WithLang("Typescript", Extensively).
 		WithLang("Javascript", Extensively).
@@ -726,93 +726,108 @@ func initProjectsFinal() {
 		WithDbs("mongodb").
 		WithCaches().
 		WithTechnologies("Github Actions", "React", "NextJs", "RFID", "NFC", "I2C", "Cloudflare", "Grafana", "Github Actions"). // TODO: MORE?
-		WithPlatforms().
+		WithPlatforms("Github").
 		WithCloudProvider("GCP", "Google Cloud DNS", "Identity Platform"). // TODO: MORE!
 		finalize()
 	cvProject = cvProject.WithStatus(statusBuilding).
+		WithSummary("This project! SUMMARY HERE").
 		WithLang("Go", Extensively).
-		WithLang("Javascript", Some).
-		WithDbs().
-		WithCaches().
+		WithLang("Bash", Some).
+		WithLang("Javascript", Rarely).
 		WithTechnologies("Github Actions", "Obsidian", "Markdown", "Quartz"). // TODO: MORE?
-		WithPlatforms().                                                      // TODO: MORE!
+		// TODO: add info to technologies????
+		WithPlatforms("Github"). // TODO: MORE!
 		finalize()
 	measurementsProject = measurementsProject.WithStatus(statusShelved).
+		WithSummary("SUMMARY HERE").
 		WithLang("Go", Extensively).
 		WithDbs().
 		WithCaches().
 		WithTechnologies("Github Actions"). // TODO: MORE?
-		WithPlatforms().                    // TODO: MORE!
+		WithPlatforms(). // TODO: MORE!
 		finalize()
 	nfcScannerProject = nfcScannerProject.WithStatus(statusBuilding).
+		WithSummary("SUMMARY HERE").
 		WithLang("Go", Extensively).
 		WithDbs().
 		WithCaches().
 		WithTechnologies("Github Actions"). // TODO: MORE?
-		WithPlatforms().                    // TODO: MORE!
+		WithPlatforms("Github"). // TODO: MORE!
 		finalize()
 	coreShufflerProject = coreShufflerProject.WithStatus(statusComplete).
+		WithSummary("SUMMARY HERE").
 		WithLang("Javascript", Extensively).
 		WithDbs().
 		WithCaches().
 		WithTechnologies("JQuery"). // TODO: MORE?
-		WithPlatforms().            // TODO: MORE!
+		WithPlatforms("Github", "Gitlab"). // TODO: MORE!
 		finalize()
 	CharityProject = CharityProject.WithStatus(statusComplete). // TODO: MORE!
-									finalize()
+		WithSummary("SUMMARY HERE").
+		finalize()
 	WellAwareProject = WellAwareProject.WithStatus(statusComplete).
+		WithSummary("SUMMARY HERE").
 		WithCloudProvider("AWS",
-						"S3", "IAM", "Route53").
+			"S3", "IAM", "Route53").
 		WithTechnologies("Gitlab CI"). // TODO: MORE!
 		finalize()
 	CritColaProject = CritColaProject.WithStatus(statusComplete).
+		WithSummary("SUMMARY HERE").
 		WithCloudProvider("AWS",
 			"S3", "EC2", "IAM", "SecretsManager", "ECR", "Route53").
 		WithLang("Docker", Regularly).
 		WithLang("Terraform", Often).
 		WithTechnologies("Gitlab CI"). // TODO: MORE!
+		WithPlatforms("Gitlab").
 		finalize()
 	MastersDataAnalysisProject = MastersDataAnalysisProject.WithStatus(statusComplete).
+		WithSummary("SUMMARY HERE").
 		WithLang("Python", Often).
 		WithTechnologies("Gitlab CI"). // TODO: MORE!
+		WithPlatforms("Gitlab").
 		finalize()
 	capstoneProject = capstoneProject.WithStatus(statusComplete).
+		WithSummary("SUMMARY HERE").
 		WithLang("Javascript", Some). // TODO: any others? CASMO, SIMULATE? FORTRAN
 		WithLang("Fortran", Often).
 		WithDbs().
 		WithCaches().
 		WithTechnologies("JQuery", "Git"). // TODO: MORE?
-		WithPlatforms("Github").           // TODO: MORE!
+		WithPlatforms("Github"). // TODO: MORE!
 		finalize()
 	cherenkovProject = cherenkovProject.WithStatus(statusComplete).
+		WithSummary("SUMMARY HERE").
 		WithLang("Python", Often). // TODO: any others?
 		WithDbs().
 		WithCaches().
 		WithTechnologies("Arduino"). // TODO: MORE?
-		WithPlatforms("Github").     // TODO: MORE!
+		WithPlatforms("Github"). // TODO: MORE!
 		finalize()
 	roboticsTeamProject = roboticsTeamProject.WithStatus(statusComplete).
+		WithSummary("SUMMARY HERE").
 		WithLang("Python", Often). // TODO: any others?
 		WithDbs().
 		WithCaches().
 		WithTechnologies("Arduino"). // TODO: MORE?
-		WithPlatforms().             // TODO: MORE!
+		WithPlatforms(). // TODO: MORE!
 		finalize()
 	cncLaserCutterProject = cncLaserCutterProject.WithStatus(statusComplete).
+		WithSummary("SUMMARY HERE").
 		WithLang("Java", Often). // TODO: any others?
 		WithLang("Javascript", Regularly).
 		WithLang("HTML", Regularly).
 		WithDbs().
 		WithCaches().
 		WithTechnologies("Arduino"). // TODO: MORE?
-		WithPlatforms().             // TODO: MORE!
+		WithPlatforms(). // TODO: MORE!
 		finalize()
 	aerospaceFinalProject = aerospaceFinalProject.WithStatus(statusComplete).
+		WithSummary("SUMMARY HERE").
 		WithLang("Java", Minimal). // TODO: any others?
 		WithLang("Javascript", Minimal).
 		WithDbs().
 		WithCaches().
 		WithTechnologies("Arduino"). // TODO: MORE?
-		WithPlatforms().             // TODO: MORE!
+		WithPlatforms(). // TODO: MORE!
 		finalize()
 }
