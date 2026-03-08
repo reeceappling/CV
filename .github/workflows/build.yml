@@ -79,13 +79,13 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0 # Fetch all history for git info # TODO: likely no
-      - name: Fix permissions
-        run: sudo chown -R $USER:$USER . && chmod -R 777 ./quartz
+      - name: clone quartz
+        run: git clone https://github.com/jackyzha0/quartz.git
+#      - name: Fix permissions
+#        run: sudo chown -R $USER:$USER . && chmod -R 777 ./quartz
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: clone quartz
-        run: git clone https://github.com/jackyzha0/quartz.git
       - name: install quartz deps
         run: npm i
         working-directory: quartz
