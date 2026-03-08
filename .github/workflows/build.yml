@@ -45,6 +45,8 @@ jobs:
           token: ${{ github.token }}
           cache: true
           cache-dependency-path: 'go.sum'
+      - name: Make quartz dirs
+        run: mkdir -P ./quartz/content
       - name: Create Generator
         run: go build -o generate ./generator && chmod 777 generate
       - name: Generate and fix permissions
