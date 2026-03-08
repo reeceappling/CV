@@ -82,19 +82,28 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: clone quartz
+        run: git clone https://github.com/jackyzha0/quartz.git
+      - name: install quartz deps
+        run: npm i
+        working-directory: quartz
+      - name: create quartz work area
+        # Create new quartz, using shortest links (shortest, relative, absolute). -s=dir?
+        run: npx quartz create -X new -l shortest
+        working-directory: quartz
       - uses: actions/download-artifact@v5
         with:
           name: markdownFiles
           path: ./quartz/content # TODO: ensure ok
-      - name: Install Dependencies
-        run: npm ci # TODO: i?
+#      - name: Install Dependencies
+#        run: npm ci # TODO: i?
       - name: Build Quartz
         run: npx quartz build
         working-directory: ./quartz
       - uses: actions/upload-artifact@v4
         with:
           name: finalFiles
-          path: quartz/public
+          path: ./quartz/public
           if-no-files-found: error
           retention-days: 1 # TODO: ok????
           # The level of compression for Zlib to be applied to the artifact archive.
