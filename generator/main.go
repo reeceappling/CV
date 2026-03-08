@@ -155,6 +155,20 @@ func createMainPage() { // TODO: TAGS EVERYWHERE????
 	for _, name := range alphabetizedSkills {
 		b.WriteString(fmt.Sprintf("- %s\n", miscSkills[name].Link()))
 	}
+	b.WriteString("#### Interests\n") // TODO: move????
+	alphabetizedInterests := slices.Collect(maps.Keys(interests))
+	sort.Strings(alphabetizedInterests)
+	for _, name := range alphabetizedInterests {
+		b.WriteString(fmt.Sprintf("- %s\n", linkForInterest(name)))
+	}
+	b.WriteString("#### Subject Matters\n") // TODO: move????
+	alphabetizedSms := subjectMatters.AsSlice()
+	sort.Slice(alphabetizedSms, func(i, j int) bool { // TODO: ok????
+		return string(alphabetizedSms[i]) < string(alphabetizedSms[j])
+	})
+	for _, name := range alphabetizedSms {
+		b.WriteString(fmt.Sprintf("- %s\n", name.Link()))
+	}
 
 	b.WriteString("# Blog\n")
 	b.WriteString("[Blog](blog/blog.md)\n")
@@ -385,11 +399,13 @@ func main() {
 	// Create data structures representing the content of the pages to write
 	// initSchools() // Done outside of init
 	// initClientsFirst() // Done in vars
-	initProjectsAfterClients()
+	//initProjectsAfterClients()
 	initProjectsFinal()
 	initClientsAfterProjectsComplete() // Sets client on projects as well // TODO: may need to go after positions (worked that way before)
 	initPositionsAfterProjects()
 	initCompaniesAfterPositions() // Must be done after positions and project setup, but before projects pages. What about clients?
+
+	// TODO: SEARCH BAR
 
 	// Start creating actual pages
 	createLanguagesPages()
@@ -405,8 +421,11 @@ func main() {
 	createServicesPages()
 	createTechnologiesPages()
 	createMiscSkillsPages()
-	createMainPage()
+	createInterestsPages()
+	createSubjectMatterPages()
+	createMainPage() // TODO: interests!
 	createErrorPage()
+
 }
 
 func createLanguagesPages() {
@@ -789,6 +808,50 @@ func createMiscSkillsPages() {
 	}
 	for name, skill := range miscSkills {
 		writePage("miscSkill", withoutSpaces(name)+".md", skill.Bytes())
+	}
+}
+func createInterestsPages() {
+	b := strings.Builder{}
+	alphabetizedInterests := slices.Collect(maps.Keys(interests))
+	sort.Strings(alphabetizedInterests)
+	for _, name := range alphabetizedInterests {
+		b.WriteString(fmt.Sprintf("- %s\n", linkForInterest(name)))
+	}
+	err := os.WriteFile(root+"interests.md", []byte(b.String()), 777)
+	if err != nil {
+		panic("failed to write interests file: " + err.Error())
+	}
+	if len(interests) > 0 {
+		if err = os.MkdirAll(root+"interest", 777); err != nil {
+			panic("failed to create interest dir: " + err.Error())
+		}
+	}
+	for name, interest := range interests {
+		writePage("interest", withoutSpaces(name)+".md", interest.Bytes())
+	}
+}
+func createSubjectMatterPages() {
+	// TODO; THJIS!!!!
+	b := strings.Builder{}
+	alphabetizedSms := subjectMatters.AsSlice()
+	sort.Slice(alphabetizedSms, func(i, j int) bool { // TODO: ok????
+		return string(alphabetizedSms[i]) < string(alphabetizedSms[j])
+	})
+	for _, name := range alphabetizedSms {
+		b.WriteString(fmt.Sprintf("- %s\n", name.Link()))
+	}
+	err := os.WriteFile(root+"subjectMatters.md", []byte(b.String()), 777)
+	if err != nil {
+		panic("failed to write subjectMatters file: " + err.Error())
+	}
+	if len(subjectMatters) > 0 {
+		if err = os.MkdirAll(root+"subjectMatter", 777); err != nil {
+			panic("failed to create subjectMatter dir: " + err.Error())
+		}
+	}
+	for sm, _ := range subjectMatters {
+		// TODO: LIKELY USE A TAG SYSTEM INSTEAD!!!!!
+		writePage("subjectMatter", string(sm)+".md", []byte("SUBJECT MATTER PAGE NOT IMPLEMENTED") /*skill.Bytes()*/) // TODO: FIX!
 	}
 }
 

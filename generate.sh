@@ -1,2 +1,2 @@
-chmod -R 777 ./main
+chmod -R 777 ./quartz
 go run ./generator

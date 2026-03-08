@@ -1,6 +1,7 @@
 package main
 
 import (
+	"appli.ng/cv/generator/utils"
 	"fmt"
 	"maps"
 	"strings"
@@ -14,6 +15,7 @@ type SchoolPage struct {
 	Degrees          []*Degree
 	Projects         []*Project
 	Extracurriculars []Extracurricular
+	SubjectMatters   utils.Set[SubjectMatter] // TODO: DISPLAY THIS???
 }
 
 func NewSchool(name string) *SchoolPage {
@@ -23,12 +25,26 @@ func NewSchool(name string) *SchoolPage {
 		Degrees:          []*Degree{},
 		Projects:         []*Project{},
 		Extracurriculars: []Extracurricular{},
+		SubjectMatters:   map[SubjectMatter]struct{}{},
 	}
 	schools[name] = out
 	return out
 }
 func (pg *SchoolPage) WithSummary(info string) *SchoolPage {
 	pg.Info = &info
+	return pg
+}
+func (pg *SchoolPage) WithSubjectMatters(sms ...SubjectMatter) *SchoolPage {
+	if pg == nil {
+		return pg
+	}
+	for _, sm := range sms {
+		if sm == smFullStack {
+			pg.SubjectMatters.Add(smFrontend, smBackend)
+		}
+		pg.SubjectMatters.Add(sm)
+	}
+
 	return pg
 }
 func (pg *SchoolPage) ProjectTypeInfo() projectTypeInfo {
@@ -69,6 +85,13 @@ func (sp *SchoolPage) Bytes() []byte {
 					b.WriteString(fmt.Sprintf(" - %s\n", pos.notes))
 				}
 			}
+		}
+	}
+	// SubjectMatters
+	if len(sp.SubjectMatters) > 0 {
+		b.WriteString("# Related Subject Matters\n")
+		for sm, _ := range sp.SubjectMatters {
+			b.WriteString(fmt.Sprintf("- %s\n", sm.Link()))
 		}
 	}
 
@@ -161,6 +184,7 @@ var (
 			NewExtracurricular("Beta club", fixmeLink),
 		)
 	schoolNCSU = NewSchool("North Carolina State University").
+			WithSubjectMatters(smNuclearEngineering, smParticlePhysics, smFluidMechanics, smThermodynamics).
 			WithSummary("Undergraduate studies").
 			WithDegree(DegNE).
 			WithDegree(DegMath).
