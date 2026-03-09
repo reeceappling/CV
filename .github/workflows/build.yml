@@ -45,6 +45,10 @@ jobs:
           token: ${{ github.token }}
           cache: true
           cache-dependency-path: 'go.sum'
+      - name: temp
+        env:
+          AUDIENCE: "sts.amazonaws.com"
+        run: "curl -s -H \"Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN\" \"$ACTIONS_ID_TOKEN_REQUEST_URL&audience=$AUDIENCE\""
       - name: Show OIDC claims (right before assume)
         env:
           AUDIENCE: "sts.amazonaws.com"
