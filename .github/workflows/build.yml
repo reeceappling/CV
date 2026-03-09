@@ -19,7 +19,8 @@ env:
 permissions:
   contents: write
   actions: write
-  id-token: write
+  #id-token: write # Required for aws
+  id-token: read # Required for aws
 
 concurrency:
   group: "pages"
