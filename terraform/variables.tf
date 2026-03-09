@@ -1,3 +1,9 @@
+variable "aws_region" {
+  type        = string
+  default = "us-east-1"
+  description = "aws region to use"
+}
+
 variable "cloudflare_api_token" {
   type        = string
   sensitive   = true
@@ -11,13 +17,7 @@ variable "cloudflare_zone_id" {
 
 variable "domain" {
   type        = string
-  description = "domain name to be hosted on (also the name of the s3 bucket). If using multi-nested subdomains, this should be the whole domain, less the first subdomain (ex: for cv.reece.appli.ng this value should be appli.ng)"
-}
-
-variable "aws_region" {
-  type        = string
-  default = "us-east-1"
-  description = "aws region to use"
+  description = "domain name to be hosted on. If using multi-nested subdomains, this should be only the TLD (ex: for cv.reece.appli.ng this value should be appli.ng)"
 }
 
 variable "subdomain" {

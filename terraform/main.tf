@@ -33,7 +33,7 @@ output "website_s3_endpoint" {
   description = "The S3 static website endpoint URL (HTTP only) (not through cloudflare)"
 }
 # Output the website endpoint URL for access through cloudflare
-output "website_cloudflare_endpoint" {
+output "website_cloudflare_endpoint_and_bucket_name" {
   value = "${var.subdomain}.${var.domain}"
   description = "The https endpoint that goes through cloudflare"
 }
