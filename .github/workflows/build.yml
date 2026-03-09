@@ -13,15 +13,15 @@ on:
       - '.github/workflows/build**'
 
 env:
-  GLOBAL_PAT: ${{ secrets.CICD_TOKEN }} # Set PAT as a global environment variable # TODO: likely get rid of
-  AWS_REGION: us-east-2
+  #GLOBAL_PAT: ${{ secrets.CICD_TOKEN }} # Set PAT as a global environment variable # TODO: likely get rid of
+  AWS_REGION: "us-east-2"
   ACTIONS_STEP_DEBUG: true
 
 permissions:
-  # TODO: contents may need to be write
+  id-token: write
   contents: read
   actions: write
-  id-token: write
+
 
 concurrency:
   group: "pages"
