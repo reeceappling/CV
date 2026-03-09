@@ -13,7 +13,8 @@ on:
       - '.github/workflows/build**'
 
 env:
-  GLOBAL_PAT: ${{ secrets.CICD_TOKEN }} # Set PAT as a global environment variable
+  GLOBAL_PAT: ${{ secrets.CICD_TOKEN }} # Set PAT as a global environment variable # TODO: likely get rid of
+  AWS_REGION: us-east-2
 
 permissions:
   contents: write
@@ -121,8 +122,6 @@ jobs:
 
   deploy:
     needs: [build-quartz, generate-markdown]
-    env:
-      AWS_REGION: us-east-2
     if: |
       always() && !cancelled()
       && (needs.generate-markdown.result == 'success')
