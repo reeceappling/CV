@@ -18,7 +18,8 @@ env:
   ACTIONS_STEP_DEBUG: true
 
 permissions:
-  contents: write
+  # TODO: contents may need to be write
+  contents: read
   actions: write
   id-token: write
 
