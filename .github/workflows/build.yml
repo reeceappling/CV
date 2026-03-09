@@ -31,8 +31,6 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: temp
-        run: aws sts get-caller-identity
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0 # Fetch all history for git info # TODO: ok??? probably dont
@@ -56,6 +54,8 @@ jobs:
           audience: sts.amazonaws.com
           aws-region: us-east-2
           role-session-name: cv-deployment
+      - name: temp
+        run: aws sts get-caller-identity
       - name: Make quartz dirs
         run: mkdir -p ./quartz/content
       - name: Create Generator
