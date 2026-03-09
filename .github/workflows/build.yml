@@ -15,6 +15,7 @@ on:
 env:
   GLOBAL_PAT: ${{ secrets.CICD_TOKEN }} # Set PAT as a global environment variable # TODO: likely get rid of
   AWS_REGION: us-east-2
+  ACTIONS_STEP_DEBUG: true
 
 permissions:
   contents: write
