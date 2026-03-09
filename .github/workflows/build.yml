@@ -31,6 +31,7 @@ jobs:
     permissions:
       contents: write
     steps:
+      - run: echo "hello world"
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0 # Fetch all history for git info # TODO: ok??? probably dont
