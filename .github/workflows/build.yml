@@ -18,7 +18,6 @@ env:
 permissions:
   contents: write
   actions: write
-#  pages: write
   id-token: write
 
 concurrency:
@@ -27,8 +26,6 @@ concurrency:
 
 jobs:
   generate-markdown:
-#    env:
-#      GH_TOKEN: ${{ secrets.CICD_TOKEN }}
     runs-on: ubuntu-22.04
     permissions:
       contents: write
@@ -113,11 +110,6 @@ jobs:
           compression-level: 6
           overwrite: true
           include-hidden-files: false
-#      - name: Upload artifact
-#        uses: actions/upload-pages-artifact@v3
-#        working-directory: ./quartz
-#        with:
-#          path: public
 
   deploy:
     needs: [build-quartz, generate-markdown]
@@ -125,16 +117,35 @@ jobs:
       always() && !cancelled()
       && (needs.generate-markdown.result == 'success')
       && needs.build-quartz.result == 'success'
-    environment:
-      # TODO: ANY ENV VARS TO PUT IT ON S3 or GHP?
-#      name: github-pages
-#      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for git info # TODO: likely no
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.14.6"
       - uses: actions/download-artifact@v5
         with:
           name: finalFiles
-          path: public # TODO: ensure ok
+          path: terraform/public
+      - run: terraform init -backend-config='bucket=${{ vars.TERRAFORM_STATE_BUCKET }}'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+        working-directory: terraform
+      - run: terraform plan -var-file='deploy.tfvars' -var 'tf_state_bucket_name=${{vars.TERRAFORM_STATE_BUCKET}}' -var 'cloudflare_api_token=${{vars.CLOUDFLARE_API_TOKEN}}' -var 'cloudflare_zone_id=${{vars.CLOUDFLARE_ZONE_ID}}' -out=plan.tf
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+        working-directory: terraform
+      - run: terraform apply -auto-approve plan.tf
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+        working-directory: terraform
+
 #      - name: Deploy to GitHub Pages
 #        id: deployment
 #        uses: actions/deploy-pages@v4
