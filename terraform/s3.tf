@@ -60,7 +60,7 @@ resource "aws_s3_bucket_policy" "public_bucket_policy" {
 
 # TODO: bucket retention rules/backups (no backups)
 
-# Upload all files in public directory to bucket!
+# Upload all files in public directory to bucket
 resource "aws_s3_object" "website_files" {
   for_each = fileset(local.source_dir, "**")
   bucket = aws_s3_bucket.cv_site_bucket.id
