@@ -1,9 +1,9 @@
 terraform {
   backend "s3" {
-    // bucket gets overridden by pipeline
-    bucket = var.domain
+    // bucket gets overridden by pipeline. Ex: terraform init -backend-config='bucket=stateBucketName'
+    bucket = "overwritten-by-pipeline"
     key    = "tfState/cv-site.tfstate"
-    region = "us-east-2"
+    region = var.aws_region
   }
 
   required_providers {
@@ -20,7 +20,7 @@ terraform {
 
 # Configure Providers
 provider "aws" {
-  region = "us-east-2"
+  region = var.aws_region
 }
 provider "cloudflare" {
   api_token = var.cloudflare_api_token
@@ -38,17 +38,5 @@ output "website_cloudflare_endpoint" {
   description = "The https endpoint that goes through cloudflare"
 }
 
-# TODO: enable https
+# TODO: enable https?
 # TODO:
-
-# # Upload files from the local directory to the S3 bucket
-# resource "aws_s3_object" "directory_upload" {
-#   for_each = fileset("./public/", "**")
-#   bucket = aws_s3_bucket.cv_site_bucket.id
-#   # S3 path
-#   key = each.value
-#   # Local file source
-#   source = "./public/${each.value}"
-#   # include an etag to ensure updates iff file content changes
-#   etag = filemd5("./public/${each.value}")
-# }
