@@ -31,17 +31,6 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Debug OIDC Claims
-        uses: github/actions-oidc-debugger@main
-        with:
-          audience: '${{ github.server_url }}/${{ github.repository_owner }}'
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v6.0.0
-        with:
-          role-to-assume: ${{ secrets.AWS_RUNNER_ROLE }}
-          audience: sts.amazonaws.com
-          aws-region: us-east-2
-          role-session-name: cv-deployment
       - name: temp
         run: aws sts get-caller-identity
       - uses: actions/checkout@v4
@@ -56,6 +45,17 @@ jobs:
           token: ${{ github.token }}
           cache: true
           cache-dependency-path: 'go.sum'
+      - name: Debug OIDC Claims
+        uses: github/actions-oidc-debugger@main
+        with:
+          audience: '${{ github.server_url }}/${{ github.repository_owner }}'
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v6.0.0
+        with:
+          role-to-assume: ${{ secrets.AWS_RUNNER_ROLE }}
+          audience: sts.amazonaws.com
+          aws-region: us-east-2
+          role-session-name: cv-deployment
       - name: Make quartz dirs
         run: mkdir -p ./quartz/content
       - name: Create Generator
