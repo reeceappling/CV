@@ -1,9 +1,9 @@
 terraform {
   backend "s3" {
-    // bucket gets overridden by pipeline. Ex: terraform init -backend-config='bucket=stateBucketName'
+    // bucket and region get overridden by pipeline. Ex: terraform init -backend-config='bucket=stateBucketName'
     bucket = "overwritten-by-pipeline"
     key    = "tfState/cv-site.tfstate"
-    region = var.aws_region
+    region = "us-east-1"
   }
 
   required_providers {

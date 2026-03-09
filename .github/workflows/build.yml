@@ -113,6 +113,8 @@ jobs:
 
   deploy:
     needs: [build-quartz, generate-markdown]
+    env:
+      AWS_REGION: us-east-2
     if: |
       always() && !cancelled()
       && (needs.generate-markdown.result == 'success')
@@ -130,12 +132,12 @@ jobs:
         with:
           name: finalFiles
           path: terraform/public
-      - run: terraform init -backend-config='bucket=${{ vars.TERRAFORM_STATE_BUCKET }}'
+      - run: terraform init -backend-config='bucket=${{ vars.TERRAFORM_STATE_BUCKET }}' -backend-config='region=${{ env.AWS_REGION }}'
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
         working-directory: terraform
-      - run: terraform plan -var-file='deploy.tfvars' -var 'cloudflare_api_token=${{vars.CLOUDFLARE_API_TOKEN}}' -var 'cloudflare_zone_id=${{vars.CLOUDFLARE_ZONE_ID}}' -out=plan.tf
+      - run: terraform plan -var-file='deploy.tfvars' -var 'cloudflare_api_token=${{vars.CLOUDFLARE_API_TOKEN}}' -var 'cloudflare_zone_id=${{vars.CLOUDFLARE_ZONE_ID}}' -var 'aws_region=${{env.AWS_REGION}}' -out=plan.tf
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
