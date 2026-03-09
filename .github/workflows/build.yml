@@ -30,6 +30,14 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v6.0.0
+        with:
+          role-to-assume: ${{ secrets.AWS_RUNNER_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+          role-session-name: cv-deployment
+      - name: temp
+        run: aws sts get-caller-identity
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0 # Fetch all history for git info # TODO: ok??? probably dont
@@ -131,8 +139,8 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v6.0.0
         with:
-          aws-region: ${{ env.AWS_REGION }}
           role-to-assume: ${{ secrets.AWS_RUNNER_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
           role-session-name: cv-deployment
       - uses: actions/download-artifact@v5
         with:
@@ -144,6 +152,7 @@ jobs:
 #          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
 #          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
         working-directory: terraform
+
       - name: plan terraform
         run: terraform plan -var-file='deploy.tfvars' -var 'cloudflare_api_token=${{vars.CLOUDFLARE_API_TOKEN}}' -var 'cloudflare_zone_id=${{vars.CLOUDFLARE_ZONE_ID}}' -var 'aws_region=${{env.AWS_REGION}}' -out=plan.tf
 #        env:
