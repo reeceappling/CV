@@ -51,7 +51,13 @@ jobs:
       - name: plan terraform
         run: terraform plan -var-file='deploy.tfvars' -var 'domain=${{ env.domain }}' -var 'subdomain=${{ env.subdomain }}' -var 'cloudflare_api_token=${{secrets.CLOUDFLARE_API_TOKEN}}' -var 'cloudflare_zone_id=${{secrets.CLOUDFLARE_ZONE_ID}}' -var 'aws_region=${{env.AWS_REGION}}' -out=plan.tf
         working-directory: terraform
+      - name: apply terraform
+        run: terraform apply -auto-approve plan.tf
+        working-directory: terraform
   generate-markdown:
+    # TODO: REMOVE
+    if: |
+      !always()
     runs-on: ubuntu-22.04
     permissions:
       id-token: write
