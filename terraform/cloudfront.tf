@@ -62,7 +62,6 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     min_ttl                = 0 # none
     default_ttl            = 3600 # 1hr
     max_ttl                = 86400 # very long
-    headers      = ["Origin"] # TODO: ok?
     forwarded_values {
       query_string = false # TODO: ???
       headers      = ["Origin"] # TODO: ok?
