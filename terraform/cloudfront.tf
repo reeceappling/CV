@@ -1,9 +1,9 @@
 resource "aws_acm_certificate" "viewer_certificate" {
   provider = aws.us_east_1
-  domain_name       = local.domain_name # TODO: ensure ok and dont need the subdomain
+  domain_name       = local.full_domain # TODO: ensure ok and dont need the subdomain
   validation_method = "DNS"
   # Add subject alternative names if needed
-  subject_alternative_names = [local.domain_name] # TODO: ensure ok
+  subject_alternative_names = [local.full_domain] # TODO: ensure ok
 
   lifecycle {
     create_before_destroy = true
@@ -49,7 +49,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   comment             = "Some comment" # TODO: change
   default_root_object = "index.html"
   price_class = "PriceClass_100" # TODO: ensure ok
-  aliases = [local.domain_name]
+  aliases = [local.full_domain]
   # logging_config { # TODO: NO LOGS
   #   include_cookies = false
   #   bucket          = "mylogs.s3.amazonaws.com"

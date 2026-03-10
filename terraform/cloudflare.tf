@@ -18,7 +18,7 @@ resource "cloudflare_dns_record" "acm_validation" {
 
 resource "cloudflare_dns_record" "cv_subdomain_cname" {
   zone_id = var.cloudflare_zone_id
-  name = local.domain_name
+  name = local.full_domain
   type    = "CNAME"
   comment = "Subdomain CNAME record for CV hosted on S3"
   content = aws_cloudfront_distribution.s3_distribution.domain_name
