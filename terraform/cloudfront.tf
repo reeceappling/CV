@@ -29,6 +29,9 @@ resource "aws_cloudfront_origin_access_identity" "cv_site_bucket" {
 resource "aws_cloudfront_distribution" "s3_distribution" {
   depends_on = [aws_s3_bucket.cv_site_bucket] # TODO: ok?
   origin {
+    s3_origin_config {
+      origin_access_identity = ""
+    }
     domain_name              = aws_s3_bucket.cv_site_bucket.bucket_regional_domain_name
     origin_access_control_id = aws_cloudfront_origin_access_control.cv-site-bucket.id
     origin_id                = local.s3_origin_id
