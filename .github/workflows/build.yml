@@ -15,8 +15,9 @@ on:
 env:
   AWS_REGION: "us-east-2"
   ACTIONS_STEP_DEBUG: true
-  domain: appli.ng
-  subdomain: cv
+  # TODO: remove next 2
+  TF_VAR_domain: appli.ng
+  TF_VAR_subdomain: cv
 
 permissions:
   id-token: write
@@ -30,9 +31,6 @@ concurrency:
 
 jobs:
   temp:
-    env:
-      domain: appli.ng
-      subdomain: cv
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
@@ -51,9 +49,9 @@ jobs:
         run: terraform init -backend-config='bucket=${{ vars.TERRAFORM_STATE_BUCKET }}' -backend-config='region=${{ env.AWS_REGION }}'
         working-directory: terraform
 #      - name: clean out s3 bucket
-#        run: aws s3 rm s3://${{ env.subdomain }}.${{ env.domain }} --recursive
+#        run: aws s3 rm s3://${{ env.TF_VAR_subdomain }}.${{ env.TF_VAR_domain }} --recursive
       - name: plan terraform
-        run: terraform plan -var-file='deploy.tfvars' -var 'domain=${{ env.domain }}' -var 'subdomain=${{ env.subdomain }}' -var 'cloudflare_api_token=${{secrets.CLOUDFLARE_API_TOKEN}}' -var 'cloudflare_zone_id=${{secrets.CLOUDFLARE_ZONE_ID}}' -var 'aws_region=${{env.AWS_REGION}}' -out=plan.tf
+        run: terraform plan -var-file='deploy.tfvars' -var 'cloudflare_api_token=${{secrets.CLOUDFLARE_API_TOKEN}}' -var 'cloudflare_zone_id=${{secrets.CLOUDFLARE_ZONE_ID}}' -var 'aws_region=${{env.AWS_REGION}}' -out=plan.tf
         working-directory: terraform
       - name: apply terraform
         run: terraform apply -auto-approve plan.tf
@@ -168,12 +166,12 @@ jobs:
           name: finalFiles
           path: terraform/public
       - name: clean out s3 bucket
-        run: aws s3 rm s3://${{ env.subdomain }}.${{ env.domain }} --recursive
+        run: aws s3 rm s3://${{ env.TF_VAR_subdomain }}.${{ env.TF_VAR_domain }} --recursive
       - name: initialize terraform
         run: terraform init -backend-config='bucket=${{ vars.TERRAFORM_STATE_BUCKET }}' -backend-config='region=${{ env.AWS_REGION }}'
         working-directory: terraform
       - name: plan terraform
-        run: terraform plan -var-file='deploy.tfvars' -var 'domain=${{ env.domain }}' -var 'subdomain=${{ env.subdomain }}' -var 'cloudflare_api_token=${{secrets.CLOUDFLARE_API_TOKEN}}' -var 'cloudflare_zone_id=${{secrets.CLOUDFLARE_ZONE_ID}}' -var 'aws_region=${{env.AWS_REGION}}' -out=plan.tf
+        run: terraform plan -var-file='deploy.tfvars' -var 'cloudflare_api_token=${{secrets.CLOUDFLARE_API_TOKEN}}' -var 'cloudflare_zone_id=${{secrets.CLOUDFLARE_ZONE_ID}}' -var 'aws_region=${{env.AWS_REGION}}' -out=plan.tf
         working-directory: terraform
       - name: apply terraform
         run: terraform apply -auto-approve plan.tf
