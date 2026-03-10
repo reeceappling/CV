@@ -162,14 +162,11 @@ locals {
       var request = event.request;
       var uri = request.uri;
 
-      // Add index.html for directory paths (e.g., /posts/ -> /posts/index.html)
-      // TODO: probably delete first one
-      if (uri.endsWith('/')) {
-        request.uri += 'index.html';
-      }
-      // Add .html extension for clean URLs (e.g., /posts/123 -> /posts/123.html)
-      else if (!uri.includes('.')) {
-        request.uri += '/index.html';
+      if (path.length > 1){
+        const lastSegment = path.split('/').filter(Boolean).pop() || '';
+        if (lastSegment.length !==0 && !lastSegment.includes('.')){
+          request.uri += '.html';
+        }
       }
 
       return request;
