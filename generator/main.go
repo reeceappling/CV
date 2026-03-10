@@ -41,7 +41,7 @@ func createMainPage() { // TODO: TAGS EVERYWHERE????
 		if endDate == "current" {
 			endDate = ""
 		}
-		b.WriteString(fmt.Sprintf("%s | %s | %s | %s\n", company.Positions[0].Link(), company.Link(), company.Positions[len(company.Positions)-1].Start.String(), endDate))
+		b.WriteString(fmt.Sprintf("%s | %s | %s | %s\n", company.Positions[0].Name, company.Link(), company.Positions[len(company.Positions)-1].Start.String(), endDate))
 	}
 
 	b.WriteString("## Education\n")
