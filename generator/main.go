@@ -631,7 +631,7 @@ func createCompaniesPages() {
 	for _, companyName := range companiesOrder {
 		company := companies[companyName]
 		// TODO; is this ok?
-		b.WriteString(fmt.Sprintf("%s | %s | %s | %s\n", company.Positions[0].Link(), company.Link(), company.Start.String(), company.End.String()))
+		b.WriteString(fmt.Sprintf("%s | %s | %s | %s\n", company.Positions[0].Name, company.Link(), company.Start.String(), company.End.String()))
 	}
 	err := os.WriteFile(root+"companies.md", []byte(b.String()), 777)
 	if err != nil {
