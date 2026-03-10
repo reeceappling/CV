@@ -1,6 +1,7 @@
 package main
 
 import (
+	"appli.ng/cv/generator/utils"
 	"fmt"
 	"maps"
 	"slices"
@@ -11,9 +12,10 @@ var clients = map[string]*Client{}
 var clientsOrder = []string{}
 
 type Client struct {
-	Name     string
-	Info     *string // TODO: NEW! use this when the company can't be outright named!
-	Projects []*Project
+	Name        string
+	Info        *string // TODO: NEW! use this when the company can't be outright named!
+	Projects    []*Project
+	projectsSet utils.Set[string]
 	//Languages []string // Calculated later
 	// Parent
 	company *CompanyPage
@@ -35,7 +37,7 @@ func (pg *Client) Link() string {
 }
 
 func NewClient(name string, info ...string) *Client {
-	out := &Client{Name: name, Projects: []*Project{}, Info: nil}
+	out := &Client{Name: name, Projects: []*Project{}, Info: nil, projectsSet: utils.Set[string]{}}
 	if _, exists := clients[name]; exists {
 		panic("client already exists")
 	}
@@ -49,7 +51,7 @@ func NewClient(name string, info ...string) *Client {
 
 func (pg *Client) Bytes() []byte {
 	builder := strings.Builder{}
-	if pg.Projects != nil && len(pg.Projects) > 0 {
+	if pg.Projects != nil && len(pg.Projects) > 0 { // TODO: PROJECTS ARE BEING DOUBLE-POPULATED
 		builder.WriteString("# Projects\n")
 		for _, proj := range pg.Projects {
 			builder.WriteString(fmt.Sprintf("- [%s](project/%s)\n", proj.Name, withoutSpaces(proj.Name)))
@@ -93,8 +95,10 @@ func projectsFor(cs []*Client) []*Project {
 }
 
 func (c *Client) WithProjects(projs ...*Project) *Client {
-	c.Projects = append(c.Projects, projs...)
 	for _, proj := range projs {
+		if !c.projectsSet.Contains(proj.Name) {
+			c.Projects = append(c.Projects, proj)
+		}
 		proj.TypeInfo = proj.TypeInfo.setClient(c) // TODO: ?????
 		for lang, _ := range proj.Languages {
 			langs[lang].AddClient(c)
