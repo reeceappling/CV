@@ -55,7 +55,7 @@ jobs:
         run: terraform apply -auto-approve plan.tf
         working-directory: terraform
   generate-markdown:
-    # TODO: REMOVE
+    # TODO: REMOVE!
     if: |
       !always()
     runs-on: ubuntu-22.04
