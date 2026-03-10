@@ -99,7 +99,7 @@ jobs:
           name: markdownFiles
           path: ./quartz/content
       - name: Build Quartz
-        run: npx quartz build
+        run: npx --quiet quartz build
         working-directory: ./quartz
       - uses: actions/upload-artifact@v4
         with:

@@ -67,5 +67,6 @@ resource "aws_s3_object" "website_files" {
   source = "${local.source_dir}/${each.value}"
   acl = "public-read"
   etag   = filemd5("${local.source_dir}/${each.value}") # Etag ensures updates are detected
-  content_type = lookup(local.mime_types, regex("\\.([^.]+)$", each.value), "application/octet-stream")
+  content_type = lookup(local.mime_types, regex("\\.([^.]+)$", each.value)[0], "application/octet-stream")
+  //content_type = lookup(local.mime_types, regex("\\.([^.]+)$", each.value), "application/octet-stream") # TODO; NOT WORKING
 }

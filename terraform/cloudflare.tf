@@ -13,7 +13,7 @@ resource "cloudflare_dns_record" "cv_subdomain_cname" {
   name = "${ var.subdomain }.${ var.domain }"
   ttl     = 600            # Optional: Time to live in seconds, "1" means automatic # TODO; was 3600 (30min), set to 10min for testing purposes
   type = "CNAME"
-  comment = "Domain verification record" # TODO: edit
+  comment = "Subdomain CNAME record for CV hosted on S3"
   content = aws_s3_bucket_website_configuration.website_configuration.website_endpoint
   proxied = true
   # settings = {
