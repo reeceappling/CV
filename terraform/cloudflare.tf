@@ -12,8 +12,8 @@ resource "cloudflare_dns_record" "acm_validation" {
   type    = each.value.type
   comment = "Subdomain CNAME record for CV hosted on S3" # TODO: fix
   # Use trimsuffix to remove the trailing dot that AWS sometimes adds, which Cloudflare doesn't require
-  value   = trimsuffix(each.value.record, ".")
-  # content = trimsuffix(each.value.record, ".")
+  # value   = trimsuffix(each.value.record, ".")
+  content = trimsuffix(each.value.record, ".")
   proxied = false
   # settings = { # TODO: del or reenable???
   #   ipv4_only = true

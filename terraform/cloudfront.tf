@@ -130,6 +130,9 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   #   viewer_protocol_policy = "redirect-to-https"
   # }
 
+  restrictions {
+
+  }
   # viewer_certificate { # TODO: can we use this instead?
   #   cloudfront_default_certificate = true
   # }
@@ -138,6 +141,12 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     acm_certificate_arn = aws_acm_certificate.viewer_certificate.arn # ARN of your ACM cert in us-east-1 # TODO: ???
     ssl_support_method  = "sni-only"
     minimum_protocol_version = "TLSv1.2_2021"
+  }
+  restrictions {
+    geo_restriction {
+      restriction_type = "blacklist"
+      locations        = []#["US", "CA", "GB", "DE"]
+    }
   }
   tags = {
     component = "cv-site"
