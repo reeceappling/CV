@@ -143,10 +143,10 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     minimum_protocol_version = "TLSv1.2_2021"
   }
   restrictions {
-    # geo_restriction {
-    #   restriction_type = "blacklist"
-    #   locations        = ["DE"] # TODO: FIX
-    # }
+    geo_restriction {
+      restriction_type = "blacklist"
+      locations        = ["DE"] # TODO: FIX
+    }
   }
   tags = {
     component = "cv-site"
