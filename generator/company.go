@@ -75,7 +75,7 @@ func (pg *CompanyPage) Bytes() []byte {
 		for _, pos := range pg.Positions {
 			// TODO: NOT PROPERLY SORTED
 			// TODO: ORDERING?
-			builder.WriteString(fmt.Sprintf("- [%s](position/%s)\n", pos.Name, withoutSpaces(pos.MapName())))
+			builder.WriteString(fmt.Sprintf("- %s\n", pos.Link()))
 		}
 	}
 	clis := pg.Clients()
@@ -83,7 +83,7 @@ func (pg *CompanyPage) Bytes() []byte {
 	if clis != nil && len(clis) > 0 {
 		builder.WriteString("# Clients\n")
 		for _, client := range clis {
-			builder.WriteString(fmt.Sprintf("- [%s](client/%s)\n", client.Name, withoutSpaces(client.Name)))
+			builder.WriteString(fmt.Sprintf("- %s\n", client.Link()))
 		}
 	}
 	// resolve projects
@@ -91,7 +91,7 @@ func (pg *CompanyPage) Bytes() []byte {
 	if len(ps) > 0 {
 		builder.WriteString("# Projects\n")
 		for _, proj := range ps {
-			builder.WriteString(fmt.Sprintf("- [%s](project/%s)\n", proj.Name, withoutSpaces(proj.Name)))
+			builder.WriteString(fmt.Sprintf("- %s\n", proj.Link()))
 		}
 	}
 	// Resolve languages
@@ -109,7 +109,7 @@ func (pg *CompanyPage) Bytes() []byte {
 		}
 		for f := 5; f >= 0; f-- {
 			for _, name := range freqs[Frequency(f)] {
-				builder.WriteString(fmt.Sprintf("- [%s](language/%s)\n", name, withoutSpaces(name)))
+				builder.WriteString(fmt.Sprintf("- %s\n", langs[name].Link()))
 			}
 		}
 	}

@@ -54,7 +54,7 @@ func createMainPage() { // TODO: TAGS EVERYWHERE????
 		for i, d := range school.Degrees {
 			temp[i] = d.StringShort()
 		}
-		b.WriteString(fmt.Sprintf("- [%s](school/%s) %s\n", school.Name, withoutSpaces(school.Name), strings.Join(temp, ", ")))
+		b.WriteString(fmt.Sprintf("- %s %s\n", school.Link(), strings.Join(temp, ", ")))
 	}
 
 	b.WriteString("## Certifications\n")
@@ -83,7 +83,7 @@ func createMainPage() { // TODO: TAGS EVERYWHERE????
 	b.WriteString("## Languages\n[Full Page](Languages.md)\n")
 	b.WriteString("### Preferred (in order)\n")
 	for _, name := range []string{"Go", "Typescript", "Terraform", "Bash"} {
-		b.WriteString(fmt.Sprintf("- [%s](language/%s)\n", name, withoutSpaces(name)))
+		b.WriteString(fmt.Sprintf("- %s\n", langs[name].Link()))
 	}
 	b.WriteString("### All\n")
 	b.WriteString(alphabetizedLinksCompressed(langs, "language"))
@@ -97,7 +97,7 @@ func createMainPage() { // TODO: TAGS EVERYWHERE????
 	b.WriteString("## Cloud Providers\n[Full Page](providers.md)\n")
 	b.WriteString("### Preferred\n")
 	for _, name := range []string{"AWS"} {
-		b.WriteString(fmt.Sprintf("- [%s](provider/%s)\n", name, withoutSpaces(name)))
+		b.WriteString(fmt.Sprintf("- %s\n", providers[name].Link()))
 	}
 	b.WriteString("### All\n")
 	b.WriteString(alphabetizedLinksCompressed(providers, "provider"))
@@ -224,42 +224,42 @@ func bytesForAll(item showAll, showFrequencies bool) string {
 		}
 		for f := 5; f >= 0; f-- {
 			for _, name := range freqs[Frequency(f)] {
-				b.WriteString(fmt.Sprintf("[%s](language/%s) | %s\n", name, withoutSpaces(name), Frequency(f).String()))
+				b.WriteString(fmt.Sprintf("%s | %s\n", langs[name].Link(), Frequency(f).String()))
 			}
 		}
 	}
 	if len(tempC) > 0 {
 		b.WriteString("# Caches\n")
 		for name, _ := range tempC {
-			b.WriteString(fmt.Sprintf("[%s](cache/%s)\n", name, withoutSpaces(name)))
+			b.WriteString(fmt.Sprintf("%s\n", caches[name].Link()))
 		}
 	}
 	if len(tempD) > 0 {
 		b.WriteString("# Databases\n")
 		for name, _ := range tempD {
-			b.WriteString(fmt.Sprintf("[%s](db/%s)\n", name, withoutSpaces(name)))
+			b.WriteString(fmt.Sprintf("%s\n", dbs[name].Link()))
 		}
 	}
 	if len(tempP) > 0 {
 		b.WriteString("# Platforms\n")
 		for name, _ := range tempP {
-			b.WriteString(fmt.Sprintf("[%s](platform/%s)\n", name, withoutSpaces(name)))
+			b.WriteString(fmt.Sprintf("%s\n", platforms[name].Link()))
 		}
 	}
 	if len(tempT) > 0 {
 		b.WriteString("# Technologies\n")
 		for name, _ := range tempT {
-			b.WriteString(fmt.Sprintf("[%s](technology/%s)\n", name, withoutSpaces(name)))
+			b.WriteString(fmt.Sprintf("%s\n", techs[name].Link()))
 		}
 	}
 	if len(tempS) > 0 {
 		b.WriteString("# Providers\n")
 		for name, svcs := range tempS {
 			tempSvcs := make([]string, len(svcs))
-			for i, svc := range slices.Collect(maps.Keys(svcs)) {
-				tempSvcs[i] = fmt.Sprintf("[%s](service/%s)", svc, withoutSpaces(name))
+			for _, svc := range slices.Collect(maps.Keys(svcs)) {
+				b.WriteString(fmt.Sprintf("%s\n", cloudServices[svc].Link()))
 			}
-			b.WriteString(fmt.Sprintf("[%s](provider/%s): %s\n", name, withoutSpaces(name), strings.Join(tempSvcs, ", ")))
+			b.WriteString(fmt.Sprintf("%s: %s\n", providers[name].Link(), strings.Join(tempSvcs, ", ")))
 		}
 	}
 	if showFrequencies {

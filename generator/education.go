@@ -72,7 +72,7 @@ func (sp *SchoolPage) Bytes() []byte {
 	// Write all projects
 	b.WriteString("# Projects\n")
 	for _, proj := range sp.Projects {
-		b.WriteString(fmt.Sprintf("- [%s](project/%s)\n", proj.Name, withoutSpaces(proj.Name)))
+		b.WriteString(fmt.Sprintf("- %s\n", proj.Link()))
 	}
 	// Write all extracurriculars
 	b.WriteString("# Extracurriculars and positions held\n")

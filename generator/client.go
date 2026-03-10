@@ -51,10 +51,10 @@ func NewClient(name string, info ...string) *Client {
 
 func (pg *Client) Bytes() []byte {
 	builder := strings.Builder{}
-	if pg.Projects != nil && len(pg.Projects) > 0 { // TODO: PROJECTS ARE BEING DOUBLE-POPULATED
+	if pg.Projects != nil && len(pg.Projects) > 0 {
 		builder.WriteString("# Projects\n")
 		for _, proj := range pg.Projects {
-			builder.WriteString(fmt.Sprintf("- [%s](project/%s)\n", proj.Name, withoutSpaces(proj.Name)))
+			builder.WriteString(fmt.Sprintf("- %s\n", proj.Link()))
 		}
 	}
 	ls := languagesFor(pg.Projects)
@@ -73,7 +73,7 @@ func (pg *Client) Bytes() []byte {
 		}
 		for f := 5; f >= 0; f-- {
 			for _, name := range freqs[Frequency(f)] {
-				builder.WriteString(fmt.Sprintf("[%s](language/%s) | %s\n", name, withoutSpaces(name), Frequency(f).String()))
+				builder.WriteString(fmt.Sprintf("%s | %s\n", langs[name].Link(), Frequency(f).String()))
 			}
 		}
 	}

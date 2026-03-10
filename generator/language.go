@@ -29,13 +29,14 @@ func (pg *LanguagePage) Bytes() []byte {
 	if pg.Companies != nil && len(pg.Companies) > 0 {
 		builder.WriteString("# Companies\n")
 		for companyName := range pg.Companies {
-			builder.WriteString(fmt.Sprintf("- [%s](Company/%s)\n", companyName, withoutSpaces(companyName)))
+
+			builder.WriteString(fmt.Sprintf("- %s\n", companies[companyName].Link()))
 		}
 	}
 	if pg.Clients != nil && len(pg.Clients) > 0 {
 		builder.WriteString("# Clients\n")
 		for name := range pg.Clients {
-			builder.WriteString(fmt.Sprintf("- [%s](Client/%s)\n", name, withoutSpaces(name)))
+			builder.WriteString(fmt.Sprintf("- %s\n", clients[name].Link()))
 		}
 	}
 	if pg.Projects != nil && len(pg.Projects) > 0 {
@@ -65,7 +66,7 @@ func (pg *LanguagePage) Bytes() []byte {
 					panic("unknown project type: " + v)
 				}
 
-				builder.WriteString(fmt.Sprintf("[%s](project/%s) | %s | %s\n", name, withoutSpaces(name), Frequency(f).String(), projTypeStr))
+				builder.WriteString(fmt.Sprintf("%s | %s | %s\n", projects[name].Link(), Frequency(f).String(), projTypeStr))
 			}
 		}
 	}

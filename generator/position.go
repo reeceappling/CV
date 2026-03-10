@@ -86,7 +86,7 @@ func (pg *Position) Bytes() []byte {
 	// TODO: NAME
 	// TODO: Start/end
 	// Company and clients
-	builder.WriteString(fmt.Sprintf("Company: [%s](company/%s)\n", pg.company.Name, withoutSpaces(pg.company.Name)))
+	builder.WriteString(fmt.Sprintf("Company: %s\n", pg.company.Link()))
 	if len(pg.Projects) > 0 {
 		builder.WriteString("# Clients and Projects\n")
 		builder.WriteString("Client | Project\n")
@@ -101,7 +101,7 @@ func (pg *Position) Bytes() []byte {
 	if len(pg.miscSkills) > 0 {
 		builder.WriteString("# Misc Skills\n")
 		for skill, _ := range pg.miscSkills {
-			builder.WriteString(fmt.Sprintf("- [%s](miscSkill/%s)\n", skill, withoutSpaces(skill))) // TODO: FIX ME!
+			builder.WriteString(fmt.Sprintf("- %s\n", miscSkills[skill].Link())) // TODO: FIX ME!
 		}
 	}
 	// SubjectMatters
