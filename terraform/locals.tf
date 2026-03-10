@@ -1,7 +1,8 @@
 locals {
   s3_origin_id = "cvSiteBucketOrigin"
   source_dir = "./public/"
-  site_bucket_name = "${ var.subdomain}.${ var.domain }" # TODO: del?
+  domain_name = "${ var.subdomain }.${ var.domain }"
+  site_bucket_name = local.domain_name
   # Helper local for content types
   mime_types = {
     "html" = "text/html"

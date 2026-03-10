@@ -1,13 +1,3 @@
-locals {
-  domain_name = "${ var.subdomain }.${ var.domain }"
-  cname_info = {
-     # TODO: ensure ok
-    resource_record_name = "${ var.subdomain }.${ var.domain }"
-    resource_record_type = "CNAME"
-    resource_record_value = aws_cloudfront_distribution.cloudfront_distribution.domain_name # TODO: ensure ok
-  }
-}
-
 resource "cloudflare_dns_record" "acm_validation" {
   for_each = {
     for dvo in aws_acm_certificate.viewer_certificate.domain_validation_options : dvo.domain_name => {

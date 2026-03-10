@@ -1,6 +1,6 @@
 # Ensure bucket exists
 resource "aws_s3_bucket" "cv_site_bucket" {
-  bucket = "${ var.subdomain}.${ var.domain }"
+  bucket = local.site_bucket_name
   # TODO: acl    = "private"
   # TODO: tags???
 }
@@ -31,7 +31,7 @@ resource "aws_s3_bucket_website_configuration" "website_configuration" {
 # }
 
 # Set object ownership to allow ACLs (required for public-read ACL)
-resource "aws_s3_bucket_ownership_controls" "website_bucket_ownership" {
+resource "aws_s3_bucket_ownership_controls" "website_bucket_ownership" { # TODO: might be unnecessary
   bucket = aws_s3_bucket.cv_site_bucket.id
   rule {
     object_ownership = "BucketOwnerPreferred"
