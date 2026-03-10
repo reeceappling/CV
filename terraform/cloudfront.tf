@@ -8,9 +8,9 @@ resource "aws_acm_certificate" "viewer_certificate" {
   lifecycle {
     create_before_destroy = true
   }
-  options {
-    export = "DISABLED" # Will incur costs otherwise
-  }
+  # options {
+  #   export = "DISABLED" # Will incur costs otherwise # TODO: this
+  # }
 }
 
 resource "aws_cloudfront_origin_access_control" "cv-site-bucket" {
