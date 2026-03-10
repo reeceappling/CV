@@ -81,6 +81,7 @@ func createMainPage() { // TODO: TAGS EVERYWHERE????
 	// TODO: any others?
 
 	b.WriteString("## Languages\n[Full Page](Languages.md)\n")
+	b.WriteString("[see all languages](language/)\n") // TODO: delete?
 	b.WriteString("### Preferred (in order)\n")
 	for _, name := range []string{"Go", "Typescript", "Terraform", "Bash"} {
 		b.WriteString(fmt.Sprintf("- %s\n", langs[name].Link()))
@@ -405,7 +406,7 @@ func main() {
 	initPositionsAfterProjects()
 	initCompaniesAfterPositions() // Must be done after positions and project setup, but before projects pages. What about clients?
 
-	// TODO: SEARCH BAR
+	// TODO: SEARCH BAR?
 
 	// Start creating actual pages
 	createLanguagesPages()
@@ -423,7 +424,7 @@ func main() {
 	createMiscSkillsPages()
 	createInterestsPages()
 	createSubjectMatterPages()
-	createMainPage() // TODO: interests!
+	createMainPage()
 	createErrorPage()
 
 }
@@ -436,8 +437,9 @@ func createLanguagesPages() {
 		b.WriteString(fmt.Sprintf("- %s\n", l.Link()))
 	}
 	b.WriteString("# All\n")
+	b.WriteString("[see all languages](language/)\n") // TODO: delete?
 	b.WriteString(alphabetizedLinks(langs, "language"))
-	err := writeFileFromScratch("Languages.md", b.String()) // TODO: use this everywhere!
+	err := writeFileFromScratch("Languages.md", b.String())
 	if err != nil {
 		panic(err.Error())
 	}
