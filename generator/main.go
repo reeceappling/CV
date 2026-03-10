@@ -12,6 +12,7 @@ import (
 )
 
 // TODO: change top-left title that says "Quartz 4"
+// TODO: remove "Aug 23, 2023 2 min read" at top of each page
 // TODO: fix this link: https://cv.appli.ng/language/
 /* TODO:
 ---
@@ -36,8 +37,8 @@ func createMainPage() { // TODO: TAGS EVERYWHERE????
 
 	// TODO: ADD OTHER JOBS, UNRELATED TO SOFTWARE
 	b.WriteString("## Work History ([Companies](companies.md), [Positions](positions.md))\n") // TODO: RENAME
-	b.WriteString(" Positions | Latest Position | Company | Start Date | End Date\n")
-	b.WriteString(":-- | :-- | :-- | --: | :--\n")
+	b.WriteString("Latest Position | Company | Start Date | End Date\n")
+	b.WriteString(":-- | :-- | --: | :--\n")
 	for _, companyName := range companiesOrder {
 		company := companies[companyName]
 		endDate := company.Positions[0].End.String()
@@ -73,7 +74,7 @@ func createMainPage() { // TODO: TAGS EVERYWHERE????
 	} {
 		link := ""
 		if cert.Link != nil {
-			link = fmt.Sprintf(`[certification](%s)`, *cert.Link)
+			link = fmt.Sprintf(`[link](%s)`, *cert.Link)
 		}
 		expiryDate := cert.ExpiryDate.String()
 		if expiryDate == "current" {
