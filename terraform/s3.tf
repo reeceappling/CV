@@ -4,11 +4,6 @@ resource "aws_s3_bucket" "cv_site_bucket" {
   # TODO: tags???
 }
 
-resource "aws_s3_bucket_acl" "b_acl" {
-  bucket = aws_s3_bucket.cv_site_bucket.id
-  acl    = "private"
-}
-
 # Enable static website hosting
 resource "aws_s3_bucket_website_configuration" "website_configuration" {
   bucket = aws_s3_bucket.cv_site_bucket.id
@@ -26,6 +21,12 @@ resource "aws_s3_bucket_ownership_controls" "website_bucket_ownership" { # TODO:
   rule {
     object_ownership = "BucketOwnerPreferred"
   }
+}
+
+resource "aws_s3_bucket_acl" "b_acl" {
+  depends_on = [aws_s3_bucket_ownership_controls.website_bucket_ownership] # TODO: ok?
+  bucket = aws_s3_bucket.cv_site_bucket.id
+  acl    = "private"
 }
 
 data "aws_iam_policy_document" "site_bucket" {
@@ -53,7 +54,7 @@ resource "aws_s3_object" "website_files" {
   bucket = aws_s3_bucket.cv_site_bucket.id
   key    = each.value
   source = "${local.source_dir}${each.value}"
-  acl = "public-read"
+  # acl = "public-read"
   etag   = filemd5("${local.source_dir}/${each.value}") # Etag ensures updates are detected
   //content_type = lookup(local.mime_types, regex("\\.([^.]+)$", each.value)[0], "application/octet-stream")
   content_type = lookup(local.mime_types, reverse(split(".", each.value))[0], "application/octet-stream")
