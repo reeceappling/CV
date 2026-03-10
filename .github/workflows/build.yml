@@ -28,6 +28,9 @@ concurrency:
 
 jobs:
   temp:
+    env:
+      domain: appli.ng
+      subdomain: cv.reece
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
