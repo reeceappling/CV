@@ -27,12 +27,19 @@ resource "aws_cloudfront_origin_access_identity" "cv_site_bucket" {
 }
 
 resource "aws_cloudfront_distribution" "s3_distribution" {
-  depends_on = [aws_s3_bucket.cv_site_bucket]
+  depends_on = [aws_s3_bucket.cv_site_bucket] # TODO: ok?
   origin {
     domain_name              = aws_s3_bucket.cv_site_bucket.bucket_regional_domain_name
     origin_access_control_id = aws_cloudfront_origin_access_control.cv-site-bucket.id
     origin_id                = local.s3_origin_id
   }
+  # origin {
+  #   s3_origin_config {
+  #     origin_access_identity = aws_cloudfront_origin_access_identity.cv_site_bucket.cloudfront_access_identity_path
+  #   }
+  #   domain_name = local.domain_name # TODO: ok?
+  #   origin_id   = local.s3_origin_id # TODO: ok?
+  # }
 
   enabled             = true
   is_ipv6_enabled     = true
@@ -45,13 +52,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   #   bucket          = "mylogs.s3.amazonaws.com"
   #   prefix          = "myprefix"
   # }
-  origin {
-    s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.cv_site_bucket.cloudfront_access_identity_path
-    }
-    domain_name = local.domain_name # TODO: ok?
-    origin_id   = local.s3_origin_id # TODO: ok?
-  }
+
 
   default_cache_behavior {
     # path_pattern = "*.html" # TODO: ok?
