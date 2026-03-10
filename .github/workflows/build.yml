@@ -15,10 +15,8 @@ on:
 env:
   AWS_REGION: "us-east-2"
   ACTIONS_STEP_DEBUG: true
-  # TODO: remove next 2
   TF_VAR_domain: appli.ng
-  # TODO: CHANGE TO cv
-  TF_VAR_subdomain: cv.reece
+  TF_VAR_subdomain: cv
 
 permissions:
   id-token: write
@@ -51,21 +49,21 @@ jobs:
         working-directory: terraform
 #      - name: clean out s3 bucket
 #        run: aws s3 rm s3://${{ env.TF_VAR_subdomain }}.${{ env.TF_VAR_domain }} --recursive
-#      - name: plan terraform
-#        run: terraform plan -var-file='deploy.tfvars' -var 'cloudflare_api_token=${{secrets.CLOUDFLARE_API_TOKEN}}' -var 'cloudflare_zone_id=${{secrets.CLOUDFLARE_ZONE_ID}}' -var 'aws_region=${{env.AWS_REGION}}' -out=plan.tf
-#        working-directory: terraform
-      - name: plan terraform destroy
-        run: terraform plan -var-file='deploy.tfvars' -var 'cloudflare_api_token=${{secrets.CLOUDFLARE_API_TOKEN}}' -var 'cloudflare_zone_id=${{secrets.CLOUDFLARE_ZONE_ID}}' -var 'aws_region=${{env.AWS_REGION}}'  -destroy -out=plan.tf
+      - name: plan terraform
+        run: terraform plan -var-file='deploy.tfvars' -var 'cloudflare_api_token=${{secrets.CLOUDFLARE_API_TOKEN}}' -var 'cloudflare_zone_id=${{secrets.CLOUDFLARE_ZONE_ID}}' -var 'aws_region=${{env.AWS_REGION}}' -out=plan.tf
         working-directory: terraform
-#      - name: plan terraform
-#        run: terraform plan -var-file='deploy.tfvars' -var 'cloudflare_api_token=${{secrets.CLOUDFLARE_API_TOKEN}}' -var 'cloudflare_zone_id=${{secrets.CLOUDFLARE_ZONE_ID}}' -var 'aws_region=${{env.AWS_REGION}}' -out=plan.tf
-#        working-directory: terraform
       - name: apply terraform
         run: terraform apply -auto-approve plan.tf
         working-directory: terraform
-#        env:
-#          # TODO: set tf verbose if needed
-#          TF_LOG: TRACE
+        #        env:
+        #          # TODO: set tf verbose if needed
+        #          TF_LOG: TRACE
+        #      - name: plan terraform destroy
+        #        run: terraform plan -destroy -var-file='deploy.tfvars' -var 'cloudflare_api_token=${{secrets.CLOUDFLARE_API_TOKEN}}' -var 'cloudflare_zone_id=${{secrets.CLOUDFLARE_ZONE_ID}}' -var 'aws_region=${{env.AWS_REGION}}' -out=plan.tf
+        #        working-directory: terraform
+        #      - name: apply terraform destroy
+        #        run: terraform apply -auto-approve -destroy plan.tf
+
   generate-markdown:
     # TODO: REMOVE!
     if: |
@@ -76,6 +74,10 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4 # TODO: only checkout the go?
+        with:
+          sparse-checkout: |
+            generator
+            go.mod
       - name: Fix workspace permissions
         run: sudo chown -R $USER:$USER ${{ github.workspace }}
       - uses: actions/setup-go@v6
@@ -113,7 +115,7 @@ jobs:
     needs: [ generate-markdown ]
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4 # TODO: may not need
+#      - uses: actions/checkout@v4 # TODO: may not need
       - name: clone quartz
         run: git clone https://github.com/jackyzha0/quartz.git
       - uses: actions/setup-node@v4
@@ -158,6 +160,9 @@ jobs:
       actions: write
     steps:
       - uses: actions/checkout@v4 # TODO: only checkout the terraform???
+        with:
+          sparse-checkout: |
+            terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
