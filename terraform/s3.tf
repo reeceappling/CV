@@ -1,7 +1,6 @@
 # Ensure bucket exists
 resource "aws_s3_bucket" "cv_site_bucket" {
   bucket = local.site_bucket_name
-  # TODO: acl    = "private"
   # TODO: tags???
 }
 
@@ -21,15 +20,6 @@ resource "aws_s3_bucket_website_configuration" "website_configuration" {
   }
 }
 
-# # Control public access settings
-# resource "aws_s3_bucket_public_access_block" "website_bucket_public_access_block" {
-#   bucket = aws_s3_bucket.cv_site_bucket.id
-#   block_public_acls       = false
-#   block_public_policy     = false
-#   ignore_public_acls      = false
-#   restrict_public_buckets = false
-# }
-
 # Set object ownership to allow ACLs (required for public-read ACL)
 resource "aws_s3_bucket_ownership_controls" "website_bucket_ownership" { # TODO: might be unnecessary
   bucket = aws_s3_bucket.cv_site_bucket.id
@@ -37,26 +27,6 @@ resource "aws_s3_bucket_ownership_controls" "website_bucket_ownership" { # TODO:
     object_ownership = "BucketOwnerPreferred"
   }
 }
-# # Define a bucket policy to allow public read access
-# resource "aws_s3_bucket_policy" "public_bucket_policy" {
-#   depends_on = [
-#         aws_s3_bucket_ownership_controls.website_bucket_ownership,
-#         aws_s3_bucket_public_access_block.website_bucket_public_access_block,
-#       ]
-#   bucket = aws_s3_bucket.cv_site_bucket.id
-#   policy = jsonencode({
-#     Version = "2012-10-17"
-#     Statement = [
-#       {
-#         Sid    = "PublicReadGetObject"
-#         Effect = "Allow"
-#         Principal = "*"
-#         Action = "s3:GetObject"
-#         Resource = "${aws_s3_bucket.cv_site_bucket.arn}/*"
-#       }
-#     ]
-#   })
-# }
 
 data "aws_iam_policy_document" "site_bucket" {
   statement {

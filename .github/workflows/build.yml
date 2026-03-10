@@ -15,6 +15,8 @@ on:
 env:
   AWS_REGION: "us-east-2"
   ACTIONS_STEP_DEBUG: true
+  domain: appli.ng
+  subdomain: cv
 
 permissions:
   id-token: write
@@ -30,7 +32,7 @@ jobs:
   temp:
     env:
       domain: appli.ng
-      subdomain: cv.reece
+      subdomain: cv
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
@@ -145,9 +147,6 @@ jobs:
       && (needs.generate-markdown.result == 'success')
       && needs.build-quartz.result == 'success'
     runs-on: ubuntu-latest
-    env:
-      domain: appli.ng
-      subdomain: cv.reece
     permissions:
       id-token: write
       contents: read
