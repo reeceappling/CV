@@ -11,6 +11,8 @@ import (
 	"strings"
 )
 
+// TODO: change top-left title that says "Quartz 4"
+// TODO: fix this link: https://cv.appli.ng/language/
 /* TODO:
 ---
 title: Example Title
@@ -82,7 +84,7 @@ func createMainPage() { // TODO: TAGS EVERYWHERE????
 	// TODO: any others?
 
 	b.WriteString("## Languages\n[Full Page](Languages.md)\n")
-	b.WriteString("[see all languages](language/)\n") // TODO: delete?
+	b.WriteString("[see all languages LINK BROKEN](language/)\n") // TODO: delete?
 	b.WriteString("### Preferred (in order)\n")
 	for _, name := range []string{"Go", "Typescript", "Terraform", "Bash"} {
 		b.WriteString(fmt.Sprintf("- %s\n", langs[name].Link()))
@@ -90,10 +92,10 @@ func createMainPage() { // TODO: TAGS EVERYWHERE????
 	b.WriteString("### All\n")
 	b.WriteString(alphabetizedLinksCompressed(langs, "language"))
 
-	b.WriteString("## Databases\n[Full Page](dbs.md)\n")
+	b.WriteString("## Databases\n[Full Page](dbs.md)\n\n") // TODO: why does this take 2 newlines??
 	b.WriteString(alphabetizedLinksCompressed(dbs, "db"))
 
-	b.WriteString("## Caches\n[Full Page](caches.md)\n")
+	b.WriteString("## Caches\n[Full Page](caches.md)\n\n") // TODO: why does this take 2 newlines??
 	b.WriteString(alphabetizedLinksCompressed(caches, "cache"))
 
 	b.WriteString("## Cloud Providers\n[Full Page](providers.md)\n")
@@ -105,13 +107,13 @@ func createMainPage() { // TODO: TAGS EVERYWHERE????
 	b.WriteString(alphabetizedLinksCompressed(providers, "provider"))
 	// TODO: ADD GCP! Azure!
 
-	b.WriteString("## Technologies and Libraries\n[Full Page](technologies.md)\n")
-	b.WriteString(alphabetizedLinksCompressed(techs, "technology")) // TODO: dir correct?
+	b.WriteString("## Technologies and Libraries\n[Full Page](technologies.md)\n\n") // TODO: why does this take 2 newlines??
+	b.WriteString(alphabetizedLinksCompressed(techs, "technology"))                  // TODO: dir correct?
 
-	b.WriteString("### Containerization and Distributed Computing\n")
+	b.WriteString("### Containerization and Distributed Computing\n\n") // TODO: why does this take 2 newlines??
 	// TODO: POPULATE THIS AREA!!!!!!!!!!!!!
 
-	b.WriteString("## Platforms\n[Full Page](platforms.md)\n")
+	b.WriteString("## Platforms\n[Full Page](platforms.md)\n\n") // TODO: why does this take 2 newlines??
 	b.WriteString(alphabetizedLinksCompressed(platforms, "platform"))
 
 	b.WriteString("### CI/CD\n")
@@ -271,7 +273,7 @@ func bytesForAll(item showAll, showFrequencies bool) string {
 	return b.String()
 }
 
-type tracked struct { // TODO: use this to backlink (Ex: where a platform was used)
+type tracked struct {
 	Companies map[string]*CompanyPage
 	Positions map[string]*Position
 	Clients   map[string]*Client
@@ -344,25 +346,25 @@ func (tr *tracked) String() string {
 	if tr.Projects != nil {
 		b.WriteString("# Projects\n")
 		for _, proj := range tr.Projects {
-			b.WriteString(fmt.Sprintf("- [%s](project/%s)\n", proj.Name, withoutSpaces(proj.Name)))
+			b.WriteString(fmt.Sprintf("- %s\n", proj.Link()))
 		}
 	}
 	if tr.Positions != nil {
 		b.WriteString("# Positions\n")
 		for _, pos := range tr.Positions { // TODO: ENSURE THESE ARE IN ORDER
-			b.WriteString(fmt.Sprintf("- [%s](position/%s) at [%s](company/%s)\n", pos.Name, withoutSpaces(pos.MapName()), pos.company.Name, withoutSpaces(pos.company.Name)))
+			b.WriteString(fmt.Sprintf("- %s at %s\n", pos.Link(), pos.company.Link()))
 		}
 	}
 	if tr.Companies != nil {
 		b.WriteString("# Companies\n")
 		for _, item := range tr.Companies {
-			b.WriteString(fmt.Sprintf("- [%s](company/%s)\n", item.Name, withoutSpaces(item.Name)))
+			b.WriteString(fmt.Sprintf("- %s\n", item.Link()))
 		}
 	}
 	if tr.Clients != nil {
 		b.WriteString("# Clients\n")
 		for _, client := range tr.Clients {
-			b.WriteString(fmt.Sprintf("- [%s](client/%s)\n", client.Name, withoutSpaces(client.Name)))
+			b.WriteString(fmt.Sprintf("- %s\n", client.Link()))
 		}
 	}
 	return b.String()

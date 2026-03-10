@@ -789,13 +789,13 @@ func initProjectsFinal() {
 		WithSubjectMatters(smCiCd, smContainerization, smIAC, smClusterComputing, smDistributedComputing, smLinearAlgebra, smBackend).
 		finalize()
 	saiCollegeProject = saiCollegeProject.WithStatus(statusComplete). // TODO: MORE!
-										WithSummary("SUMMARY HERE"). // TODO: MORE!
-										WithLang("Html", Regularly).
-										WithLang("CSS", Regularly).
-										WithLang("Javascript", Some).
-										WithSubjectMatters(smFrontend).
-										WithTechnologies("Drupal").
-										finalize()
+		WithSummary("SUMMARY HERE"). // TODO: MORE!
+		WithLang("Html", Regularly).
+		WithLang("CSS", Regularly).
+		WithLang("Javascript", Some).
+		WithSubjectMatters(smFrontend).
+		WithTechnologies("Drupal").
+		finalize()
 	// TODO: sai project for JAMF
 	mushDbProject = mushDbProject.WithStatus(statusBuilding).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!
@@ -912,7 +912,7 @@ func initProjectsFinal() {
 	roboticsTeamProject = roboticsTeamProject.WithStatus(statusComplete).
 		WithSummary("SUMMARY HERE"). // TODO: this
 		WithLang("Java", Extensively).
-		WithLang("HTML", Some).
+		WithLang("Html", Some).
 		WithLang("CSS", Some).
 		WithLang("Javascript", Some).
 		WithTechnologies("PWM").
@@ -923,7 +923,7 @@ func initProjectsFinal() {
 		WithSummary("SUMMARY HERE"). // TODO: this
 		WithLang("Java", Often).
 		WithLang("Javascript", Regularly).
-		WithLang("HTML", Regularly).
+		WithLang("Html", Regularly).
 		WithTechnologies("PWM").
 		WithSubjectMatters(smRobotics, smLinearAlgebra, smEmbeddedSystems, smElectronics).
 		finalize()
