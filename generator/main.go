@@ -629,8 +629,8 @@ func createCompaniesPages() {
 	b.WriteString(":-- | :-- | --: | :--\n")
 	// TODO: make this into a cool chart!
 	for _, companyName := range companiesOrder {
+		// TODO: Consider linking every position from here, but on separate lines
 		company := companies[companyName]
-		// TODO; is this ok?
 		b.WriteString(fmt.Sprintf("%s | %s | %s | %s\n", company.Positions[0].Name, company.Link(), company.Start.String(), company.End.String()))
 	}
 	err := os.WriteFile(root+"companies.md", []byte(b.String()), 777)
@@ -643,7 +643,6 @@ func createCompaniesPages() {
 		}
 	}
 	for name, company := range companies {
-		// TODO: ADD THE TIMES AND DATES!
 		writePage("company", withoutSpaces(name)+".md", company.Bytes())
 	}
 }
@@ -834,7 +833,7 @@ func createInterestsPages() {
 	}
 }
 func createSubjectMatterPages() {
-	// TODO; THJIS!!!!
+	// TODO; THIS!!!!
 	b := strings.Builder{}
 	alphabetizedSms := subjectMatters.AsSlice()
 	sort.Slice(alphabetizedSms, func(i, j int) bool { // TODO: ok????
@@ -858,21 +857,6 @@ func createSubjectMatterPages() {
 	}
 }
 
-//func camelCaseToSpaces(s string) string {
-//	// Add a space before any lowercase character that follows an uppercase one,
-//	// and before any uppercase character that follows a lowercase one or a number.
-//	// This handles cases like "userID" -> "user ID" and "APIResponse" -> "API Response"
-//	re := regexp.MustCompile("([a-z0-9])([A-Z])")
-//	spaced := re.ReplaceAllString(s, "$1 $2")
-//
-//	// Handle cases where a sequence of uppercase letters is followed by a lowercase letter,
-//	// like "HTTPRequest" -> "HTTP Request" (the previous regex gives "HTTPR equest").
-//	re2 := regexp.MustCompile("([A-Z])([A-Z][a-z])")
-//	spaced = re2.ReplaceAllString(spaced, "$1 $2")
-//
-//	return spaced
-//}
-
 func writePage(dirName, filename string, bs []byte) {
 	path := dirName + "/" + filename
 	err := os.WriteFile(root+path, bs, 777)
@@ -884,28 +868,6 @@ func writePage(dirName, filename string, bs []byte) {
 func withoutSpaces(s string) string {
 	return strings.Join(strings.Split(s, " "), "_")
 }
-
-func init() {
-	// Languages
-	//for _, l := range []string{
-	//	"Go", "Scala", "Java", "Kotlin", "Javascript", "Typescript", "Python", "Fortran", "C/C++", "HTML", "CSS", "Rust",
-	//	// TODO: add more?
-	//} {
-	//	_ = NewLanguage(l)
-	//}
-	// TODO: cloud providers
-	//providers["AWS"] = NewCloudProvider("AWS")
-
-}
-
-// TODO: add clients.
-
-//var comps = map[string]*CompanyPage{
-//	"Source Allies": sai,
-//	"Freelance":     freelanceCompany,
-//}
-
-// TODO: DB ADD
 
 type Frequency int
 
@@ -954,14 +916,4 @@ func FrequencyFromString(s string) Frequency {
 	default:
 		panic("unhandled frequency: " + s)
 	}
-}
-
-type Page struct {
-	Path       string
-	Properties []pageProperty // TODO: may not need if not using dataViews
-	Body       string         // TODO: ok?
-}
-
-type pageProperty interface { // TODO: struct?
-	// TODO: fixMe
 }

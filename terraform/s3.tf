@@ -1,19 +1,10 @@
 # Ensure bucket exists
 resource "aws_s3_bucket" "cv_site_bucket" {
   bucket = local.site_bucket_name
-  # TODO: tags???
+  # tags = { # TODO: ???
+  #   component: cv-site
+  # }
 }
-
-# # Enable static website hosting
-# resource "aws_s3_bucket_website_configuration" "website_configuration" {
-#   bucket = aws_s3_bucket.cv_site_bucket.id
-#   index_document {
-#     suffix = "index.html" # TODO: ensure ok
-#   }
-#   error_document {
-#     key    = "error.html"
-#   }
-# }
 
 resource "aws_s3_bucket_public_access_block" "website" {
   bucket = aws_s3_bucket.cv_site_bucket.id
@@ -24,7 +15,7 @@ resource "aws_s3_bucket_public_access_block" "website" {
 }
 
 # Set object ownership to allow ACLs (required for public-read ACL)
-resource "aws_s3_bucket_ownership_controls" "website_bucket_ownership" { # TODO: might be unnecessary
+resource "aws_s3_bucket_ownership_controls" "website_bucket_ownership" {
   bucket = aws_s3_bucket.cv_site_bucket.id
   rule {
     object_ownership = "BucketOwnerPreferred"
@@ -32,7 +23,7 @@ resource "aws_s3_bucket_ownership_controls" "website_bucket_ownership" { # TODO:
 }
 
 resource "aws_s3_bucket_acl" "b_acl" {
-  depends_on = [aws_s3_bucket_ownership_controls.website_bucket_ownership] # TODO: ok?
+  depends_on = [aws_s3_bucket_ownership_controls.website_bucket_ownership]
   bucket = aws_s3_bucket.cv_site_bucket.id
   acl    = "private"
 }
@@ -70,9 +61,6 @@ resource "aws_s3_object" "website_files" {
   bucket = aws_s3_bucket.cv_site_bucket.id
   key    = each.value
   source = "${local.source_dir}${each.value}"
-  # acl = "public-read"
   etag   = filemd5("${local.source_dir}/${each.value}") # Etag ensures updates are detected
-  //content_type = lookup(local.mime_types, regex("\\.([^.]+)$", each.value)[0], "application/octet-stream")
   content_type = lookup(local.mime_types, reverse(split(".", each.value))[0], "application/octet-stream")
-  # TODO: lookup(local.mime_types, regex("\\.([^.]+)$", each.value)[0], "text/html")
 }

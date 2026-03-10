@@ -13,7 +13,6 @@ resource "cloudflare_dns_record" "acm_validation" {
   comment = "Certificate validation records for CV hosted on S3"
   content = trimsuffix(each.value.record, ".")
   proxied = false
-  # tags = ["component:cv-site"]
 }
 
 resource "cloudflare_dns_record" "cv_subdomain_cname" {
@@ -24,5 +23,4 @@ resource "cloudflare_dns_record" "cv_subdomain_cname" {
   content = aws_cloudfront_distribution.s3_distribution.domain_name
   proxied = true
   ttl     = 1 # Must be 1 for proxied
-  # tags = ["component:cv-site"]
 }

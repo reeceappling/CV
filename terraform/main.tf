@@ -31,17 +31,8 @@ provider "aws" {
   alias  = "us_east_1"
 }
 
-
-# # Output the website endpoint URL
-# output "website_s3_endpoint" {
-#   value = aws_s3_bucket_website_configuration.website_configuration.website_endpoint
-#   description = "The S3 static website endpoint URL (HTTP only) (not through cloudflare)"
-# }
 # Output the website endpoint URL for access through cloudflare
 output "website_cloudflare_endpoint_and_bucket_name" {
   value = "${var.subdomain}.${var.domain}"
   description = "The https endpoint that goes through cloudflare"
 }
-
-# TODO: enable https?
-# TODO:
