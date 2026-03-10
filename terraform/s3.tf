@@ -4,16 +4,16 @@ resource "aws_s3_bucket" "cv_site_bucket" {
   # TODO: tags???
 }
 
-# Enable static website hosting
-resource "aws_s3_bucket_website_configuration" "website_configuration" {
-  bucket = aws_s3_bucket.cv_site_bucket.id
-  index_document {
-    suffix = "index.html" # TODO: ensure ok
-  }
-  error_document {
-    key    = "error.html"
-  }
-}
+# # Enable static website hosting
+# resource "aws_s3_bucket_website_configuration" "website_configuration" {
+#   bucket = aws_s3_bucket.cv_site_bucket.id
+#   index_document {
+#     suffix = "index.html" # TODO: ensure ok
+#   }
+#   error_document {
+#     key    = "error.html"
+#   }
+# }
 
 resource "aws_s3_bucket_public_access_block" "website" {
   bucket = aws_s3_bucket.cv_site_bucket.id
@@ -38,22 +38,22 @@ resource "aws_s3_bucket_acl" "b_acl" {
 }
 
 data "aws_iam_policy_document" "site_bucket" {
+  # statement {
+  #   actions   = ["s3:GetObject"]
+  #   resources = ["${aws_s3_bucket.cv_site_bucket.arn}/*",aws_s3_bucket.cv_site_bucket.arn]
+  #
+  #   principals {
+  #     type        = "AWS"
+  #     identifiers = [aws_cloudfront_origin_access_identity.cv_site_bucket.iam_arn]
+  #   }
+  # }
   statement {
     actions   = ["s3:GetObject"]
     resources = ["${aws_s3_bucket.cv_site_bucket.arn}/*",aws_s3_bucket.cv_site_bucket.arn]
 
     principals {
       type        = "AWS"
-      identifiers = [aws_cloudfront_origin_access_identity.cv_site_bucket.iam_arn]
-    }
-  }
-  statement {
-    actions   = ["s3:GetObject"]
-    resources = ["${aws_s3_bucket.cv_site_bucket.arn}/*",aws_s3_bucket.cv_site_bucket.arn]
-
-    principals {
-      type        = "AWS"
-      identifiers = ["*"]
+      identifiers = [aws_cloudfront_distribution.s3_distribution.arn]
     }
   }
 }

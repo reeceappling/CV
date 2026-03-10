@@ -22,9 +22,9 @@ resource "aws_cloudfront_origin_access_control" "cv-site-bucket" {
 
 
 
-resource "aws_cloudfront_origin_access_identity" "cv_site_bucket" {
-  comment = "cv site bucket origin access identity"
-}
+# resource "aws_cloudfront_origin_access_identity" "cv_site_bucket" {
+#   comment = "cv site bucket origin access identity"
+# }
 
 resource "aws_cloudfront_distribution" "s3_distribution" {
   depends_on = [aws_s3_bucket.cv_site_bucket] # TODO: ok?
