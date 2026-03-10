@@ -48,7 +48,6 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
 
   default_cache_behavior {
-    # path_pattern = "*.html" # TODO: ok?
     allowed_methods  = ["GET", "HEAD"]# TODO: ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = local.s3_origin_id
@@ -59,7 +58,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     max_ttl                = 86400 # very long
     forwarded_values {
       query_string = false # TODO: ???
-      headers      = ["Origin"] # TODO: ok?
+      # headers      = ["Origin"] # TODO: ok?
       cookies {
         forward = "none" # TODO: all???
       }
