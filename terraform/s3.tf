@@ -48,12 +48,17 @@ data "aws_iam_policy_document" "site_bucket" {
   #   }
   # }
   statement {
-    actions   = ["s3:GetObject"]
+    actions   = ["s3:GetObject","s3:HeadObject"]
     resources = ["${aws_s3_bucket.cv_site_bucket.arn}/*",aws_s3_bucket.cv_site_bucket.arn]
 
     principals {
-      type        = "AWS"
-      identifiers = [aws_cloudfront_distribution.s3_distribution.arn]
+      type        = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
+    }
+    condition {
+      test = "StringEquals"
+      variable = "AWS:SourceArn"
+      values = [aws_cloudfront_distribution.s3_distribution.arn]
     }
   }
 }

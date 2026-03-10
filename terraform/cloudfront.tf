@@ -1,6 +1,6 @@
 resource "aws_acm_certificate" "viewer_certificate" {
   provider = aws.us_east_1
-  domain_name       = local.full_domain # TODO: ensure ok and dont need the subdomain
+  domain_name = local.full_domain # TODO: ensure ok and dont need the subdomain
   validation_method = "DNS"
   # Add subject alternative names if needed
   subject_alternative_names = [local.full_domain] # TODO: ensure ok
@@ -21,7 +21,6 @@ resource "aws_cloudfront_origin_access_control" "cv-site-bucket" {
 }
 
 
-
 # resource "aws_cloudfront_origin_access_identity" "cv_site_bucket" {
 #   comment = "cv site bucket origin access identity"
 # }
@@ -36,7 +35,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   enabled             = true
   is_ipv6_enabled     = true
-  comment             = "Some comment" # TODO: change
+  comment = "Some comment" # TODO: change
   default_root_object = "index.html"
   price_class = "PriceClass_100" # TODO: ensure ok
   aliases = [local.full_domain]
@@ -48,14 +47,14 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
 
   default_cache_behavior {
-    allowed_methods  = ["GET", "HEAD"]# TODO: ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
-    cached_methods   = ["GET", "HEAD"]
+    allowed_methods = ["GET", "HEAD"]# TODO: ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    cached_methods = ["GET", "HEAD"]
     target_origin_id = local.s3_origin_id
     viewer_protocol_policy = "redirect-to-https" # TODO: redirect-to-https?
-    compress               = true # TODO: ok?
-    min_ttl                = 0 # none
-    default_ttl            = 3600 # 1hr
-    max_ttl                = 86400 # very long
+    compress = true # TODO: ok?
+    min_ttl = 0 # none
+    default_ttl = 3600 # 1hr
+    max_ttl          = 86400 # very long
     forwarded_values {
       query_string = false # TODO: ???
       # headers      = ["Origin"] # TODO: ok?
@@ -67,10 +66,10 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   # Cache behavior with precedence 0
   ordered_cache_behavior {
-    path_pattern     = "*.html"
-    allowed_methods  = ["GET", "HEAD"] # TODO: ["GET", "HEAD", "OPTIONS"]
-    cached_methods   = ["GET", "HEAD"] # TODO: ["GET", "HEAD", "OPTIONS"]
-    target_origin_id = local.s3_origin_id
+    path_pattern           = "*.html"
+    allowed_methods = ["GET", "HEAD"] # TODO: ["GET", "HEAD", "OPTIONS"]
+    cached_methods = ["GET", "HEAD"] # TODO: ["GET", "HEAD", "OPTIONS"]
+    target_origin_id       = local.s3_origin_id
     min_ttl                = 0
     default_ttl            = 86400
     max_ttl                = 31536000
@@ -85,10 +84,10 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
   # Cache behavior with precedence 1
   ordered_cache_behavior {
-    path_pattern     = "*.webp"
-    allowed_methods  = ["GET", "HEAD"] # TODO: ["GET", "HEAD", "OPTIONS"]
-    cached_methods   = ["GET", "HEAD"] # TODO: ["GET", "HEAD", "OPTIONS"]
-    target_origin_id = local.s3_origin_id
+    path_pattern           = "*.webp"
+    allowed_methods = ["GET", "HEAD"] # TODO: ["GET", "HEAD", "OPTIONS"]
+    cached_methods = ["GET", "HEAD"] # TODO: ["GET", "HEAD", "OPTIONS"]
+    target_origin_id       = local.s3_origin_id
     min_ttl                = 0
     default_ttl            = 86400
     max_ttl                = 31536000
@@ -129,7 +128,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   viewer_certificate {
     #cloudfront_default_certificate = false # TODO: ???
     acm_certificate_arn = aws_acm_certificate.viewer_certificate.arn # ARN of your ACM cert in us-east-1 # TODO: ???
-    ssl_support_method  = "sni-only"
+    ssl_support_method = "sni-only"
     #minimum_protocol_version = "TLSv1.2_2021" # TODO: ???
   }
   # restrictions {
@@ -138,7 +137,8 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   #     locations        = ["DE"] # TODO: FIX
   #   }
   # }
-  restrictions { # TODO: does not work
+  restrictions {
+    # TODO: does not work
     geo_restriction {
       restriction_type = "none"
       locations = []
@@ -146,6 +146,10 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
   tags = {
     component = "cv-site"
+  }
+  timeouts {
+    create = "10m"
+    update = "10m"
   }
 }
 
