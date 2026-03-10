@@ -10,9 +10,6 @@ resource "aws_s3_bucket_acl" "b_acl" {
   acl    = "private"
 }
 
-locals {
-
-
 # Enable static website hosting
 resource "aws_s3_bucket_website_configuration" "website_configuration" {
   bucket = aws_s3_bucket.cv_site_bucket.id
@@ -89,5 +86,6 @@ resource "aws_s3_object" "website_files" {
   acl = "public-read"
   etag   = filemd5("${local.source_dir}/${each.value}") # Etag ensures updates are detected
   //content_type = lookup(local.mime_types, regex("\\.([^.]+)$", each.value)[0], "application/octet-stream")
-  content_type = lookup(local.mime_types, regex("\\.([^.]+)$", each.value)[0], "text/html")
+  content_type = lookup(local.mime_types, reverse(split(".", each.value))[0], "application/octet-stream")
+  # TODO: lookup(local.mime_types, regex("\\.([^.]+)$", each.value)[0], "text/html")
 }
