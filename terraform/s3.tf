@@ -17,10 +17,10 @@ resource "aws_s3_bucket_website_configuration" "website_configuration" {
 
 resource "aws_s3_bucket_public_access_block" "website" {
   bucket = aws_s3_bucket.cv_site_bucket.id
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
 }
 
 # Set object ownership to allow ACLs (required for public-read ACL)
