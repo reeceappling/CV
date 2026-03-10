@@ -10,7 +10,6 @@ resource "aws_s3_bucket_website_configuration" "website_configuration" {
     suffix = "index.html" # TODO: ensure ok
   }
   error_document {
-    suffix = "" # TODO: ensure ok
     key    = "error.html"
   }
 }
