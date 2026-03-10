@@ -46,7 +46,7 @@ jobs:
       - name: Make quartz dirs
         run: mkdir -p ./quartz/content
       - name: Generate
-        run: go run ./generator
+        run: sudo go run ./generator
 #      - name: Create Generator
 #        run: go build -o generate ./generator && chmod 777 generate
 #      - name: Generate and fix permissions
