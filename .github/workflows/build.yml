@@ -55,11 +55,11 @@ jobs:
 #        run: terraform plan -var-file='deploy.tfvars' -var 'cloudflare_api_token=${{secrets.CLOUDFLARE_API_TOKEN}}' -var 'cloudflare_zone_id=${{secrets.CLOUDFLARE_ZONE_ID}}' -var 'aws_region=${{env.AWS_REGION}}' -out=plan.tf
 #        working-directory: terraform
       - name: plan terraform destroy
-        run: terraform plan -var-file='deploy.tfvars' -var 'cloudflare_api_token=${{secrets.CLOUDFLARE_API_TOKEN}}' -var 'cloudflare_zone_id=${{secrets.CLOUDFLARE_ZONE_ID}}' -var 'aws_region=${{env.AWS_REGION}}' -destroy -out=plan.tf
+        run: terraform plan -var-file='deploy.tfvars' -var 'cloudflare_api_token=${{secrets.CLOUDFLARE_API_TOKEN}}' -var 'cloudflare_zone_id=${{secrets.CLOUDFLARE_ZONE_ID}}' -var 'aws_region=${{env.AWS_REGION}}'  -destroy -out=plan.tf
         working-directory: terraform
-      - name: plan terraform
-        run: terraform plan -var-file='deploy.tfvars' -var 'cloudflare_api_token=${{secrets.CLOUDFLARE_API_TOKEN}}' -var 'cloudflare_zone_id=${{secrets.CLOUDFLARE_ZONE_ID}}' -var 'aws_region=${{env.AWS_REGION}}' -out=plan.tf
-        working-directory: terraform
+#      - name: plan terraform
+#        run: terraform plan -var-file='deploy.tfvars' -var 'cloudflare_api_token=${{secrets.CLOUDFLARE_API_TOKEN}}' -var 'cloudflare_zone_id=${{secrets.CLOUDFLARE_ZONE_ID}}' -var 'aws_region=${{env.AWS_REGION}}' -out=plan.tf
+#        working-directory: terraform
       - name: apply terraform
         run: terraform apply -auto-approve plan.tf
         working-directory: terraform
