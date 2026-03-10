@@ -1,8 +1,17 @@
 # Ensure bucket exists
 resource "aws_s3_bucket" "cv_site_bucket" {
   bucket = "${ var.subdomain}.${ var.domain }"
+  # TODO: acl    = "private"
   # TODO: tags???
 }
+
+resource "aws_s3_bucket_acl" "b_acl" {
+  bucket = aws_s3_bucket.cv_site_bucket.id
+  acl    = "private"
+}
+
+locals {
+
 
 # Enable static website hosting
 resource "aws_s3_bucket_website_configuration" "website_configuration" {
@@ -15,14 +24,14 @@ resource "aws_s3_bucket_website_configuration" "website_configuration" {
   }
 }
 
-# Control public access settings
-resource "aws_s3_bucket_public_access_block" "website_bucket_public_access_block" {
-  bucket = aws_s3_bucket.cv_site_bucket.id
-  block_public_acls       = false
-  block_public_policy     = false
-  ignore_public_acls      = false
-  restrict_public_buckets = false
-}
+# # Control public access settings
+# resource "aws_s3_bucket_public_access_block" "website_bucket_public_access_block" {
+#   bucket = aws_s3_bucket.cv_site_bucket.id
+#   block_public_acls       = false
+#   block_public_policy     = false
+#   ignore_public_acls      = false
+#   restrict_public_buckets = false
+# }
 
 # Set object ownership to allow ACLs (required for public-read ACL)
 resource "aws_s3_bucket_ownership_controls" "website_bucket_ownership" {
@@ -31,25 +40,42 @@ resource "aws_s3_bucket_ownership_controls" "website_bucket_ownership" {
     object_ownership = "BucketOwnerPreferred"
   }
 }
-# Define a bucket policy to allow public read access
-resource "aws_s3_bucket_policy" "public_bucket_policy" {
-  depends_on = [
-        aws_s3_bucket_ownership_controls.website_bucket_ownership,
-        aws_s3_bucket_public_access_block.website_bucket_public_access_block,
-      ]
+# # Define a bucket policy to allow public read access
+# resource "aws_s3_bucket_policy" "public_bucket_policy" {
+#   depends_on = [
+#         aws_s3_bucket_ownership_controls.website_bucket_ownership,
+#         aws_s3_bucket_public_access_block.website_bucket_public_access_block,
+#       ]
+#   bucket = aws_s3_bucket.cv_site_bucket.id
+#   policy = jsonencode({
+#     Version = "2012-10-17"
+#     Statement = [
+#       {
+#         Sid    = "PublicReadGetObject"
+#         Effect = "Allow"
+#         Principal = "*"
+#         Action = "s3:GetObject"
+#         Resource = "${aws_s3_bucket.cv_site_bucket.arn}/*"
+#       }
+#     ]
+#   })
+# }
+
+data "aws_iam_policy_document" "site_bucket" {
+  statement {
+    actions   = ["s3:GetObject"]
+    resources = ["${aws_s3_bucket.cv_site_bucket.arn}/*"]
+
+    principals {
+      type        = "AWS"
+      identifiers = [aws_cloudfront_origin_access_identity.cv_site_bucket.iam_arn]
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "cv_site" {
   bucket = aws_s3_bucket.cv_site_bucket.id
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Sid    = "PublicReadGetObject"
-        Effect = "Allow"
-        Principal = "*"
-        Action = "s3:GetObject"
-        Resource = "${aws_s3_bucket.cv_site_bucket.arn}/*"
-      }
-    ]
-  })
+  policy = data.aws_iam_policy_document.site_bucket.json
 }
 
 # TODO: bucket retention rules/backups (no backups)
