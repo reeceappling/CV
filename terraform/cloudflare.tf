@@ -17,7 +17,6 @@ resource "cloudflare_dns_record" "acm_validation" {
 }
 
 resource "cloudflare_dns_record" "cv_subdomain_cname" {
-
   zone_id = var.cloudflare_zone_id
   name = local.full_domain
   type    = "CNAME"

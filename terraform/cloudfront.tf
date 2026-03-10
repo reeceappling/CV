@@ -133,15 +133,15 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     ssl_support_method  = "sni-only"
     #minimum_protocol_version = "TLSv1.2_2021" # TODO: ???
   }
-  # restrictions {
-  #   geo_restriction {
-  #     restriction_type = "blacklist"
-  #     locations        = ["DE"] # TODO: FIX
-  #   }
-  # }
   restrictions {
-    geo_restriction { restriction_type = "none" }
+    geo_restriction {
+      restriction_type = "blacklist"
+      locations        = ["DE"] # TODO: FIX
+    }
   }
+  # restrictions {
+  #   geo_restriction { restriction_type = "none" }
+  # }
   tags = {
     component = "cv-site"
   }
