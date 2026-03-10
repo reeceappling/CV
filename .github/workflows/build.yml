@@ -38,6 +38,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Fix workspace permissions
         run: sudo chown -R $USER:$USER ${{ github.workspace }}
+      - name: clone quartz
+        run: git clone https://github.com/jackyzha0/quartz.git
       - uses: actions/setup-go@v6
         with:
           go-version-file: 'go.mod'
