@@ -39,8 +39,8 @@ resource "aws_s3_bucket_acl" "b_acl" {
 
 data "aws_iam_policy_document" "site_bucket" {
   statement {
-    actions   = ["s3:GetObject","s3:HeadObject"]
-    resources = ["${aws_s3_bucket.cv_site_bucket.arn}/*",aws_s3_bucket.cv_site_bucket.arn]
+    actions   = ["s3:GetObject"]
+    resources = ["${ aws_s3_bucket.cv_site_bucket.arn }", "${aws_s3_bucket.cv_site_bucket.arn}/*"]
 
     principals {
       type        = "Service"
