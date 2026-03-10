@@ -33,8 +33,8 @@ func createMainPage() { // TODO: TAGS EVERYWHERE????
 
 	// TODO: ADD OTHER JOBS, UNRELATED TO SOFTWARE
 	b.WriteString("## Work History ([Companies](companies.md), [Positions](positions.md))\n") // TODO: RENAME
-	b.WriteString("Latest Position | Company | Start Date | End Date\n")
-	b.WriteString(":-- | :-- | --: | :--\n")
+	b.WriteString(" Positions | Latest Position | Company | Start Date | End Date\n")
+	b.WriteString(":-- | :-- | :-- | --: | :--\n")
 	for _, companyName := range companiesOrder {
 		company := companies[companyName]
 		endDate := company.Positions[0].End.String()

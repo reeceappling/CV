@@ -155,29 +155,10 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 }
 
-locals {
-  # The JavaScript code can be inline or loaded from a file
-  rewrite_function_code = <<-EOT
-    function handler(event) {
-      var request = event.request;
-      var uri = request.uri;
-
-      if (path.length > 1){
-        const lastSegment = path.split('/').filter(Boolean).pop() || '';
-        if (lastSegment.length !==0 && !lastSegment.includes('.')){
-          request.uri += '.html';
-        }
-      }
-
-      return request;
-    }
-  EOT
-}
-
 resource "aws_cloudfront_function" "rewrite_urls" {
   name    = "rewrite-urls-function"
   runtime = "cloudfront-js-2.0"
-  code    = local.rewrite_function_code
+  code    = file("${path.module}/scripts/cloudfront.js")
   # Automatically publish the function to the LIVE stage
   publish = true
 
