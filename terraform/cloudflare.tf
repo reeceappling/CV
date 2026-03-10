@@ -10,7 +10,7 @@
 
 resource "cloudflare_dns_record" "cv_subdomain_cname" {
   zone_id = var.cloudflare_zone_id
-  name = "${{ var.subdomain }}.${{ var.domain }}"
+  name = "${ var.subdomain }.${ var.domain }"
   ttl     = 600            # Optional: Time to live in seconds, "1" means automatic # TODO; was 3600 (30min), set to 10min for testing purposes
   type = "CNAME"
   comment = "Domain verification record" # TODO: edit
