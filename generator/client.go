@@ -95,6 +95,7 @@ func projectsFor(cs []*Client) []*Project {
 func (c *Client) WithProjects(projs ...*Project) *Client {
 	for _, proj := range projs {
 		if !c.projectsSet.Contains(proj.Name) {
+			c.projectsSet.Add(proj.Name)
 			c.Projects = append(c.Projects, proj)
 		}
 		proj.TypeInfo = proj.TypeInfo.setClient(c) // TODO: ?????
