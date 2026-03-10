@@ -207,22 +207,25 @@ func (pg *Project) Bytes() []byte {
 	t := pg.TypeInfo.Type()
 	switch t {
 	case projectTypeSchool:
-		builder.WriteString("Coursework-related Project\n") // TODO: ???????
+		builder.WriteString("Coursework-related Project\n")
 	case projectTypeProfessional:
-		builder.WriteString("Professional Project\n") // TODO: ???????
+		builder.WriteString("Professional Project\n")
 	case projectTypePersonal:
-		builder.WriteString("Personal Project\n") // TODO: ???????
+		builder.WriteString("Personal Project\n")
 	default:
 		panic("unknown project type: " + string(t))
 	}
-	// Client/company
-	cli := pg.TypeInfo.getClient()
-	if cli != nil {
+	// Client/company/school
+
+	if cli := pg.TypeInfo.getClient(); cli != nil {
 		builder.WriteString(fmt.Sprintf("Client: %s\n", cli.Link()))
+		if comp := cli.company; comp != nil {
+			builder.WriteString(fmt.Sprintf("Company: %s\n", comp.Link()))
+		}
+	} else if sch := pg.TypeInfo.getSchool(); sch != nil {
+		builder.WriteString(fmt.Sprintf("School: %s\n", sch.Link()))
 	}
-	if comp := pg.Company(); comp != nil {
-		builder.WriteString(fmt.Sprintf("Company: %s\n", comp.Link()))
-	}
+
 	// SUMMARY
 	builder.WriteString("# Summary\n")
 	builder.WriteString(string("Status: " + pg.Status + "\n"))
@@ -786,13 +789,13 @@ func initProjectsFinal() {
 		WithSubjectMatters(smCiCd, smContainerization, smIAC, smClusterComputing, smDistributedComputing, smLinearAlgebra, smBackend).
 		finalize()
 	saiCollegeProject = saiCollegeProject.WithStatus(statusComplete). // TODO: MORE!
-										WithSummary("SUMMARY HERE"). // TODO: MORE!
-										WithLang("Html", Regularly).
-										WithLang("CSS", Regularly).
-										WithLang("Javascript", Some).
-										WithSubjectMatters(smFrontend).
-										WithTechnologies("Drupal").
-										finalize()
+		WithSummary("SUMMARY HERE"). // TODO: MORE!
+		WithLang("Html", Regularly).
+		WithLang("CSS", Regularly).
+		WithLang("Javascript", Some).
+		WithSubjectMatters(smFrontend).
+		WithTechnologies("Drupal").
+		finalize()
 	// TODO: sai project for JAMF
 	mushDbProject = mushDbProject.WithStatus(statusBuilding).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!

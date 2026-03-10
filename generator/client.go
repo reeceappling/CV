@@ -78,9 +78,7 @@ func (pg *Client) Bytes() []byte {
 		}
 	}
 	// ALL LOWEST
-	builder.WriteString(bytesForAll(pg, true)) // TODO: languages will exist twice???
-	builder.WriteString(definitionsArea())
-	builder.WriteString(usageFrequencyDefinitions())
+	builder.WriteString(bytesForAll(pg, true))
 	return []byte(builder.String())
 }
 

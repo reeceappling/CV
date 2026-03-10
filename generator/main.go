@@ -28,6 +28,7 @@ func createMainPage() { // TODO: TAGS EVERYWHERE????
 	// TODO: HEADER AREA FOR LINKS TO CV, RESUME, BLOG, NOTES
 	b.WriteString("# Home\n") // TODO: PUT LINK TO HOME ON EVERY PAGE
 	b.WriteString("# CV\n")
+	b.WriteString("Welcome to my CV! It is a living document that is updated occasionally.\n")
 	b.WriteString("## About\n")
 	b.WriteString(fixmeLink + "\n") // TODO: SUMMARY/About
 
