@@ -1,5 +1,5 @@
 resource "aws_acm_certificate" "viewer_certificate" {
-  region = "us-east-1"
+  provider = "us-east-1"
   domain_name       = local.domain_name # TODO: ensure ok and dont need the subdomain
   validation_method = "DNS"
   # Add subject alternative names if needed

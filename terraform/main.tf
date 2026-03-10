@@ -25,6 +25,11 @@ provider "aws" {
 provider "cloudflare" {
   api_token = var.cloudflare_api_token
 }
+# Provider for us-east-1 region (required for CloudFront certs)
+provider "aws" {
+  region = "us-east-1"
+  alias  = "us-east-1"
+}
 
 
 # Output the website endpoint URL
