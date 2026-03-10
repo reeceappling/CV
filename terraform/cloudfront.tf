@@ -129,10 +129,6 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   #   compress               = true
   #   viewer_protocol_policy = "redirect-to-https"
   # }
-
-  restrictions {
-
-  }
   # viewer_certificate { # TODO: can we use this instead?
   #   cloudfront_default_certificate = true
   # }
