@@ -1,6 +1,6 @@
 # Ensure bucket exists
 resource "aws_s3_bucket" "cv_site_bucket" {
-  bucket = var.domain
+  bucket = "${ var.subdomain}.${ var.domain }"
 }
 
 # Enable static website hosting
