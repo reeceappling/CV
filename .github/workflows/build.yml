@@ -52,11 +52,13 @@ jobs:
           node-version: 22
       - name: install quartz deps
         run: npm i
-        working-directory: quartz
+        working-directory: ./quartz
       - name: create quartz work area
         # Create new quartz, using shortest links (shortest, relative, absolute). -s=dir?
         run: npx quartz create -X new -l shortest
-        working-directory: quartz
+        working-directory: ./quartz
+      - name: Fix permissions
+        run: sudo chown -R $USER:$USER . && chmod -R 777 ./quartz/content
       - name: Generate
         run: go run ./generator
 #      - name: Create Generator
@@ -98,7 +100,7 @@ jobs:
       - name: list quartz files
         run: ls ./quartz
       - name: move files
-        run: mv quartz/public terraform/public
+        run: mv ./quartz/public ./terraform/public
       - name: clean out s3 bucket
         run: aws s3 rm s3://${{ env.subdomain }}.${{ env.domain }} --recursive
       - name: initialize terraform
