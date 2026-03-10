@@ -17,7 +17,8 @@ env:
   ACTIONS_STEP_DEBUG: true
   # TODO: remove next 2
   TF_VAR_domain: appli.ng
-  TF_VAR_subdomain: cv
+  # TODO: CHANGE TO cv
+  TF_VAR_subdomain: cv.reece
 
 permissions:
   id-token: write
@@ -50,6 +51,12 @@ jobs:
         working-directory: terraform
 #      - name: clean out s3 bucket
 #        run: aws s3 rm s3://${{ env.TF_VAR_subdomain }}.${{ env.TF_VAR_domain }} --recursive
+#      - name: plan terraform
+#        run: terraform plan -var-file='deploy.tfvars' -var 'cloudflare_api_token=${{secrets.CLOUDFLARE_API_TOKEN}}' -var 'cloudflare_zone_id=${{secrets.CLOUDFLARE_ZONE_ID}}' -var 'aws_region=${{env.AWS_REGION}}' -out=plan.tf
+#        working-directory: terraform
+      - name: plan terraform destroy
+        run: terraform plan -var-file='deploy.tfvars' -var 'cloudflare_api_token=${{secrets.CLOUDFLARE_API_TOKEN}}' -var 'cloudflare_zone_id=${{secrets.CLOUDFLARE_ZONE_ID}}' -var 'aws_region=${{env.AWS_REGION}}' -destroy -out=plan.tf
+        working-directory: terraform
       - name: plan terraform
         run: terraform plan -var-file='deploy.tfvars' -var 'cloudflare_api_token=${{secrets.CLOUDFLARE_API_TOKEN}}' -var 'cloudflare_zone_id=${{secrets.CLOUDFLARE_ZONE_ID}}' -var 'aws_region=${{env.AWS_REGION}}' -out=plan.tf
         working-directory: terraform
