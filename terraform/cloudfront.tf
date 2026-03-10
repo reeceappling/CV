@@ -161,7 +161,7 @@ resource "aws_acm_certificate_validation" "test" {
   # Use the FQDNs from the cloudflare_record resources to ensure Terraform waits for their creation
   validation_record_fqdns = [for record in cloudflare_dns_record.acm_validation : record.name] # TODO: is name ok instead of hostname?
 
-  # TODO: Optional, Set a longer timeout if DNS propagation is slow
+  # TODO: Optional, Set a longer timeout if DNS propagation is slow...
   timeouts {
     create = "10m"
   }
