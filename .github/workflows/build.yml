@@ -43,14 +43,16 @@ jobs:
           go-version-file: 'go.mod'
           # GitHub token for authentication
           token: ${{ github.token }}
-          cache: true
+          cache: true # TODO: ok not to?
           cache-dependency-path: 'go.sum'
       - name: Make quartz dirs
         run: mkdir -p ./quartz/content
-      - name: Create Generator
-        run: go build -o generate ./generator && chmod 777 generate
-      - name: Generate and fix permissions
-        run: sudo ./generate
+      - name: Generate
+        run: go run .
+#      - name: Create Generator
+#        run: go build -o generate ./generator && chmod 777 generate
+#      - name: Generate and fix permissions
+#        run: sudo ./generate
       - name: Fix permissions
         run: sudo chown -R $USER:$USER . && chmod -R 777 ./quartz/content
       - uses: actions/upload-artifact@v4
