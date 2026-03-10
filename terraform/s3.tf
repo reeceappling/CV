@@ -1,6 +1,7 @@
 # Ensure bucket exists
 resource "aws_s3_bucket" "cv_site_bucket" {
   bucket = "${ var.subdomain}.${ var.domain }"
+  # TODO: tags???
 }
 
 # Enable static website hosting
@@ -30,18 +31,12 @@ resource "aws_s3_bucket_ownership_controls" "website_bucket_ownership" {
     object_ownership = "BucketOwnerPreferred"
   }
 }
-# Define bucket acl
-resource "aws_s3_bucket_acl" "public_read" {
-  depends_on = [
-    aws_s3_bucket_ownership_controls.website_bucket_ownership,
-    aws_s3_bucket_public_access_block.website_bucket_public_access_block,
-  ]
-  bucket = aws_s3_bucket.cv_site_bucket.id
-  acl    = "public-read"
-}
-
 # Define a bucket policy to allow public read access
 resource "aws_s3_bucket_policy" "public_bucket_policy" {
+  depends_on = [
+        aws_s3_bucket_ownership_controls.website_bucket_ownership,
+        aws_s3_bucket_public_access_block.website_bucket_public_access_block,
+      ]
   bucket = aws_s3_bucket.cv_site_bucket.id
   policy = jsonencode({
     Version = "2012-10-17"
