@@ -28,8 +28,7 @@ concurrency:
 
 jobs:
   all:
-    runs-on: ubuntu-22.04
-  generate-markdown:
+  #generate-markdown:
     runs-on: ubuntu-22.04
 #    permissions:
 #      id-token: write
@@ -110,82 +109,80 @@ jobs:
         run: terraform apply -auto-approve plan.tf
         working-directory: terraform
 
-
-
-  build-quartz:
-    needs: [ generate-markdown ]
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v4
-      - name: clone quartz
-        run: git clone https://github.com/jackyzha0/quartz.git
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - name: install quartz deps
-        run: npm i
-        working-directory: quartz
-      - name: create quartz work area
-        # Create new quartz, using shortest links (shortest, relative, absolute). -s=dir?
-        run: npx quartz create -X new -l shortest
-        working-directory: quartz
-      - uses: actions/download-artifact@v5
-        with:
-          name: markdownFiles
-          path: ./quartz/content
-      - name: Build Quartz
-        run: npx --quiet quartz build
-        working-directory: ./quartz
-      - uses: actions/upload-artifact@v4
-        with:
-          name: finalFiles
-          path: ./quartz/public
-          if-no-files-found: error
-          retention-days: 1
-          # The level of compression for Zlib to be applied to the artifact archive.
-          # The value can range from 0 to 9. Default is '6'
-          compression-level: 6
-          overwrite: true
-          include-hidden-files: false
-
-  deploy:
-    needs: [build-quartz, generate-markdown]
-    if: |
-      always() && !cancelled()
-      && (needs.generate-markdown.result == 'success')
-      && needs.build-quartz.result == 'success'
-    runs-on: ubuntu-latest
-    env:
-      domain: appli.ng
-      subdomain: cv.reece
-    permissions:
-      id-token: write
-      contents: read
-      actions: write
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: "1.14.6"
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v6.0.0
-        with:
-          role-to-assume: ${{ secrets.AWS_RUNNER_ROLE }}
-          aws-region: ${{ env.AWS_REGION }}
-          role-session-name: cv-deployment
-      - uses: actions/download-artifact@v5
-        with:
-          name: finalFiles
-          path: terraform/public
-      - name: clean out s3 bucket
-        run: aws s3 rm s3://${{ env.subdomain }}.${{ env.domain }} --recursive
-      - name: initialize terraform
-        run: terraform init -backend-config='bucket=${{ vars.TERRAFORM_STATE_BUCKET }}' -backend-config='region=${{ env.AWS_REGION }}'
-        working-directory: terraform
-      - name: plan terraform
-        run: terraform plan -var-file='deploy.tfvars' -var 'domain=${{ env.domain }}' -var 'subdomain=${{ env.subdomain }}' -var 'cloudflare_api_token=${{secrets.CLOUDFLARE_API_TOKEN}}' -var 'cloudflare_zone_id=${{secrets.CLOUDFLARE_ZONE_ID}}' -var 'aws_region=${{env.AWS_REGION}}' -out=plan.tf
-        working-directory: terraform
-      - name: apply terraform
-        run: terraform apply -auto-approve plan.tf
-        working-directory: terraform
+#  build-quartz:
+#    needs: [ generate-markdown ]
+#    runs-on: ubuntu-22.04
+#    steps:
+#      - uses: actions/checkout@v4
+#      - name: clone quartz
+#        run: git clone https://github.com/jackyzha0/quartz.git
+#      - uses: actions/setup-node@v4
+#        with:
+#          node-version: 22
+#      - name: install quartz deps
+#        run: npm i
+#        working-directory: quartz
+#      - name: create quartz work area
+#        # Create new quartz, using shortest links (shortest, relative, absolute). -s=dir?
+#        run: npx quartz create -X new -l shortest
+#        working-directory: quartz
+#      - uses: actions/download-artifact@v5
+#        with:
+#          name: markdownFiles
+#          path: ./quartz/content
+#      - name: Build Quartz
+#        run: npx --quiet quartz build
+#        working-directory: ./quartz
+#      - uses: actions/upload-artifact@v4
+#        with:
+#          name: finalFiles
+#          path: ./quartz/public
+#          if-no-files-found: error
+#          retention-days: 1
+#          # The level of compression for Zlib to be applied to the artifact archive.
+#          # The value can range from 0 to 9. Default is '6'
+#          compression-level: 6
+#          overwrite: true
+#          include-hidden-files: false
+#
+#  deploy:
+#    needs: [build-quartz, generate-markdown]
+#    if: |
+#      always() && !cancelled()
+#      && (needs.generate-markdown.result == 'success')
+#      && needs.build-quartz.result == 'success'
+#    runs-on: ubuntu-latest
+#    env:
+#      domain: appli.ng
+#      subdomain: cv.reece
+#    permissions:
+#      id-token: write
+#      contents: read
+#      actions: write
+#    steps:
+#      - uses: actions/checkout@v4
+#      - name: Setup Terraform
+#        uses: hashicorp/setup-terraform@v3
+#        with:
+#          terraform_version: "1.14.6"
+#      - name: Configure AWS Credentials
+#        uses: aws-actions/configure-aws-credentials@v6.0.0
+#        with:
+#          role-to-assume: ${{ secrets.AWS_RUNNER_ROLE }}
+#          aws-region: ${{ env.AWS_REGION }}
+#          role-session-name: cv-deployment
+#      - uses: actions/download-artifact@v5
+#        with:
+#          name: finalFiles
+#          path: terraform/public
+#      - name: clean out s3 bucket
+#        run: aws s3 rm s3://${{ env.subdomain }}.${{ env.domain }} --recursive
+#      - name: initialize terraform
+#        run: terraform init -backend-config='bucket=${{ vars.TERRAFORM_STATE_BUCKET }}' -backend-config='region=${{ env.AWS_REGION }}'
+#        working-directory: terraform
+#      - name: plan terraform
+#        run: terraform plan -var-file='deploy.tfvars' -var 'domain=${{ env.domain }}' -var 'subdomain=${{ env.subdomain }}' -var 'cloudflare_api_token=${{secrets.CLOUDFLARE_API_TOKEN}}' -var 'cloudflare_zone_id=${{secrets.CLOUDFLARE_ZONE_ID}}' -var 'aws_region=${{env.AWS_REGION}}' -out=plan.tf
+#        working-directory: terraform
+#      - name: apply terraform
+#        run: terraform apply -auto-approve plan.tf
+#        working-directory: terraform
