@@ -29,20 +29,10 @@ resource "aws_cloudfront_origin_access_identity" "cv_site_bucket" {
 resource "aws_cloudfront_distribution" "s3_distribution" {
   depends_on = [aws_s3_bucket.cv_site_bucket] # TODO: ok?
   origin {
-    s3_origin_config {
-      origin_access_identity = ""
-    }
     domain_name              = aws_s3_bucket.cv_site_bucket.bucket_regional_domain_name
     origin_access_control_id = aws_cloudfront_origin_access_control.cv-site-bucket.id
-    origin_id                = local.s3_origin_id
+    origin_id                = local.s3_origin_id # TODO: ok?
   }
-  # origin {
-  #   s3_origin_config {
-  #     origin_access_identity = aws_cloudfront_origin_access_identity.cv_site_bucket.cloudfront_access_identity_path
-  #   }
-  #   domain_name = local.domain_name # TODO: ok?
-  #   origin_id   = local.s3_origin_id # TODO: ok?
-  # }
 
   enabled             = true
   is_ipv6_enabled     = true
@@ -71,7 +61,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
       query_string = false # TODO: ???
       headers      = ["Origin"] # TODO: ok?
       cookies {
-        forward = "all" # TODO: ???
+        forward = "none" # TODO: all???
       }
     }
   }
@@ -141,13 +131,16 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     #cloudfront_default_certificate = false # TODO: ???
     acm_certificate_arn = aws_acm_certificate.viewer_certificate.arn # ARN of your ACM cert in us-east-1 # TODO: ???
     ssl_support_method  = "sni-only"
-    minimum_protocol_version = "TLSv1.2_2021"
+    #minimum_protocol_version = "TLSv1.2_2021" # TODO: ???
   }
+  # restrictions {
+  #   geo_restriction {
+  #     restriction_type = "blacklist"
+  #     locations        = ["DE"] # TODO: FIX
+  #   }
+  # }
   restrictions {
-    geo_restriction {
-      restriction_type = "blacklist"
-      locations        = ["DE"] # TODO: FIX
-    }
+    geo_restriction { restriction_type = "none" }
   }
   tags = {
     component = "cv-site"
