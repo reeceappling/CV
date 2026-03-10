@@ -27,14 +27,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  all:
-    runs-on: ubuntu-22.04
   generate-markdown:
     runs-on: ubuntu-22.04
-#    permissions:
-#      id-token: write
-#      contents: write
-#      actions: write
+    permissions:
+      id-token: write
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - name: Fix workspace permissions
