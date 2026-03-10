@@ -56,6 +56,9 @@ jobs:
       - name: apply terraform
         run: terraform apply -auto-approve plan.tf
         working-directory: terraform
+        env:
+          # TODO: set tf verbose
+          TF_LOG: TRACE
   generate-markdown:
     # TODO: REMOVE!
     if: |
