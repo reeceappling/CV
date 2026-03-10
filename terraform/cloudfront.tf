@@ -147,10 +147,6 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   tags = {
     component = "cv-site"
   }
-  timeouts {
-    create = "10m"
-    update = "10m"
-  }
 }
 
 
