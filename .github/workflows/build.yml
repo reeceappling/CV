@@ -35,7 +35,7 @@ jobs:
       id-token: write
       contents: write
     steps:
-      - uses: actions/checkout@v4 # TODO: only checkout the go?
+      - uses: actions/checkout@v4
         with:
           sparse-checkout: |
             generator
@@ -47,7 +47,7 @@ jobs:
           go-version-file: 'go.mod'
           # GitHub token for authentication
           token: ${{ github.token }}
-          cache: true # TODO: ok not to?
+          cache: false
           cache-dependency-path: 'go.sum'
       - name: Make quartz dirs
         run: mkdir -p ./quartz/content
@@ -77,8 +77,7 @@ jobs:
     needs: [ generate-markdown ]
     runs-on: ubuntu-22.04
     steps:
-#      - uses: actions/checkout@v4 # TODO: may not need
-      - name: clone quartz
+      - name: Clone Quartz 4
         run: git clone https://github.com/jackyzha0/quartz.git
       - uses: actions/setup-node@v4
         with:

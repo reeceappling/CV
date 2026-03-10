@@ -13,6 +13,17 @@ resource "aws_acm_certificate" "viewer_certificate" {
   # }
 }
 
+resource "terraform_data" "invalidation" {
+  triggers_replace = {
+    distribution_id = aws_cloudfront_distribution.s3_distribution.id
+    # Add files/paths that change to force invalidation
+  }
+
+  provisioner "local-exec" {
+    command = "aws cloudfront create-invalidation --distribution-id ${aws_cloudfront_distribution.s3_distribution.id} --paths '/*'"
+  }
+}
+
 resource "aws_cloudfront_origin_access_control" "cv-site-bucket" {
   name                              = "cv-origin-access-control"
   origin_access_control_origin_type = "s3"
@@ -55,6 +66,10 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     min_ttl = 0 # none
     default_ttl = 3600 # 1hr
     max_ttl          = 86400 # very long
+    function_association {
+      event_type   = "viewer-request"
+      function_arn = aws_cloudfront_function.rewrite_urls.arn
+    }
     forwarded_values {
       query_string = false # TODO: ???
       # headers      = ["Origin"] # TODO: ok?
@@ -64,42 +79,42 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     }
   }
 
-  # Cache behavior with precedence 0
-  ordered_cache_behavior {
-    path_pattern           = "*.html"
-    allowed_methods = ["GET", "HEAD"] # TODO: ["GET", "HEAD", "OPTIONS"]
-    cached_methods = ["GET", "HEAD"] # TODO: ["GET", "HEAD", "OPTIONS"]
-    target_origin_id       = local.s3_origin_id
-    min_ttl                = 0
-    default_ttl            = 86400
-    max_ttl                = 31536000
-    compress               = true
-    viewer_protocol_policy = "redirect-to-https"
-    forwarded_values {
-      query_string = false # TODO: ok?
-      cookies {
-        forward = "none" # TODO: none?
-      }
-    }
-  }
-  # Cache behavior with precedence 1
-  ordered_cache_behavior {
-    path_pattern           = "*.webp"
-    allowed_methods = ["GET", "HEAD"] # TODO: ["GET", "HEAD", "OPTIONS"]
-    cached_methods = ["GET", "HEAD"] # TODO: ["GET", "HEAD", "OPTIONS"]
-    target_origin_id       = local.s3_origin_id
-    min_ttl                = 0
-    default_ttl            = 86400
-    max_ttl                = 31536000
-    compress               = true
-    viewer_protocol_policy = "redirect-to-https"
-    forwarded_values {
-      query_string = false # TODO: ok?
-      cookies {
-        forward = "none" # TODO: none?
-      }
-    }
-  }
+  # # Cache behavior with precedence 0
+  # ordered_cache_behavior {
+  #   path_pattern           = "*.html"
+  #   allowed_methods = ["GET", "HEAD"] # TODO: ["GET", "HEAD", "OPTIONS"]
+  #   cached_methods = ["GET", "HEAD"] # TODO: ["GET", "HEAD", "OPTIONS"]
+  #   target_origin_id       = local.s3_origin_id
+  #   min_ttl                = 0
+  #   default_ttl            = 86400
+  #   max_ttl                = 31536000
+  #   compress               = true
+  #   viewer_protocol_policy = "redirect-to-https"
+  #   forwarded_values {
+  #     query_string = false # TODO: ok?
+  #     cookies {
+  #       forward = "none" # TODO: none?
+  #     }
+  #   }
+  # }
+  # # Cache behavior with precedence 1
+  # ordered_cache_behavior {
+  #   path_pattern           = "*.webp"
+  #   allowed_methods = ["GET", "HEAD"] # TODO: ["GET", "HEAD", "OPTIONS"]
+  #   cached_methods = ["GET", "HEAD"] # TODO: ["GET", "HEAD", "OPTIONS"]
+  #   target_origin_id       = local.s3_origin_id
+  #   min_ttl                = 0
+  #   default_ttl            = 86400
+  #   max_ttl                = 31536000
+  #   compress               = true
+  #   viewer_protocol_policy = "redirect-to-https"
+  #   forwarded_values {
+  #     query_string = false # TODO: ok?
+  #     cookies {
+  #       forward = "none" # TODO: none?
+  #     }
+  #   }
+  # }
 
   # # Cache behavior with precedence 1
   # ordered_cache_behavior {
@@ -126,19 +141,10 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   #   cloudfront_default_certificate = true
   # }
   viewer_certificate {
-    #cloudfront_default_certificate = false # TODO: ???
     acm_certificate_arn = aws_acm_certificate.viewer_certificate.arn # ARN of your ACM cert in us-east-1 # TODO: ???
     ssl_support_method = "sni-only"
-    #minimum_protocol_version = "TLSv1.2_2021" # TODO: ???
   }
-  # restrictions {
-  #   geo_restriction {
-  #     restriction_type = "blacklist"
-  #     locations        = ["DE"] # TODO: FIX
-  #   }
-  # }
   restrictions {
-    # TODO: does not work
     geo_restriction {
       restriction_type = "none"
       locations = []
@@ -147,6 +153,38 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   tags = {
     component = "cv-site"
   }
+}
+
+locals {
+  # The JavaScript code can be inline or loaded from a file
+  rewrite_function_code = <<-EOT
+    function handler(event) {
+      var request = event.request;
+      var uri = request.uri;
+
+      // Add index.html for directory paths (e.g., /posts/ -> /posts/index.html)
+      // TODO: probably delete first one
+      if (uri.endsWith('/')) {
+        request.uri += 'index.html';
+      }
+      // Add .html extension for clean URLs (e.g., /posts/123 -> /posts/123.html)
+      else if (!uri.includes('.')) {
+        request.uri += '/index.html';
+      }
+
+      return request;
+    }
+  EOT
+}
+
+resource "aws_cloudfront_function" "rewrite_urls" {
+  name    = "rewrite-urls-function"
+  runtime = "cloudfront-js-2.0"
+  code    = local.rewrite_function_code
+  # Automatically publish the function to the LIVE stage
+  publish = true
+
+  # Learn more about the aws_cloudfront_function resource in the [Terraform Registry](https://registry.terraform.io)
 }
 
 
