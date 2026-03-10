@@ -13,7 +13,6 @@ on:
       - '.github/workflows/build**'
 
 env:
-  #GLOBAL_PAT: ${{ secrets.CICD_TOKEN }} # Set PAT as a global environment variable # TODO: likely get rid of
   AWS_REGION: "us-east-2"
   ACTIONS_STEP_DEBUG: true
 
@@ -35,8 +34,8 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # Fetch all history for git info # TODO: ok??? probably dont
+#        with:
+#          fetch-depth: 0 # Fetch all history for git info # TODO: ok??? probably dont
       - name: Fix workspace permissions
         run: sudo chown -R $USER:$USER ${{ github.workspace }}
       - uses: actions/setup-go@v6
@@ -78,8 +77,8 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # Fetch all history for git info # TODO: likely no
+#        with:
+#          fetch-depth: 0 # Fetch all history for git info # TODO: likely no
       - name: clone quartz
         run: git clone https://github.com/jackyzha0/quartz.git
       - uses: actions/setup-node@v4
@@ -124,8 +123,8 @@ jobs:
       actions: write
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # Fetch all history for git info # TODO: likely no
+#        with:
+#          fetch-depth: 0 # Fetch all history for git info # TODO: likely no
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
