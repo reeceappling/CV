@@ -1,8 +1,8 @@
 resource "aws_acm_certificate" "viewer_certificate" {
-  domain_name       = var.domain # TODO: ensure ok and dont need the subdomain
+  domain_name       = local.domain_name # TODO: ensure ok and dont need the subdomain
   validation_method = "DNS"
   # Add subject alternative names if needed
-  subject_alternative_names = ["*.${var.domain}",local.domain_name] # TODO: ensure ok
+  subject_alternative_names = [local.domain_name] # TODO: ensure ok
   # TODO: must be on US-EAST 1????
 
   lifecycle {
