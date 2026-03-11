@@ -14,7 +14,7 @@ export default ((opts?: Options) => {
         return (
             <footer class={`${displayClass ?? ""}`}>
                 <p>
-                    © {year} Reece Appling
+                    © {year} Reece Appling. All Rights Reserved.
                 </p>
                 <ul>
                     {Object.entries(links).map(([text, link]) => (

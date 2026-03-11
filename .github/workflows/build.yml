@@ -93,6 +93,10 @@ jobs:
         with:
           name: markdownFiles
           path: ./quartz/content
+      - name: list 1
+        run: ls ./quartz
+      - name: list 1
+        run: ls ./quartz/quartz
       - name: custom configuration
         run: rm ./quartz/quartz/quartz.config.ts && mv ./config/quartz.config.ts ./quartz/quartz/quartz.config.ts
       - name: custom layout
