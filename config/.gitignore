@@ -3,6 +3,5 @@
 !/quartz.config.ts
 !/quartz.layout.ts
 !/components/Footer.tsx
-!/components/DarkMode.tsxFIXME
 !/components/scripts/darkmode.inline.ts
 !/components/styles/darkmode.scss
