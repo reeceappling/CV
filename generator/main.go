@@ -14,6 +14,7 @@ import (
 // TODO: change top-left title that says "Quartz 4"
 // TODO: remove "Aug 23, 2023 2 min read" at top of each page
 // TODO: fix this link: https://cv.appli.ng/language/
+// TODO: add resume
 /* TODO:
 ---
 title: Example Title
@@ -27,6 +28,11 @@ https://github.com/jackyzha0/quartz/blob/v4/docs/authoring%20content.md
 const fixmeLink = "[FIX ME](fixme.md)"
 
 func createMainPage() { // TODO: TAGS EVERYWHERE????
+	// TODO: https://quartz.jzhao.xyz/configuration PAGE TITLE
+	// TODO: SPA ROUTING? // https://quartz.jzhao.xyz/configuration
+	// TODO: THEMEING // https://quartz.jzhao.xyz/configuration
+	// TODO: FORCE DARK MODE
+	// TODO: import configs for quartz from /config
 	b := strings.Builder{}
 	// TODO: HEADER AREA FOR LINKS TO CV, RESUME, BLOG, NOTES
 	b.WriteString("# Home\n") // TODO: PUT LINK TO HOME ON EVERY PAGE

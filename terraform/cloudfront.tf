@@ -50,8 +50,8 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     viewer_protocol_policy = "redirect-to-https"
     compress = true
     min_ttl = 0 # none
-    default_ttl = 3600 # 1hr
-    max_ttl          = 86400 # very long
+    default_ttl = 60 # TODO: 3600 # 1hr
+    max_ttl          = 60 # TODO: 86400 # very long
     function_association {
       event_type   = "viewer-request"
       function_arn = aws_cloudfront_function.rewrite_urls.arn
