@@ -77,12 +77,12 @@ jobs:
     needs: [ generate-markdown ]
     runs-on: ubuntu-22.04
     steps:
-      - name: Clone Quartz 4
-        run: git clone https://github.com/jackyzha0/quartz.git
       - uses: actions/checkout@v4
         with:
           sparse-checkout: |
             config
+      - name: Clone Quartz 4
+        run: git clone https://github.com/jackyzha0/quartz.git
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -97,14 +97,14 @@ jobs:
         with:
           name: markdownFiles
           path: ./quartz/content
-      - name: list 1
-        run: ls ./quartz
-      - name: list 1
-        run: ls ./quartz
-      - name: custom configuration
-        run: rm ./quartz/quartz/quartz.config.ts && mv ./config/quartz.config.ts ./quartz/quartz/quartz.config.ts
-      - name: custom layout
-        run: rm ./quartz/quartz/quartz.layout.ts && mv ./config/quartz.layout.ts ./quartz/quartz/quartz.layout.ts
+      - name: set modified quartz files
+        run: |
+          for full_path in config/*; do
+            if [ -f "$full_path" ]; then
+              rm -f "./quartz/quartz/$file"
+              mv "$file" "./quartz/quartz/$file"
+            fi
+          done
       - name: Build Quartz
         run: npx --quiet quartz build
         working-directory: ./quartz

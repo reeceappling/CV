@@ -1,0 +1,7 @@
+*
+scripts/*
+styles/*
+!quartz.config.ts
+!quartz.layout.ts
+!scripts/darkmode.inline.ts
+!styles/Darkmode.tsx
