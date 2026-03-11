@@ -97,7 +97,11 @@ jobs:
         with:
           name: markdownFiles
           path: ./quartz/content
-#      - name: set modified quartz files
+          # TODO: MORE!!!
+      - name: set modified quartz files at top level
+        run: |
+          rm -f quartz/quartz.layout.ts && mv quartzModified/quartz.layout.ts
+#      - name: set other modified quartz files
 #        run: |
 #          (
 #            cd quartzModified && find . -type f -print0
