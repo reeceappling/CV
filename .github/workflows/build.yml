@@ -79,6 +79,10 @@ jobs:
     steps:
       - name: Clone Quartz 4
         run: git clone https://github.com/jackyzha0/quartz.git
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            config
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -96,7 +100,7 @@ jobs:
       - name: list 1
         run: ls ./quartz
       - name: list 1
-        run: ls ./quartz/quartz
+        run: ls ./quartz
       - name: custom configuration
         run: rm ./quartz/quartz/quartz.config.ts && mv ./config/quartz.config.ts ./quartz/quartz/quartz.config.ts
       - name: custom layout
