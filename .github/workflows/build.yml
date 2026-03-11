@@ -97,10 +97,12 @@ jobs:
         with:
           name: markdownFiles
           path: ./quartz/content
-          # TODO: MORE!!! rm -f quartz/quartz.config.ts && mv quartzModified/quartz.config.ts quartz/quartz.config.ts
+          # TODO: MORE!!!
       - name: set modified quartz files at top level
         run: |
           rm -f quartz/quartz.layout.ts && mv quartzModified/quartz.layout.ts quartz/quartz.layout.ts
+          rm -f quartz/quartz.config.ts && mv quartzModified/quartz.config.ts quartz/quartz.config.ts
+          rm -f quartz/quartz/components/Footer.tsx && mv quartzModified/quartz/components/Footer.tsx quartz/quartz/components/Footer.tsx
 #      - name: set other modified quartz files
 #        run: |
 #          (
@@ -158,8 +160,8 @@ jobs:
         with:
           name: finalFiles
           path: terraform/public
-      - name: clean out s3 bucket
-        run: aws s3 rm s3://${{ env.TF_VAR_subdomain }}.${{ env.TF_VAR_domain }} --recursive
+#      - name: clean out s3 bucket # Do not do this because it is more expensive
+#        run: aws s3 rm s3://${{ env.TF_VAR_subdomain }}.${{ env.TF_VAR_domain }} --recursive
       - name: initialize terraform
         run: terraform init -backend-config='bucket=${{ vars.TERRAFORM_STATE_BUCKET }}' -backend-config='region=${{ env.AWS_REGION }}'
         working-directory: terraform
