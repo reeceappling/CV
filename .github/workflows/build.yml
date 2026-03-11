@@ -99,11 +99,12 @@ jobs:
           path: ./quartz/content
       - name: set modified quartz files
         run: |
-          for full_path in config/*; do
-            if [ -f "$full_path" ]; then
-              rm -f "./quartz/quartz/$file"
-              mv "$file" "./quartz/quartz/$file"
-            fi
+          (
+            cd config && find . -type f -print0
+          ) | while IFS= read -r -d '' file_relative_path; do
+            clean_path="${file_relative_path#./}"
+            rm -f "./quartz/quartz/$clean_path"
+            mv "./config/$clean_path" "./quartz/quartz/$clean_path"
           done
       - name: Build Quartz
         run: npx --quiet quartz build
