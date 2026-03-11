@@ -102,7 +102,10 @@ jobs:
           (
             cd config && find . -type f -print0
           ) | while IFS= read -r -d '' file_relative_path; do
+            # Strip the leading "./" from the path for true relative path
+            # from the perspective of the target directory itself
             clean_path="${file_relative_path#./}"
+            echo "Replacing: ./config/$clean_path"
             rm -f "./quartz/quartz/$clean_path"
             mv "./config/$clean_path" "./quartz/quartz/$clean_path"
           done
