@@ -262,8 +262,8 @@ func bytesForAll(item showAll, showFrequencies bool) string {
 		b.WriteString("# Providers\n")
 		for name, svcs := range tempS {
 			tempSvcs := make([]string, len(svcs))
-			for _, svc := range slices.Collect(maps.Keys(svcs)) {
-				b.WriteString(fmt.Sprintf("%s\n", cloudServices[svc].Link()))
+			for i, svc := range slices.Collect(maps.Keys(svcs)) {
+				tempSvcs[i] = fmt.Sprintf("%s\n", cloudServices[svc].Link())
 			}
 			b.WriteString(fmt.Sprintf("%s: %s\n", providers[name].Link(), strings.Join(tempSvcs, ", ")))
 		}
