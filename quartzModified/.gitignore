@@ -4,3 +4,4 @@
 !quartz/components/Footer.tsx
 !quartz/components/scripts/darkmode.inline.ts
 !quartz/components/styles/darkmode.scss
+!quartz/components/styles/footer.scss

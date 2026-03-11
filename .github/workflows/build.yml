@@ -100,7 +100,7 @@ jobs:
       - name: set modified quartz files
         run: |
           (
-            cd quartzModified && find . -type f -print0
+            cd ./quartzModified && find . -type f -print0
           ) | while IFS= read -r -d '' file_relative_path; do
             # Strip the leading "./" from the path for true relative path
             # from the perspective of the target directory itself
