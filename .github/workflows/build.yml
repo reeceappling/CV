@@ -106,8 +106,8 @@ jobs:
             # from the perspective of the target directory itself
             clean_path="${file_relative_path#./}"
             echo "Replacing: $clean_path"
-            rm -f "./quartz/quartz/$clean_path"
-            mv "quartzModified/$clean_path" "quartz/quartz/$clean_path"
+            rm -f "./quartz/$clean_path"
+            mv "quartzModified/$clean_path" "quartz/$clean_path"
           done
       - name: Build Quartz
         run: npx --quiet quartz build
