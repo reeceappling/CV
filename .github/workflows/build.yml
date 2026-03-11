@@ -97,18 +97,18 @@ jobs:
         with:
           name: markdownFiles
           path: ./quartz/content
-      - name: set modified quartz files
-        run: |
-          (
-            cd quartzModified && find . -type f -print0
-          ) | while IFS= read -r -d '' file_relative_path; do
-            # Strip the leading "./" from the path for true relative path
-            # from the perspective of the target directory itself
-            clean_path="${file_relative_path#./}"
-            echo "Replacing: $clean_path"
-            rm -f "./quartz/$clean_path"
-            mv "quartzModified/$clean_path" "quartz/$clean_path"
-          done
+#      - name: set modified quartz files
+#        run: |
+#          (
+#            cd quartzModified && find . -type f -print0
+#          ) | while IFS= read -r -d '' file_relative_path; do
+#            # Strip the leading "./" from the path for true relative path
+#            # from the perspective of the target directory itself
+#            clean_path="${file_relative_path#./}"
+#            echo "Replacing: $clean_path"
+#            rm -f "./quartz/$clean_path"
+#            mv "quartzModified/$clean_path" "quartz/$clean_path"
+#          done
       - name: Build Quartz
         run: npx --quiet quartz build
         working-directory: ./quartz
