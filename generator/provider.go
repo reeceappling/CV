@@ -32,11 +32,12 @@ type CloudProviderPage struct { // TODO: USE
 // TODO: Bytes() for cloud provider that also uses Services!
 func (pg *CloudProviderPage) Bytes() []byte {
 	b := strings.Builder{}
+	b.WriteString(frontmatterFor(pg.Name, "Cloud Provider"))
 	b.WriteString("# Services\n")
 	for _, svc := range pg.Services {
 		b.WriteString(fmt.Sprintf("- %s\n", svc.Link()))
 	}
-	b.WriteString("\n" + string(pg.tracked.Bytes()))
+	b.WriteString("\n" + string(pg.tracked.Bytes("", "")))
 	return []byte(b.String())
 }
 

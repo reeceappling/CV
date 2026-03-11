@@ -203,6 +203,7 @@ func (pg *Project) Company() *CompanyPage {
 
 func (pg *Project) Bytes() []byte {
 	builder := strings.Builder{}
+	builder.WriteString(frontmatterFor(pg.Name, "Project"))
 	// PERSONAL/Professional
 	t := pg.TypeInfo.Type()
 	switch t {

@@ -60,6 +60,7 @@ func (pg *SchoolPage) Link() string {
 
 func (sp *SchoolPage) Bytes() []byte {
 	b := strings.Builder{}
+	b.WriteString(frontmatterFor(sp.Name, "School"))
 	// Write all degrees
 	b.WriteString("# Degrees\n")
 	for i, deg := range sp.Degrees {

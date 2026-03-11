@@ -188,16 +188,11 @@ func createMainPage() { // TODO: TAGS EVERYWHERE????
 	if err := os.WriteFile(root+"index.md", []byte(b.String()), 777); err != nil {
 		panic("failed to write main.md file: " + err.Error())
 	}
-
-	b.WriteString("#### Footer\n") // TODO: FIX
-	b.WriteString("This page was made with [Obsidian](https://obsidian.md) and deployed with [Quartz 4](https://quartz.jzhao.xyz)")
-	b.WriteString("INSERT COPYRIGHT HERE")
-	b.WriteString("INSERT CONTACT INFO SOMEWHERE") // TODO: THIS!
-
 }
 
 func createErrorPage() {
 	b := strings.Builder{}
+	b.WriteString(frontmatterFor("Not Found Page"))
 	b.WriteString("Page does not exist!\n") // TODO: PUT LINK TO HOME ON EVERY PAGE
 	if err := os.WriteFile(root+"error.md", []byte(b.String()), 777); err != nil {
 		panic("failed to write main.md file: " + err.Error())
@@ -297,8 +292,12 @@ func newTracked() *tracked {
 		Projects:  map[string]*Project{},
 	}
 }
-func (pg *tracked) Bytes() []byte {
+func (pg *tracked) Bytes(title string, typ string) []byte {
 	builder := strings.Builder{}
+	if title != "" {
+		builder.WriteString(frontmatterFor(title, typ))
+	}
+
 	if pg.Companies != nil && len(pg.Companies) > 0 {
 		builder.WriteString("# Companies\n")
 		for _, com := range pg.Companies {
@@ -441,6 +440,7 @@ func main() {
 
 func createLanguagesPages() {
 	b := strings.Builder{}
+	b.WriteString(frontmatterFor("Languages"))
 	b.WriteString("# Preferred (in order)\n")
 	for _, name := range []string{"Go", "Typescript", "Terraform", "Bash"} {
 		l := langs[name]
@@ -475,7 +475,7 @@ func createProjectsPages() {
 	b, bPersonal, bProfessional, bSchool := strings.Builder{}, strings.Builder{}, strings.Builder{}, strings.Builder{}
 
 	// TODO: FIX PROJECTS PAGE!!!
-
+	b.WriteString(frontmatterFor("Projects"))
 	bProfessional.WriteString("# Professional Projects\n")
 	bProfessional.WriteString("Project | Company | Client\n")
 	bProfessional.WriteString(":-- | :--: | :--\n")
@@ -526,6 +526,7 @@ func createProjectsPages() {
 func createSchoolsPages() {
 	// Create schools page
 	b := strings.Builder{}
+	b.WriteString(frontmatterFor("Schools"))
 	for name, school := range schools {
 		b.WriteString(fmt.Sprintf("# %s\n", school.Link()))
 		// Write all degrees
@@ -556,6 +557,7 @@ func createSchoolsPages() {
 
 func createPositionsPages() {
 	b := strings.Builder{}
+	b.WriteString(frontmatterFor("Positions"))
 	b.WriteString("Most Current\n\n")
 	b.WriteString("Title | Company | StartDate | EndDate\n")
 	b.WriteString(":-- | :--: | :--: | :--\n")
@@ -607,6 +609,7 @@ func createPositionsPages() {
 func createClientsPages() {
 	// Clients pages
 	b := strings.Builder{}
+	b.WriteString(frontmatterFor("Clients"))
 	b.WriteString("(most recent at top)\n\nClient | Company\n")
 	b.WriteString(":-- | :--\n")
 	for _, clientName := range clientsOrder {
@@ -634,6 +637,7 @@ func createClientsPages() {
 func createCompaniesPages() {
 	// Companies pages
 	b := strings.Builder{}
+	b.WriteString(frontmatterFor("Companies"))
 	b.WriteString("Latest Position | Company | Company Start Date | Company End Date\n")
 	b.WriteString(":-- | :-- | --: | :--\n")
 	// TODO: make this into a cool chart!
@@ -663,6 +667,7 @@ type Linkable interface {
 func createPlatformsPages() {
 	// Platforms pages
 	b := strings.Builder{}
+	b.WriteString(frontmatterFor("Platforms"))
 	alphabetizedPlatforms := slices.Collect(maps.Keys(platforms))
 	sort.Strings(alphabetizedPlatforms)
 	for _, platName := range alphabetizedPlatforms {
@@ -679,13 +684,14 @@ func createPlatformsPages() {
 		}
 	}
 	for name, platform := range platforms {
-		writePage("platform", withoutSpaces(name)+".md", platform.Bytes())
+		writePage("platform", withoutSpaces(name)+".md", platform.Bytes(name, "Platform"))
 	}
 }
 
 func createDbsPages() {
 	// Databases pages
 	b := strings.Builder{}
+	b.WriteString(frontmatterFor("Databases"))
 	alphabetized := slices.Collect(maps.Keys(dbs))
 	sort.Strings(alphabetized)
 	for _, name := range alphabetized {
@@ -702,12 +708,13 @@ func createDbsPages() {
 		}
 	}
 	for name, db := range dbs {
-		writePage("db", withoutSpaces(name)+".md", db.Bytes())
+		writePage("db", withoutSpaces(name)+".md", db.Bytes(name, "Database"))
 	}
 }
 func createCachesPages() {
 	// Caches pages
 	b := strings.Builder{}
+	b.WriteString(frontmatterFor("Caches"))
 	alphabetized := slices.Collect(maps.Keys(caches))
 	sort.Strings(alphabetized)
 	for _, name := range alphabetized {
@@ -724,13 +731,14 @@ func createCachesPages() {
 		}
 	}
 	for name, cache := range caches {
-		writePage("cache", withoutSpaces(name)+".md", cache.Bytes())
+		writePage("cache", withoutSpaces(name)+".md", cache.Bytes(name, "Cache"))
 	}
 }
 
 func createProvidersPages() {
 	// Providers pages
 	b := strings.Builder{}
+	b.WriteString(frontmatterFor("Cloud Providers"))
 	// TODO: PREFERRED VS ALL
 	b.WriteString("# Preferred (in order)\n")
 	for _, name := range []string{"AWS"} {
@@ -757,6 +765,7 @@ func createProvidersPages() {
 func createServicesPages() {
 	// Services pages
 	b := strings.Builder{}
+	b.WriteString(frontmatterFor("Cloud Services"))
 	b.WriteString("Service | Provider\n")
 	b.WriteString(":-- | :--\n")
 	for _, service := range cloudServices { // TODO: alphabetize?!!!!!
@@ -772,13 +781,14 @@ func createServicesPages() {
 		}
 	}
 	for name, service := range cloudServices {
-		writePage("service", withoutSpaces(name)+".md", service.Bytes())
+		writePage("service", withoutSpaces(name)+".md", service.Bytes(name, "Cloud Service"))
 	}
 }
 
 func createTechnologiesPages() {
 	// Technologies pages
 	b := strings.Builder{}
+	b.WriteString(frontmatterFor("Technologies"))
 	alphabetized := slices.Collect(maps.Keys(techs))
 	sort.Strings(alphabetized)
 	for _, name := range alphabetized {
@@ -795,13 +805,14 @@ func createTechnologiesPages() {
 		}
 	}
 	for name, tech := range techs {
-		writePage("technology", withoutSpaces(name)+".md", tech.Bytes())
+		writePage("technology", withoutSpaces(name)+".md", tech.Bytes(name, "Technology"))
 	}
 }
 
 func createMiscSkillsPages() {
 	// Misc skills pages
 	b := strings.Builder{}
+	b.WriteString(frontmatterFor("Miscellaneous Skills"))
 	alphabetized := slices.Collect(maps.Keys(miscSkills))
 	sort.Strings(alphabetized)
 	for _, name := range alphabetized {
@@ -818,11 +829,12 @@ func createMiscSkillsPages() {
 		}
 	}
 	for name, skill := range miscSkills {
-		writePage("miscSkill", withoutSpaces(name)+".md", skill.Bytes())
+		writePage("miscSkill", withoutSpaces(name)+".md", skill.Bytes(name, "Misc Skill"))
 	}
 }
 func createInterestsPages() {
 	b := strings.Builder{}
+	b.WriteString(frontmatterFor("Interests"))
 	alphabetizedInterests := slices.Collect(maps.Keys(interests))
 	sort.Strings(alphabetizedInterests)
 	for _, name := range alphabetizedInterests {
@@ -838,12 +850,13 @@ func createInterestsPages() {
 		}
 	}
 	for name, interest := range interests {
-		writePage("interest", withoutSpaces(name)+".md", interest.Bytes())
+		writePage("interest", withoutSpaces(name)+".md", interest.Bytes(name, "Interest"))
 	}
 }
 func createSubjectMatterPages() {
 	// TODO; THIS!!!!
 	b := strings.Builder{}
+	b.WriteString(frontmatterFor("Subject Matters"))
 	alphabetizedSms := subjectMatters.AsSlice()
 	sort.Slice(alphabetizedSms, func(i, j int) bool { // TODO: ok????
 		return string(alphabetizedSms[i]) < string(alphabetizedSms[j])

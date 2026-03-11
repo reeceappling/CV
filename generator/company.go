@@ -70,6 +70,7 @@ func NewCompany(name string, startMo, startYr int, endMo, endYr *int) *CompanyPa
 
 func (pg *CompanyPage) Bytes() []byte {
 	builder := strings.Builder{}
+	builder.WriteString(frontmatterFor(pg.Name, "Company"))
 	if pg.Positions != nil && len(pg.Positions) > 0 {
 		builder.WriteString("# Positions\n")
 		for _, pos := range pg.Positions {

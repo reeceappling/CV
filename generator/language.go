@@ -26,6 +26,7 @@ func (pg *LanguagePage) Link() string {
 
 func (pg *LanguagePage) Bytes() []byte {
 	builder := strings.Builder{}
+	builder.WriteString(frontmatterFor(pg.Name, "Language"))
 	if pg.Companies != nil && len(pg.Companies) > 0 {
 		builder.WriteString("# Companies\n")
 		for companyName := range pg.Companies {

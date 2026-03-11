@@ -51,6 +51,7 @@ func NewClient(name string, info ...string) *Client {
 
 func (pg *Client) Bytes() []byte {
 	builder := strings.Builder{}
+	builder.WriteString(frontmatterFor(pg.Name, "Client"))
 	if pg.Projects != nil && len(pg.Projects) > 0 {
 		builder.WriteString("# Projects\n")
 		for _, proj := range pg.Projects {
