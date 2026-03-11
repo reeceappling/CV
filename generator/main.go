@@ -34,15 +34,15 @@ func createMainPage() { // TODO: TAGS EVERYWHERE????
 	// TODO: FORCE DARK MODE
 	// TODO: import configs for quartz from /config
 	b := strings.Builder{}
+	b.WriteString(frontmatterFor("CV Home"))
 	// TODO: HEADER AREA FOR LINKS TO CV, RESUME, BLOG, NOTES
-	b.WriteString("# Home\n") // TODO: PUT LINK TO HOME ON EVERY PAGE
 	b.WriteString("# CV\n")
 	b.WriteString("Welcome to my CV! It is a living document that is updated occasionally.\n")
-	b.WriteString("## About\n")
+	b.WriteString("# About\n")
 	b.WriteString(fixmeLink + "\n") // TODO: SUMMARY/About
 
 	// TODO: ADD OTHER JOBS, UNRELATED TO SOFTWARE
-	b.WriteString("## Work History ([Companies](companies.md), [Positions](positions.md))\n") // TODO: RENAME
+	b.WriteString("# Work History ([Companies](companies.md), [Positions](positions.md))\n") // TODO: RENAME
 	b.WriteString("Latest Position | Company | Start Date | End Date\n")
 	b.WriteString(":-- | :-- | --: | :--\n")
 	for _, companyName := range companiesOrder {
@@ -54,7 +54,7 @@ func createMainPage() { // TODO: TAGS EVERYWHERE????
 		b.WriteString(fmt.Sprintf("%s | %s | %s | %s\n", company.Positions[0].Name, company.Link(), company.Positions[len(company.Positions)-1].Start.String(), endDate))
 	}
 
-	b.WriteString("## Education\n")
+	b.WriteString("# Education\n")
 	for _, schoolName := range []string{
 		"North Carolina State University",
 		"Central Academy of Technology and Arts",
@@ -67,7 +67,7 @@ func createMainPage() { // TODO: TAGS EVERYWHERE????
 		b.WriteString(fmt.Sprintf("- %s %s\n", school.Link(), strings.Join(temp, ", ")))
 	}
 
-	b.WriteString("## Certifications\n")
+	b.WriteString("# Certifications\n")
 	b.WriteString("Cert | Certification Date | Expiration Date | link\n")
 	b.WriteString(":-- | :-- | :-- | :--\n")
 	for _, cert := range []*Certification{
@@ -90,40 +90,40 @@ func createMainPage() { // TODO: TAGS EVERYWHERE????
 	}
 	// TODO: any others?
 
-	b.WriteString("## Languages\n[Full Page](Languages.md)\n")
+	b.WriteString("# Languages\n[Full Page](Languages.md)\n")
 	b.WriteString("[see all languages LINK BROKEN](language/)\n") // TODO: delete?
-	b.WriteString("### Preferred (in order)\n")
+	b.WriteString("## Preferred (in order)\n")
 	for _, name := range []string{"Go", "Typescript", "Terraform", "Bash"} {
 		b.WriteString(fmt.Sprintf("- %s\n", langs[name].Link()))
 	}
-	b.WriteString("### All\n")
+	b.WriteString("## All\n")
 	b.WriteString(alphabetizedLinksCompressed(langs, "language"))
 
-	b.WriteString("## Databases\n[Full Page](dbs.md)\n\n") // TODO: why does this take 2 newlines??
+	b.WriteString("# Databases\n[Full Page](dbs.md)\n\n") // TODO: why does this take 2 newlines??
 	b.WriteString(alphabetizedLinksCompressed(dbs, "db"))
 
-	b.WriteString("## Caches\n[Full Page](caches.md)\n\n") // TODO: why does this take 2 newlines??
+	b.WriteString("# Caches\n[Full Page](caches.md)\n\n") // TODO: why does this take 2 newlines??
 	b.WriteString(alphabetizedLinksCompressed(caches, "cache"))
 
-	b.WriteString("## Cloud Providers\n[Full Page](providers.md)\n")
-	b.WriteString("### Preferred\n")
+	b.WriteString("# Cloud Providers\n[Full Page](providers.md)\n")
+	b.WriteString("## Preferred\n")
 	for _, name := range []string{"AWS"} {
 		b.WriteString(fmt.Sprintf("- %s\n", providers[name].Link()))
 	}
-	b.WriteString("### All\n")
+	b.WriteString("## All\n")
 	b.WriteString(alphabetizedLinksCompressed(providers, "provider"))
 	// TODO: ADD GCP! Azure!
 
-	b.WriteString("## Technologies and Libraries\n[Full Page](technologies.md)\n\n") // TODO: why does this take 2 newlines??
-	b.WriteString(alphabetizedLinksCompressed(techs, "technology"))                  // TODO: dir correct?
+	b.WriteString("# Technologies and Libraries\n[Full Page](technologies.md)\n\n") // TODO: why does this take 2 newlines??
+	b.WriteString(alphabetizedLinksCompressed(techs, "technology"))                 // TODO: dir correct?
 
-	b.WriteString("### Containerization and Distributed Computing\n\n") // TODO: why does this take 2 newlines??
+	b.WriteString("## Containerization and Distributed Computing\n\n") // TODO: why does this take 2 newlines??
 	// TODO: POPULATE THIS AREA!!!!!!!!!!!!!
 
-	b.WriteString("## Platforms\n[Full Page](platforms.md)\n\n") // TODO: why does this take 2 newlines??
+	b.WriteString("# Platforms\n[Full Page](platforms.md)\n\n") // TODO: why does this take 2 newlines??
 	b.WriteString(alphabetizedLinksCompressed(platforms, "platform"))
 
-	b.WriteString("### CI/CD\n")
+	b.WriteString("# CI/CD\n")
 	cicdThings := map[string]string{
 		"Github Actions": "technology",
 		"Gitlab CI":      "technology",
@@ -135,8 +135,8 @@ func createMainPage() { // TODO: TAGS EVERYWHERE????
 	}
 	b.WriteString(strings.Join(temp, ", ") + "\n")
 
-	b.WriteString("### Observability and Monitoring\n")
-	b.WriteString("#### Observability\n")
+	b.WriteString("# Observability and Monitoring\n")
+	b.WriteString("## Observability\n")
 	observabilityThings := map[string]string{
 		"Cloudwatch": "service",  // TODO: ok?
 		"Datadog":    "platform", // TODO: ok?
@@ -150,7 +150,7 @@ func createMainPage() { // TODO: TAGS EVERYWHERE????
 		tempObs[i] = fmt.Sprintf("[%s](%s/%s)", key, observabilityThings[key], withoutSpaces(key))
 	}
 	b.WriteString(strings.Join(tempObs, ", ") + "\n")
-	b.WriteString("#### Logs\n") // TODO: Logs
+	b.WriteString("## Logs\n") // TODO: Logs
 	loggingThings := map[string]string{
 		"LogCentral": "platform", // TODO: ok?
 	}
@@ -160,19 +160,19 @@ func createMainPage() { // TODO: TAGS EVERYWHERE????
 	}
 	b.WriteString(strings.Join(tempLogging, ", ") + "\n")
 
-	b.WriteString("#### Miscellaneous Skills\n")
+	b.WriteString("# Miscellaneous Skills\n")
 	alphabetizedSkills := slices.Collect(maps.Keys(miscSkills))
 	sort.Strings(alphabetizedSkills)
 	for _, name := range alphabetizedSkills {
 		b.WriteString(fmt.Sprintf("- %s\n", miscSkills[name].Link()))
 	}
-	b.WriteString("#### Interests\n") // TODO: move????
+	b.WriteString("# Interests\n") // TODO: move????
 	alphabetizedInterests := slices.Collect(maps.Keys(interests))
 	sort.Strings(alphabetizedInterests)
 	for _, name := range alphabetizedInterests {
 		b.WriteString(fmt.Sprintf("- %s\n", linkForInterest(name)))
 	}
-	b.WriteString("#### Subject Matters\n") // TODO: move????
+	b.WriteString("# Subject Matters\n") // TODO: move????
 	alphabetizedSms := subjectMatters.AsSlice()
 	sort.Slice(alphabetizedSms, func(i, j int) bool { // TODO: ok????
 		return string(alphabetizedSms[i]) < string(alphabetizedSms[j])

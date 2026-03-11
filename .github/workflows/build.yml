@@ -94,9 +94,9 @@ jobs:
           name: markdownFiles
           path: ./quartz/content
       - name: custom configuration
-        run: rm quartz/quartz/quartz.config.ts && mv config/quartz.config.ts quartz/quartz/quartz.config.ts
+        run: rm ./quartz/quartz/quartz.config.ts && mv ./config/quartz.config.ts ./quartz/quartz/quartz.config.ts
       - name: custom layout
-        run: rm quartz/quartz/quartz.layout.ts && mv config/quartz.layout.ts quartz/quartz/quartz.layout.ts
+        run: rm ./quartz/quartz/quartz.layout.ts && mv ./config/quartz.layout.ts ./quartz/quartz/quartz.layout.ts
       - name: Build Quartz
         run: npx --quiet quartz build
         working-directory: ./quartz

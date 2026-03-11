@@ -7,7 +7,7 @@ import "strings"
 // TODO: LAYOUT
 
 // TODO: USE THIS!!!!!!
-func frontmatterFor(title string, tags []string) string {
+func frontmatterFor(title string, tags ...string) string {
 	b := strings.Builder{}
 	b.WriteString("---\n")
 	b.WriteString("title: " + title + "\n")
