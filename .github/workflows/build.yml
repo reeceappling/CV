@@ -43,20 +43,6 @@ jobs:
             go.mod
             blogPosts
             notes
-            static
-      - name: move static files # TODO: DEL (and line above)
-        run: |
-          if test -d static; then
-            echo "Directory exists."
-            if [ -z "$(find "static" -maxdepth 0 -type d -empty)" ]; then
-              echo "FOUND STATIC"
-            else
-              echo "NO STATIC"
-            fi
-          fi
-      - name: Fix workspace permissions
-        # TODO: get rid of if possible
-        run: sudo chown -R $USER:$USER ${{ github.workspace }}
       - uses: actions/setup-go@v6
         with:
           go-version-file: 'go.mod'
@@ -64,12 +50,13 @@ jobs:
           token: ${{ github.token }}
           cache: false
           cache-dependency-path: 'go.sum'
-      - name: Make quartz dirs
-        run: mkdir -p ./quartz/content
-      - name: Generate
-        run: sudo go run ./generator
-      - name: Fix permissions
-        run: sudo chown -R $USER:$USER . && chmod -R 777 ./quartz/content
+      - name: Generate files
+        run: |
+          sudo chown -R $USER:$USER ${{ github.workspace }}
+          mkdir -p ./quartz/content
+          sudo go run ./generator
+          sudo chown -R $USER:$USER .
+          chmod -R 777 ./quartz/content
       - uses: actions/upload-artifact@v4
         with:
           name: markdownFiles
