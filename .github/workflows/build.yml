@@ -43,7 +43,16 @@ jobs:
             go.mod
             blogPosts
             notes
+            static
+      - name: move static files # TODO: DEL (and line above)
+        run: |
+          if [ -z "$(find ./static -maxdepth 0 -type d -empty)" ]; then
+            echo "FOUND STATIC"
+          else
+            echo "NO STATIC"
+          fi
       - name: Fix workspace permissions
+        # TODO: get rid of if possible
         run: sudo chown -R $USER:$USER ${{ github.workspace }}
       - uses: actions/setup-go@v6
         with:
@@ -163,7 +172,7 @@ jobs:
 #        run: aws s3 rm s3://${{ env.TF_VAR_subdomain }}.${{ env.TF_VAR_domain }} --recursive
       - name: move static files
         run: |
-          if [ -z "$(find "$DIRECTORY" -maxdepth 0 -type d -empty)" ]; then
+          if [ -z "$(find ./static -maxdepth 0 -type d -empty)" ]; then
             mv -f static/* terraform/public/static/
           fi
       # TODO: ONLY REPLACE FILES THAT HAVE CHANGED!
