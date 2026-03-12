@@ -111,6 +111,10 @@ jobs:
             echo "Replacing: quartz/quartz/$clean_path from quartzModified/quartz/$clean_path"
             rm -f quartz/quartz/$clean_path && mv quartzModified/quartz/$clean_path quartz/quartz/$clean_path
           done
+#      - name: Move static files # TODO: THIS
+#        run: |
+#          rm -f quartz/quartz.layout.ts && mv quartzModified/quartz.layout.ts quartz/quartz.layout.ts
+#          rm -f quartz/quartz.config.ts && mv quartzModified/quartz.config.ts quartz/quartz.config.ts
       - name: Build Quartz
         run: npx --quiet quartz build
         working-directory: ./quartz

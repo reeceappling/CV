@@ -40,11 +40,11 @@ func createMainCVPage() { // TODO: TAGS EVERYWHERE????
 	b := strings.Builder{}
 	b.WriteString(frontmatterFor("CV"))
 	// TODO: HEADER AREA FOR LINKS TO CV, RESUME, BLOG, NOTES
-	b.WriteString("# CV\n")
-	b.WriteString("Welcome to my CV! It is a living document that is updated occasionally.\n")
-	b.WriteString("Looking for a resume instead? [Download it here](Resume.pdf)ENSURE WORKING\n") // TODO: ENSURE OK
 
+	b.WriteString("Welcome to my CV! It is a living document that is updated occasionally.\n\n")  // Why does this need 2 newlines? // TODO: move down?
+	b.WriteString("Looking for a resume instead? [Download it here](Resume.pdf)ENSURE WORKING\n") // TODO: ENSURE OK
 	b.WriteString("# About\n")
+
 	b.WriteString(fixmeLink + "\n") // TODO: SUMMARY/About
 
 	b.WriteString("# Work History ([Companies](companies.md), [Positions](positions.md))\n") // TODO: RENAME
