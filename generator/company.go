@@ -216,11 +216,11 @@ func initCompaniesAfterPositions() {
 	_ = NewCompany("Source Allies", 5, 2022, nil, nil).
 		WithPositions(sai1, sai2, sai3)
 	_ = NewCompany("Freelance", 1, 2012, utils.Pointer(6), utils.Pointer(2022)). // TODO: RENAME
-		WithPositions(freelancePosition)
+											WithPositions(freelancePosition)
 	_ = NewCompany("TEI", 1, 2019, utils.Pointer(3), utils.Pointer(2020)). // TODO: ENSURE DATES ARE RIGHT
-		WithPositions(positionTEI)
+										WithPositions(positionTEI)
 	_ = NewCompany("Talley Associates of Engineering", 5, 2017, utils.Pointer(3), utils.Pointer(2018)). // TODO: ENSURE DATES ARE RIGHT
-		WithPositions(positionTAE)
+														WithPositions(positionTAE)
 	_ = NewCompany("Monroe Aquatics and Fitness Center", 1, 2013, utils.Pointer(8), utils.Pointer(2016)). // TODO: ENSURE DATES ARE RIGHT
-		WithPositions(positionLifeguard, positionSeniorLifeguard)
+														WithPositions(positionLifeguard, positionSeniorLifeguard)
 }

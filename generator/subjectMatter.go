@@ -2,6 +2,7 @@ package main
 
 import (
 	"appli.ng/cv/generator/utils"
+	"strings"
 )
 
 var subjectMatters = utils.Set[SubjectMatter]{}
@@ -10,6 +11,12 @@ type SubjectMatter string
 
 func (sm SubjectMatter) Link() string {
 	return linkFor(string(sm), "cv", "subjectMatter", withoutSpaces(string(sm)))
+}
+func (sm SubjectMatter) Bytes() []byte {
+	b := strings.Builder{}
+	b.WriteString(frontmatterFor(string(sm)))
+	b.WriteString("NEED TO INSERT BACKLINKS\n") // TODO: THIS
+	return []byte(b.String())
 }
 
 func NewSubjectMatter(sm string) SubjectMatter {

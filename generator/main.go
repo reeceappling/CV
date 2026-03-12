@@ -871,7 +871,7 @@ func createSubjectMatterPages() {
 	}
 	for sm, _ := range subjectMatters {
 		// TODO: LIKELY USE A TAG SYSTEM INSTEAD!!!!!
-		WriteCVFile("subjectMatter/"+withoutSpaces(string(sm))+".md", "SUBJECT MATTER PAGE NOT IMPLEMENTED")
+		WriteCVFile("subjectMatter/"+withoutSpaces(string(sm))+".md", string(sm.Bytes()))
 	}
 }
 
