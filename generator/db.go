@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 var dbs = map[string]*DbPage{}
 
 type DbPage struct {

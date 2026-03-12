@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 var cloudServices = map[string]*CloudServicePage{}
 
 type CloudServicePage struct {

@@ -535,10 +535,10 @@ func createSchoolsPages() {
 	// Create schools page
 	b := strings.Builder{}
 	b.WriteString(frontmatterFor("Schools"))
-	for name, school := range schools {
+	for _, school := range schools {
 		b.WriteString(fmt.Sprintf("# %s\n", school.Link()))
 		// Write all degrees
-		b.WriteString(fmt.Sprintf("- Degrees:", name, withoutSpaces(name)))
+		b.WriteString("- Degrees:")
 		for i, deg := range school.Degrees {
 			if i != 0 {
 				b.WriteString(", ")
@@ -547,11 +547,11 @@ func createSchoolsPages() {
 		}
 		b.WriteString("\n")
 		// Write all projects
-		b.WriteString(fmt.Sprintf("- Projects:\n", name, withoutSpaces(name)))
+		b.WriteString("- Projects:\n")
 		for _, proj := range school.Projects {
 			b.WriteString(fmt.Sprintf("- - %s\n", proj.Link()))
 		}
-		b.WriteString(fmt.Sprintf("- Extracurriculars:\n", name, withoutSpaces(name)))
+		b.WriteString("- Extracurriculars:\n")
 		// Write all extracurriculars
 		for _, ec := range school.Extracurriculars {
 			b.WriteString(fmt.Sprintf("- - %s\n", ec.Name))
