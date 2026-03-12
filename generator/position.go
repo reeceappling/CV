@@ -28,7 +28,7 @@ func (pg *Position) Link() string {
 	if pg == nil {
 		return "NO_LINK"
 	}
-	return linkFor(pg.Name, "cv", "position", withoutSpaces(pg.Name))
+	return linkFor(pg.Name, "cv", "position", withoutSpaces(pg.MapName()))
 }
 func (pg *Position) WithMiscSkills(skills ...string) *Position {
 	if pg == nil {

@@ -599,14 +599,9 @@ func createPositionsPages() {
 	b.WriteString("Earliest")
 
 	WriteFile("index.md", b.String())
-	err := os.WriteFile(root+"positions.md", []byte(b.String()), 777)
-	if err != nil {
-		panic(err)
-	}
+	WriteCVFile("positions.md", b.String())
 	if len(langs) > 0 {
-		if err = os.MkdirAll(root+"position", 777); err != nil {
-			panic("failed to create position dir: " + err.Error())
-		}
+		MakeCVDir("position")
 	}
 	for name, item := range positionsMap {
 		WriteCVFile("position/"+withoutSpaces(name)+".md", string(item.Bytes()))

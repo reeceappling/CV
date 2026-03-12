@@ -84,6 +84,7 @@ func (pg *CompanyPage) Bytes() []byte {
 		for _, pos := range pg.Positions {
 			// TODO: NOT PROPERLY SORTED
 			// TODO: ORDERING?
+			// TODO: POS NOT WORKING ON DEERE CLIENT PAGE
 			builder.WriteString(fmt.Sprintf("- %s\n", pos.Link()))
 		}
 	}

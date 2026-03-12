@@ -795,13 +795,13 @@ func initProjectsFinal() {
 		WithSubjectMatters(smCiCd, smContainerization, smIAC, smClusterComputing, smDistributedComputing, smLinearAlgebra, smBackend).
 		finalize()
 	saiCollegeProject = saiCollegeProject.WithStatus(statusComplete). // TODO: MORE!
-		WithSummary("SUMMARY HERE"). // TODO: MORE!
-		WithLang("Html", Regularly).
-		WithLang("CSS", Regularly).
-		WithLang("Javascript", Some).
-		WithSubjectMatters(smFrontend).
-		WithTechnologies("Drupal").
-		finalize()
+										WithSummary("SUMMARY HERE"). // TODO: MORE!
+										WithLang("Html", Regularly).
+										WithLang("CSS", Regularly).
+										WithLang("Javascript", Some).
+										WithSubjectMatters(smFrontend).
+										WithTechnologies("Drupal").
+										finalize()
 	// TODO: sai project for JAMF
 	mushDbProject = mushDbProject.WithStatus(statusBuilding).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!
