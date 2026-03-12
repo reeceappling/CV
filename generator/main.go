@@ -64,7 +64,7 @@ func main() {
 }
 
 func createMainPage() {
-	b := strings.Builder{}
+	b := &strings.Builder{}
 	b.WriteString(frontmatterFor("Home - Reece Appling"))
 	b.WriteString("# About\n")
 	writeMultipleTextLines(b,

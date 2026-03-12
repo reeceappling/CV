@@ -29,7 +29,7 @@ func MakeCVDir(dir string) {
 		panic("failed to create cv/" + dir + " dir: " + err.Error())
 	}
 }
-func writeMultipleTextLines(b strings.Builder, lines ...string) {
+func writeMultipleTextLines(b *strings.Builder, lines ...string) {
 	b.WriteString(strings.Join(lines, "\n\n") + "\n")
 }
 
