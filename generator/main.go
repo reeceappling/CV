@@ -14,6 +14,9 @@ import (
 // TODO: fix this link: https://reece.appli.ng/cv/language/
 // TODO: add resume
 // TODO: Figure out how deep the graph view should be...
+// TODO: DesktopOnly.tsx???
+// TODO: sort projects on projects page? (maybe chronological?) (alphabetical?)
+// TODO: backlinks only on the subject matter pages????
 
 const fixmeLink = "[FIX ME](error.md)"
 
@@ -26,12 +29,15 @@ func createMainPage() {
 	b.WriteString(frontmatterFor("Home - Reece Appling"))
 	b.WriteString("# About\n")
 	writeMultipleTextLines(b,
-		"__Hi, I'm Reece__. Welcome to my personal website! This site is primarily a living document for [my CV](cv.md), and [my resume](static/Resume_Reece_Appling.pdf), both of which I try to keep current. I also host [my personal blog](Blog.md) here, as well as an area to publish [my notes](Notes).",
+		"__Hi, I'm Reece__. Welcome to my personal website! This site is primarily a living document for [my CV](cv.md) and [my resume](static/Resume_Reece_Appling.pdf), both of which I try to keep relatively current. I also host [my personal blog](Blog.md) here, as well as an area to publish [my notes](Notes).",
 		"This entire site is auto-generated from Go code and text files into markdown files \\(for [Obsidian](https://obsidian.md)\\), which are exported to html, css, and javascript via [Quartz 4](https://quartz.jzhao.xyz), hosted on AWS S3, and accessed via AWS CloudFront and Cloudflare. Feel free to check out the [source code](https://github.com/reeceappling/CV).",
 		"__Want to get in contact with me?__ Some contact info should be at the footer of this page. Otherwise, [my links page](https://links.reece.appli.ng) contains many of my socials, as well as my email and phone number.",
 	)
+
 	b.WriteString("# CV\n")
 	writeMultipleTextLines(b,
+		// TODO: CV LAST UPDATED DATE?
+		// TODO: RESUME LAST UPDATED DATE?
 		"[Check out my CV](cv.md). It is a living document that is updated occasionally.",
 		"Looking for a resume instead? [Download my resume here](static/Resume_Reece_Appling.pdf)",
 	)

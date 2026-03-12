@@ -560,7 +560,7 @@ var (
 	WellAwareProject           = NewProfessionalProject("Well Aware NC", fixmeLink, clarkClient, nil) // TODO: change client to the lab???
 	CritColaProject            = NewProfessionalProject("CritCola", fixmeLink, critColaClient, nil)
 	MastersDataAnalysisProject = NewProfessionalProject("Masters Data Analysis", fixmeLink, clarkClient, nil)
-	capstoneProject            = NewSchoolProject("Capstone Project. Uranium Silicide Accident-Tolerant Fuel cycle design for Duke Energy Catawba Nuclear Plant", "FIX M_E", schoolNCSU, &coreShufflerUrl)
+	capstoneProject            = NewSchoolProject("Capstone Project-Uranium Silicide Accident Tolerant Fuel cycle design for Duke Energy Catawba Nuclear Plant", "FIX M_E", schoolNCSU, &coreShufflerUrl)
 	projectLinAlgCryptography  = NewSchoolProject("Linear algebra cryptography algorithm", "FIX M_E", schoolNCSU, nil)
 	cherenkovProject           = NewSchoolProject("Cherenkov radiation detector", fixmeLink, schoolNCSU, nil)
 	roboticsTeamProject        = NewSchoolProject("Robotics team 3720", fixmeLink, schoolCata, nil)
