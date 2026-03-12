@@ -1,9 +1,5 @@
 package main
 
-import (
-	"fmt"
-)
-
 var platforms = map[string]*PlatformPage{}
 
 type PlatformPage struct { // Datadog, Github, etc
