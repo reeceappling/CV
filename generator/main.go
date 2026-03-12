@@ -80,14 +80,7 @@ func createMainCVPage() { // TODO: TAGS EVERYWHERE????
 	b.WriteString("# Certifications\n")
 	b.WriteString("Cert | Certification Date | Expiration Date | link\n")
 	b.WriteString(":-- | :-- | :-- | :--\n")
-	for _, cert := range []*Certification{
-		certAwsSaa,
-		certOWASP,
-		certComtrain2,
-		certComtrain,
-		certLifeguard,
-		certCPR,
-	} {
+	for _, cert := range certs {
 		link := ""
 		if cert.Link != nil {
 			link = fmt.Sprintf(`[link](%s)`, *cert.Link)
@@ -100,7 +93,7 @@ func createMainCVPage() { // TODO: TAGS EVERYWHERE????
 	}
 	// TODO: any others?
 
-	b.WriteString("# Languages\n[Full Page](Languages.md)\n")
+	b.WriteString("# [Languages](Languages.md)\n")
 	b.WriteString("[see all languages LINK BROKEN](language/)\n") // TODO: delete?
 	b.WriteString("## Preferred (in order)\n")
 	for _, name := range []string{"Go", "Typescript", "Terraform", "Bash"} {

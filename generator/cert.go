@@ -26,13 +26,13 @@ func NewDate(month int, year int) *monthYr {
 	}
 }
 
-var (
-	certAwsSaa = NewCert("Aws Solutions Architect - Associate", 04, 2023, nil, nil) // TODO: ENSURE DATES OK
-	certOWASP  = NewCert("Owasp top 10 course", 9, 2022, nil, nil)                  // TODO: ENSURE DATES OK
+var certs = []*Certification{
+	NewCert("Aws Solutions Architect - Associate", 04, 2023, nil, nil),                  // TODO: ENSURE DATES OK
+	NewCert("Owasp top 10 course", 9, 2022, nil, nil),                                   // TODO: ENSURE DATES OK
+	NewCert("OSHA 10hr", 9, 2019, nil, nil),                                             // TODO: link
+	NewCert("Comtrain Certified Tower Climber/Rescuer", 9, 2019, NewDate(9, 2022), nil), // TODO: link
 	// TODO; RF SAFETY COURSE // TODO: link
-	certOSHA      = NewCert("OSHA 10hr", 9, 2019, nil, nil)                                              // TODO: link
-	certComtrain2 = NewCert("Comtrain Certified Tower Climber/Rescuer", 9, 2019, NewDate(9, 2022), nil)  // TODO: link
-	certComtrain  = NewCert("Comtrain Certified Tower Climber/Rescuer", 06, 2017, NewDate(6, 2020), nil) // TODO: link
-	certLifeguard = NewCert("Red Cross certified Lifeguard", 01, 2013, NewDate(6, 2018), nil)            // TODO: link
-	certCPR       = NewCert("CPR", 01, 2013, NewDate(1, 2018), nil)                                      // TODO: link
-)
+	NewCert("Comtrain Certified Tower Climber/Rescuer", 06, 2017, NewDate(6, 2020), nil), // TODO: link
+	NewCert("Red Cross certified Lifeguard", 01, 2013, NewDate(6, 2018), nil),            // TODO: link
+	NewCert("CPR", 01, 2013, NewDate(1, 2018), nil),                                      // TODO: link
+}
