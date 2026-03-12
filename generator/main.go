@@ -13,9 +13,6 @@ import (
 // TODO: remove "Aug 23, 2023 2 min read" at top of each page
 // TODO: fix this link: https://cv.appli.ng/language/
 // TODO: add resume
-// TODO: change s3 bucket to reece.appli.ng
-// TODO: add example blog post...
-// TODO: add example note...
 
 const fixmeLink = "[FIX ME](error.md)"
 
