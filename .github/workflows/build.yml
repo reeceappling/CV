@@ -46,7 +46,7 @@ jobs:
             static
       - name: move static files # TODO: DEL (and line above)
         run: |
-          if [ -z "$(find ./static -maxdepth 0 -type d -empty)" ]; then
+          if [ -z "$(find "static" -maxdepth 0 -type d -empty)" ]; then
             echo "FOUND STATIC"
           else
             echo "NO STATIC"
