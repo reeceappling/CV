@@ -24,17 +24,17 @@ func linkFor(text string, path ...string) string {
 func createMainPage() {
 	b := strings.Builder{}
 	b.WriteString(frontmatterFor("Home - Reece Appling"))
-	b.WriteString("# About\n")
-	b.WriteString("__Hi, I'm Reece__. Welcome to my personal website! This site is primarily a living document for [my CV](cv.md), and [my resume](static/Resume_Reece_Appling.pdf), both of which I try to keep current. I also host [my personal blog](Blog.md) here, as well as an area to publish [my notes](Notes).\n\n")
-	b.WriteString("This entire site is auto-generated from Go code and text files into markdown files \\(for [Obsidian](https://obsidian.md)\\), which are exported to html, css, and javascript via [Quartz 4](https://quartz.jzhao.xyz), hosted on AWS S3, and accessed via AWS CloudFront and Cloudflare. Feel free to check out the [source code](https://github.com/reeceappling/CV).\n\n")
-	b.WriteString("__Want to get in contact with me?__ Some contact info should be at the footer of this page. Otherwise, [my links page](https://links.reece.appli.ng) contains many of my socials, as well as my email and phone number.\n\n")
-	b.WriteString("# CV\n")
-	b.WriteString("[Check out my CV](cv.md). It is a living document that is updated occasionally.\n\n")        // TODO: why does this need 2x \n?
-	b.WriteString("Looking for a resume instead? [Download my resume here](static/Resume_Reece_Appling.pdf)\n") // TODO: ENSURE OK
-	b.WriteString("# Blog\n")
-	b.WriteString("Here is [my blog](Blog.md) where I host any blog posts I make.\n") // TODO: ENSURE OK
-	b.WriteString("# Public Notes\n")
-	b.WriteString("Lastly, here are [my notes](Notes)\n")
+	b.WriteString("# About\n" + `
+__Hi, I'm Reece__. Welcome to my personal website! This site is primarily a living document for [my CV](cv.md), and [my resume](static/Resume_Reece_Appling.pdf), both of which I try to keep current. I also host [my personal blog](Blog.md) here, as well as an area to publish [my notes](Notes).
+This entire site is auto-generated from Go code and text files into markdown files \\(for [Obsidian](https://obsidian.md)\\), which are exported to html, css, and javascript via [Quartz 4](https://quartz.jzhao.xyz), hosted on AWS S3, and accessed via AWS CloudFront and Cloudflare. Feel free to check out the [source code](https://github.com/reeceappling/CV).
+__Want to get in contact with me?__ Some contact info should be at the footer of this page. Otherwise, [my links page](https://links.reece.appli.ng) contains many of my socials, as well as my email and phone number.` + "\n")
+	b.WriteString("# CV\n" + `
+[Check out my CV](cv.md). It is a living document that is updated occasionally.
+Looking for a resume instead? [Download my resume here](static/Resume_Reece_Appling.pdf)` + "\n\n") // TODO: why does this need 2x \n?
+	b.WriteString("# Blog\n" + `
+Here is [my blog](Blog.md) where I host any blog posts I make.` + "\n")
+	b.WriteString("# Public Notes\n" + `
+Lastly, here are [my notes](Notes)` + "\n")
 	WriteFile("index.md", b.String())
 }
 
@@ -44,7 +44,7 @@ func createMainCVPage() { // TODO: TAGS EVERYWHERE????
 	// TODO: FORCE DARK MODE
 	b := strings.Builder{}
 	b.WriteString(frontmatterFor("CV"))
-	// TODO: HEADER AREA FOR LINKS TO CV, RESUME, BLOG, NOTES
+	// TODO: HEADER AREA FOR LINKS TO CV, RESUME, BLOG, NOTES?
 
 	b.WriteString("Welcome to my CV! It is a living document that is updated occasionally.\n\n")  // Why does this need 2 newlines? // TODO: move down?
 	b.WriteString("Looking for a resume instead? [Download it here](Resume.pdf)ENSURE WORKING\n") // TODO: ENSURE OK
