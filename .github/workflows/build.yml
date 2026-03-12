@@ -158,7 +158,7 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_RUNNER_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
-          role-session-name: reece.appli.ng deployment
+          role-session-name: mySiteDeployment
       - uses: actions/download-artifact@v5
         with:
           name: finalFiles
