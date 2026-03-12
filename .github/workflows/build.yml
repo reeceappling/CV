@@ -166,7 +166,7 @@ jobs:
 #      - name: clean out s3 bucket # Do not do this because it is more expensive
 #        run: aws s3 rm s3://${{ env.TF_VAR_subdomain }}.${{ env.TF_VAR_domain }} --recursive
       - name: move static files
-        run: mv static/* terraform/public/static/
+        run: mv -f static/* terraform/public/static/
       - name: initialize terraform
         run: terraform init -backend-config='bucket=${{ vars.TERRAFORM_STATE_BUCKET }}' -backend-config='region=${{ env.AWS_REGION }}'
         working-directory: terraform
