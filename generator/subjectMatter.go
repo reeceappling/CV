@@ -2,7 +2,6 @@ package main
 
 import (
 	"appli.ng/cv/generator/utils"
-	"fmt"
 )
 
 var subjectMatters = utils.Set[SubjectMatter]{}
@@ -10,7 +9,7 @@ var subjectMatters = utils.Set[SubjectMatter]{}
 type SubjectMatter string
 
 func (sm SubjectMatter) Link() string {
-	return fmt.Sprintf("[%s](subjectMatter/%s)", string(sm), withoutSpaces(string(sm)))
+	return linkFor(string(sm), "cv", "subjectMatter", withoutSpaces(string(sm)))
 }
 
 func NewSubjectMatter(sm string) SubjectMatter {

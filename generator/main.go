@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"maps"
 	"os"
@@ -11,37 +10,43 @@ import (
 	"strings"
 )
 
-// TODO: change top-left title that says "Quartz 4"
 // TODO: remove "Aug 23, 2023 2 min read" at top of each page
 // TODO: fix this link: https://cv.appli.ng/language/
 // TODO: add resume
-/* TODO:
----
-title: Example Title
-draft: false
-tags:
-  - example-tag
----
-https://github.com/jackyzha0/quartz/blob/v4/docs/authoring%20content.md
-*/
 
-const fixmeLink = "[FIX ME](fixme.md)"
+const fixmeLink = "[FIX ME](error.md)"
 
-func createMainPage() { // TODO: TAGS EVERYWHERE????
+func linkFor(text string, path ...string) string {
+	return fmt.Sprintf("[%s](%s)", text, strings.Join(path, "/"))
+}
+
+func createMainPage() {
+	b := strings.Builder{}
+	b.WriteString(frontmatterFor("Home - Reece Appling"))
+	b.WriteString("# CV\n")
+	b.WriteString("[Check out my CV](CV.md). It is a living document that is updated occasionally.\n")   // TODO: ENSURE OK
+	b.WriteString("Looking for a resume instead? [Download my resume here](Resume.pdf)ENSURE WORKING\n") // TODO: ENSURE OK
+	b.WriteString("# Blog\n")
+	b.WriteString("[Blog](Blog.md) where I host any blog posts I make.\n") // TODO: ENSURE OK
+	b.WriteString("# Public Notes\n")
+	b.WriteString("My [Notes](Notes).\n") // TODO: ENSURE OK
+	WriteFile("index.md", b.String())
+}
+
+func createMainCVPage() { // TODO: TAGS EVERYWHERE????
 	// TODO: https://quartz.jzhao.xyz/configuration PAGE TITLE
-	// TODO: SPA ROUTING? // https://quartz.jzhao.xyz/configuration
 	// TODO: THEMEING // https://quartz.jzhao.xyz/configuration
 	// TODO: FORCE DARK MODE
-	// TODO: import configs for quartz from /config
 	b := strings.Builder{}
-	b.WriteString(frontmatterFor("CV Home"))
+	b.WriteString(frontmatterFor("CV"))
 	// TODO: HEADER AREA FOR LINKS TO CV, RESUME, BLOG, NOTES
 	b.WriteString("# CV\n")
 	b.WriteString("Welcome to my CV! It is a living document that is updated occasionally.\n")
+	b.WriteString("Looking for a resume instead? [Download it here](Resume.pdf)ENSURE WORKING\n") // TODO: ENSURE OK
+
 	b.WriteString("# About\n")
 	b.WriteString(fixmeLink + "\n") // TODO: SUMMARY/About
 
-	// TODO: ADD OTHER JOBS, UNRELATED TO SOFTWARE
 	b.WriteString("# Work History ([Companies](companies.md), [Positions](positions.md))\n") // TODO: RENAME
 	b.WriteString("Latest Position | Company | Start Date | End Date\n")
 	b.WriteString(":-- | :-- | --: | :--\n")
@@ -131,7 +136,7 @@ func createMainPage() { // TODO: TAGS EVERYWHERE????
 	}
 	temp := make([]string, len(cicdThings))
 	for i, key := range slices.Collect(maps.Keys(cicdThings)) {
-		temp[i] = fmt.Sprintf("[%s](%s/%s)", key, cicdThings[key], withoutSpaces(key))
+		temp[i] = linkFor(key, "cv", cicdThings[key], withoutSpaces(key))
 	}
 	b.WriteString(strings.Join(temp, ", ") + "\n")
 
@@ -147,7 +152,7 @@ func createMainPage() { // TODO: TAGS EVERYWHERE????
 	}
 	tempObs := make([]string, len(observabilityThings))
 	for i, key := range slices.Collect(maps.Keys(observabilityThings)) {
-		tempObs[i] = fmt.Sprintf("[%s](%s/%s)", key, observabilityThings[key], withoutSpaces(key))
+		tempObs[i] = linkFor(key, "cv", observabilityThings[key], withoutSpaces(key))
 	}
 	b.WriteString(strings.Join(tempObs, ", ") + "\n")
 	b.WriteString("## Logs\n") // TODO: Logs
@@ -156,7 +161,7 @@ func createMainPage() { // TODO: TAGS EVERYWHERE????
 	}
 	tempLogging := make([]string, len(loggingThings))
 	for i, key := range slices.Collect(maps.Keys(loggingThings)) {
-		tempLogging[i] = fmt.Sprintf("[%s](%s/%s)", key, loggingThings[key], withoutSpaces(key))
+		tempLogging[i] = linkFor(key, "cv", loggingThings[key], withoutSpaces(key))
 	}
 	b.WriteString(strings.Join(tempLogging, ", ") + "\n")
 
@@ -172,7 +177,7 @@ func createMainPage() { // TODO: TAGS EVERYWHERE????
 	for _, name := range alphabetizedInterests {
 		b.WriteString(fmt.Sprintf("- %s\n", linkForInterest(name)))
 	}
-	b.WriteString("# Subject Matters\n") // TODO: move????
+	b.WriteString("# Subject Matters\n")
 	alphabetizedSms := subjectMatters.AsSlice()
 	sort.Slice(alphabetizedSms, func(i, j int) bool { // TODO: ok????
 		return string(alphabetizedSms[i]) < string(alphabetizedSms[j])
@@ -180,23 +185,41 @@ func createMainPage() { // TODO: TAGS EVERYWHERE????
 	for _, name := range alphabetizedSms {
 		b.WriteString(fmt.Sprintf("- %s\n", name.Link()))
 	}
+	WriteFile("CV.md", b.String())
+}
 
-	b.WriteString("# Blog\n")
-	b.WriteString("[Blog](blog/blog.md)\n")
-	b.WriteString("# Notes\n")
-	b.WriteString("[Notes](notes/notes.md)\n")
-	if err := os.WriteFile(root+"index.md", []byte(b.String()), 777); err != nil {
-		panic("failed to write main.md file: " + err.Error())
+func WriteFile(filenameLessRoot string, content string) {
+	if err := os.WriteFile(root+filenameLessRoot, []byte(content), 777); err != nil {
+		panic("failed to write " + filenameLessRoot + " file: " + err.Error())
 	}
+}
+func WriteCVFile(filenameLessRootAndCv string, content string) {
+	WriteFile("cv/"+filenameLessRootAndCv, content)
+}
+func MakeCVDir(dir string) {
+	if err := os.MkdirAll(root+"cv/"+dir, 777); err != nil {
+		panic("failed to create cv/" + dir + " dir: " + err.Error())
+	}
+}
+
+func createMainBlogPage() {
+	b := strings.Builder{}
+	b.WriteString(frontmatterFor("Blog"))
+	b.WriteString("No blog posts present at this time\n") // TODO: ADD
+	WriteFile("Blog.md", b.String())
+}
+func createMainNotesPage() {
+	b := strings.Builder{}
+	b.WriteString(frontmatterFor("Notes"))
+	b.WriteString("No notes present at this time\n") // TODO: ADD
+	WriteFile("Notes.md", b.String())
 }
 
 func createErrorPage() {
 	b := strings.Builder{}
 	b.WriteString(frontmatterFor("Not Found Page"))
 	b.WriteString("Page does not exist!\n") // TODO: PUT LINK TO HOME ON EVERY PAGE
-	if err := os.WriteFile(root+"error.md", []byte(b.String()), 777); err != nil {
-		panic("failed to write main.md file: " + err.Error())
-	}
+	WriteFile("error.md", b.String())
 }
 
 // Company -> position -> client -> project ->>>>
@@ -383,7 +406,7 @@ func alphabetizedLinksCompressed[T any](inpMap map[string]T, dir string) string 
 	allKeys := slices.Collect(maps.Keys(inpMap))
 	sort.Strings(allKeys)
 	for i, db := range allKeys {
-		allKeys[i] = fmt.Sprintf("[%s](%s/%s)", db, dir, withoutSpaces(db))
+		allKeys[i] = linkFor(db, "cv", dir, withoutSpaces(db))
 	}
 	return strings.Join(allKeys, ", ") + "\n"
 }
@@ -391,17 +414,19 @@ func alphabetizedLinks[T any](inpMap map[string]T, dir string) string {
 	allKeys := slices.Collect(maps.Keys(inpMap))
 	sort.Strings(allKeys)
 	for i, db := range allKeys {
-		allKeys[i] = fmt.Sprintf("- [%s](%s/%s)\n", db, dir, withoutSpaces(db))
+		allKeys[i] = linkFor(db, "cv", dir, withoutSpaces(db))
 	}
 	return strings.Join(allKeys, "") + "\n"
 }
 
 func main() {
-	if err := os.MkdirAll("./quartz/content", 777); err != nil {
-		panic("failed to create content dir: " + err.Error())
-	}
-	for _, dir := range []string{"school", "client", "project", "company", "position", "language", "platform", "db", "cache", "provider", "service", "technology", "miscSkill"} {
+	for _, dir := range []string{"cv", "post", "note"} {
 		if err := os.MkdirAll("./quartz/content/"+dir, 777); err != nil {
+			panic("failed to create content/" + dir + " dir: " + err.Error())
+		}
+	}
+	for _, dir := range []string{"subjectMatter", "interest", "school", "client", "project", "company", "position", "language", "platform", "db", "cache", "provider", "service", "technology", "miscSkill"} {
+		if err := os.MkdirAll("./quartz/content/cv/"+dir, 777); err != nil {
 			panic("failed to create " + dir + " dir: " + err.Error())
 		}
 	}
@@ -411,11 +436,9 @@ func main() {
 	// initClientsFirst() // Done in vars
 	//initProjectsAfterClients()
 	initProjectsFinal()
-	initClientsAfterProjectsComplete() // Sets client on projects as well // TODO: may need to go after positions (worked that way before)
+	initClientsAfterProjectsComplete() // Sets client on projects as well
 	initPositionsAfterProjects()
 	initCompaniesAfterPositions() // Must be done after positions and project setup, but before projects pages. What about clients?
-
-	// TODO: SEARCH BAR?
 
 	// Start creating actual pages
 	createLanguagesPages()
@@ -433,8 +456,11 @@ func main() {
 	createMiscSkillsPages()
 	createInterestsPages()
 	createSubjectMatterPages()
-	createMainPage()
 	createErrorPage()
+	createMainPage()
+	createMainCVPage()
+	createMainBlogPage()
+	createMainNotesPage()
 
 }
 
@@ -449,26 +475,13 @@ func createLanguagesPages() {
 	b.WriteString("# All\n")
 	b.WriteString("[see all languages](language/)\n") // TODO: delete?
 	b.WriteString(alphabetizedLinks(langs, "language"))
-	err := writeFileFromScratch("Languages.md", b.String())
-	if err != nil {
-		panic(err.Error())
-	}
+	WriteCVFile("Languages.md", b.String())
 	if len(langs) > 0 {
-		if err = os.MkdirAll(root+"language", 777); err != nil {
-			panic("failed to create languages dir: " + err.Error())
-		}
+		MakeCVDir("language")
 	}
 	for name, lang := range langs {
-		writePage("language", withoutSpaces(name)+".md", lang.Bytes())
+		WriteCVFile("language/"+withoutSpaces(name)+".md", string(lang.Bytes()))
 	}
-}
-
-func writeFileFromScratch(filepathFromRoot, toWrite string) error {
-	err := os.WriteFile(root+filepathFromRoot, []byte(toWrite), 777) // TODO; FAILING HERE
-	if err != nil {
-		return errors.Join(errors.New("failed to create "+filepathFromRoot), err)
-	}
-	return nil
 }
 
 func createProjectsPages() {
@@ -509,17 +522,12 @@ func createProjectsPages() {
 	b.WriteString(bPersonal.String())
 	b.WriteString(bSchool.String())
 
-	err := os.WriteFile(root+"projects.md", []byte(b.String()), 777)
-	if err != nil {
-		panic(err)
-	}
+	WriteCVFile("projects.md", b.String())
 	if len(langs) > 0 {
-		if err = os.MkdirAll(root+"project", 777); err != nil {
-			panic("failed to create projects dir: " + err.Error())
-		}
+		MakeCVDir("project")
 	}
 	for name, item := range projects {
-		writePage("project", withoutSpaces(name)+".md", item.Bytes())
+		WriteCVFile("project/"+withoutSpaces(name)+".md", string(item.Bytes()))
 	}
 }
 
@@ -551,7 +559,7 @@ func createSchoolsPages() {
 	}
 	// Write page for each school
 	for name, item := range schools {
-		writePage("school", withoutSpaces(name)+".md", item.Bytes())
+		WriteCVFile("school/"+withoutSpaces(name)+".md", string(item.Bytes()))
 	}
 }
 
@@ -592,6 +600,7 @@ func createPositionsPages() {
 	}
 	b.WriteString("Earliest")
 
+	WriteFile("index.md", b.String())
 	err := os.WriteFile(root+"positions.md", []byte(b.String()), 777)
 	if err != nil {
 		panic(err)
@@ -602,7 +611,7 @@ func createPositionsPages() {
 		}
 	}
 	for name, item := range positionsMap {
-		writePage("position", withoutSpaces(name)+".md", item.Bytes())
+		WriteCVFile("position/"+withoutSpaces(name)+".md", string(item.Bytes()))
 	}
 }
 
@@ -614,7 +623,7 @@ func createClientsPages() {
 	b.WriteString(":-- | :--\n")
 	for _, clientName := range clientsOrder {
 		client := clients[clientName]
-		compLink := fmt.Sprintf("[%s](company/%s)", client.Name, withoutSpaces(client.Name))
+		compLink := linkFor(client.Name, "cv", "company", withoutSpaces(client.Name))
 		if client.company != nil {
 			compLink = client.company.Link()
 		}
@@ -630,7 +639,7 @@ func createClientsPages() {
 		}
 	}
 	for name, item := range clients {
-		writePage("client", withoutSpaces(name)+".md", item.Bytes())
+		WriteCVFile("client/"+withoutSpaces(name)+".md", string(item.Bytes()))
 	}
 }
 
@@ -656,7 +665,7 @@ func createCompaniesPages() {
 		}
 	}
 	for name, company := range companies {
-		writePage("company", withoutSpaces(name)+".md", company.Bytes())
+		WriteCVFile("company/"+withoutSpaces(name)+".md", string(company.Bytes()))
 	}
 }
 
@@ -684,7 +693,7 @@ func createPlatformsPages() {
 		}
 	}
 	for name, platform := range platforms {
-		writePage("platform", withoutSpaces(name)+".md", platform.Bytes(name, "Platform"))
+		WriteCVFile("platform/"+withoutSpaces(name)+".md", string(platform.Bytes(name, "Platform")))
 	}
 }
 
@@ -708,7 +717,7 @@ func createDbsPages() {
 		}
 	}
 	for name, db := range dbs {
-		writePage("db", withoutSpaces(name)+".md", db.Bytes(name, "Database"))
+		WriteCVFile("db/"+withoutSpaces(name)+".md", string(db.Bytes(name, "Database")))
 	}
 }
 func createCachesPages() {
@@ -731,7 +740,7 @@ func createCachesPages() {
 		}
 	}
 	for name, cache := range caches {
-		writePage("cache", withoutSpaces(name)+".md", cache.Bytes(name, "Cache"))
+		WriteCVFile("cache/"+withoutSpaces(name)+".md", string(cache.Bytes(name, "Cache")))
 	}
 }
 
@@ -758,7 +767,7 @@ func createProvidersPages() {
 		}
 	}
 	for name, provider := range providers {
-		writePage("provider", withoutSpaces(name)+".md", provider.Bytes())
+		WriteCVFile("provider/"+withoutSpaces(name)+".md", string(provider.Bytes()))
 	}
 }
 
@@ -781,7 +790,7 @@ func createServicesPages() {
 		}
 	}
 	for name, service := range cloudServices {
-		writePage("service", withoutSpaces(name)+".md", service.Bytes(name, "Cloud Service"))
+		WriteCVFile("service/"+withoutSpaces(name)+".md", string(service.Bytes(name, "Cloud Service")))
 	}
 }
 
@@ -805,7 +814,7 @@ func createTechnologiesPages() {
 		}
 	}
 	for name, tech := range techs {
-		writePage("technology", withoutSpaces(name)+".md", tech.Bytes(name, "Technology"))
+		WriteCVFile("technology/"+withoutSpaces(name)+".md", string(tech.Bytes(name, "Technology")))
 	}
 }
 
@@ -829,7 +838,7 @@ func createMiscSkillsPages() {
 		}
 	}
 	for name, skill := range miscSkills {
-		writePage("miscSkill", withoutSpaces(name)+".md", skill.Bytes(name, "Misc Skill"))
+		WriteCVFile("miscSkill/"+withoutSpaces(name)+".md", string(skill.Bytes(name, "Misc Skill")))
 	}
 }
 func createInterestsPages() {
@@ -850,7 +859,7 @@ func createInterestsPages() {
 		}
 	}
 	for name, interest := range interests {
-		writePage("interest", withoutSpaces(name)+".md", interest.Bytes(name, "Interest"))
+		WriteCVFile("interest/"+withoutSpaces(name)+".md", string(interest.Bytes(name, "Interest")))
 	}
 }
 func createSubjectMatterPages() {
@@ -875,15 +884,7 @@ func createSubjectMatterPages() {
 	}
 	for sm, _ := range subjectMatters {
 		// TODO: LIKELY USE A TAG SYSTEM INSTEAD!!!!!
-		writePage("subjectMatter", string(sm)+".md", []byte("SUBJECT MATTER PAGE NOT IMPLEMENTED") /*skill.Bytes()*/) // TODO: FIX!
-	}
-}
-
-func writePage(dirName, filename string, bs []byte) {
-	path := dirName + "/" + filename
-	err := os.WriteFile(root+path, bs, 777)
-	if err != nil {
-		panic(fmt.Sprintf("failed to write page %s: %s", path, err.Error()))
+		WriteCVFile("subjectMatter/"+withoutSpaces(string(sm))+".md", "SUBJECT MATTER PAGE NOT IMPLEMENTED")
 	}
 }
 

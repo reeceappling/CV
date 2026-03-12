@@ -28,7 +28,7 @@ func (pg *Position) Link() string {
 	if pg == nil {
 		return "NO_LINK"
 	}
-	return fmt.Sprintf("[%s](position/%s)", pg.Name, withoutSpaces(pg.MapName()))
+	return linkFor(pg.Name, "cv", "position", withoutSpaces(pg.Name))
 }
 func (pg *Position) WithMiscSkills(skills ...string) *Position {
 	if pg == nil {
@@ -219,14 +219,14 @@ var (
 
 func initPositionsAfterProjects() {
 	// TODO: ANY MISC SKILLS
-	positionLifeguard = NewPosition("Lifeguard", 1, 2013, utils.Pointer(6), utils.Pointer(2014))              // TODO: ensure dates are right
-	positionSeniorLifeguard = NewPosition("Senior Lifeguard", 6, 2014, utils.Pointer(8), utils.Pointer(2016)) // TODO: ensure dates are right
+	positionLifeguard = NewPosition("Lifeguard", 1, 2013, utils.Pointer(6), utils.Pointer(2014))                              // TODO: ensure dates are right
+	positionSeniorLifeguard = NewPosition("Senior Lifeguard", 6, 2014, utils.Pointer(8), utils.Pointer(2016))                 // TODO: ensure dates are right
 	positionTAE = NewPosition("Civil Structural Engineer and Tower Climber", 5, 2017, utils.Pointer(3), utils.Pointer(2018)). // TODO: ensure dates are right
-		WithMiscSkills("Excel", "Climbing", "AutoDesk Inventor", "AutoCAD", "Autodesk Revit", "Drafting").
-		WithSubjectMatters(smCivilEngineering, smStructuralEngineering)
+																	WithMiscSkills("Excel", "Climbing", "AutoDesk Inventor", "AutoCAD", "Autodesk Revit", "Drafting").
+																	WithSubjectMatters(smCivilEngineering, smStructuralEngineering)
 	positionTEI = NewPosition("Cell Tower Inspector and Tower Climber", 1, 2019, utils.Pointer(3), utils.Pointer(2020)). // TODO: ensure dates are right
-		WithMiscSkills("Climbing", "Drafting").
-		WithSubjectMatters(smCivilEngineering, smStructuralEngineering)
+																WithMiscSkills("Climbing", "Drafting").
+																WithSubjectMatters(smCivilEngineering, smStructuralEngineering)
 	freelancePosition = NewPosition("Software Engineer", 1, 2012, utils.Pointer(5), utils.Pointer(2022)).
 		WithProjects(WellAwareProject, CharityProject, CritColaProject, MastersDataAnalysisProject)
 	sai1 = NewPosition("Software Engineer", 5, 2022, utils.Pointer(6), utils.Pointer(2023)).

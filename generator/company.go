@@ -41,7 +41,7 @@ func (pg *CompanyPage) Link() string {
 	if pg == nil {
 		return "NO_LINK"
 	}
-	return fmt.Sprintf("[%s](company/%s)", pg.Name, withoutSpaces(pg.Name))
+	return linkFor(pg.Name, "cv", "company", withoutSpaces(pg.Name))
 }
 
 func NewCompany(name string, startMo, startYr int, endMo, endYr *int) *CompanyPage {

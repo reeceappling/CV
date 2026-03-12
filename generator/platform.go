@@ -15,7 +15,7 @@ func (pg *PlatformPage) Link() string {
 	if pg == nil {
 		return "NO_LINK"
 	}
-	return fmt.Sprintf("[%s](platform/%s)", pg.Name, withoutSpaces(pg.Name))
+	return linkFor(pg.Name, "cv", "platform", withoutSpaces(pg.Name))
 }
 
 func NewPlatform(name string) *PlatformPage {

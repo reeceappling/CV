@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 var techs = map[string]*TechologyPage{}
 
 type TechologyPage struct { // React, Github actions, etc
@@ -13,7 +11,7 @@ func (pg *TechologyPage) Link() string {
 	if pg == nil {
 		return "NO_LINK"
 	}
-	return fmt.Sprintf("[%s](technology/%s)", pg.Name, withoutSpaces(pg.Name))
+	return linkFor(pg.Name, "cv", "technology", withoutSpaces(pg.Name))
 }
 
 func NewTechnology(name string) *TechologyPage {

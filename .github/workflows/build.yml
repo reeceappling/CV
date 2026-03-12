@@ -1,6 +1,7 @@
 name: Build and Deploy
 run-name:  ${{ github.ref_name }} - "${{ github.event.head_commit.message }}"
 on:
+  # TODO: other environments?
   pull_request:
     paths:
       - 'generator/**'
@@ -101,10 +102,6 @@ jobs:
         run: |
           rm -f quartz/quartz.layout.ts && mv quartzModified/quartz.layout.ts quartz/quartz.layout.ts
           rm -f quartz/quartz.config.ts && mv quartzModified/quartz.config.ts quartz/quartz.config.ts
-#          rm -f quartz/quartz/components/Footer.tsx && mv quartzModified/quartz/components/Footer.tsx quartz/quartz/components/Footer.tsx
-#          rm -f quartz/quartz/components/scripts/darkmode.inline.ts && mv quartzModified/quartz/components/scripts/darkmode.inline.ts quartz/quartz/components/scripts/darkmode.inline.ts
-#          rm -f quartz/quartz/components/styles/darkmode.scss && mv quartzModified/quartz/components/styles/darkmode.scss quartz/quartz/components/styles/darkmode.scss
-#          rm -f quartz/quartz/components/styles/footer.scss && mv quartzModified/quartz/components/styles/footer.scss quartz/quartz/components/styles/footer.scss
       - name: set modified quartz files
         run: |
           (
@@ -141,7 +138,7 @@ jobs:
       contents: read
       actions: write
     steps:
-      - uses: actions/checkout@v4 # TODO: only checkout the terraform???
+      - uses: actions/checkout@v4
         with:
           sparse-checkout: |
             terraform

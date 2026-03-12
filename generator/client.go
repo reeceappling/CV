@@ -13,7 +13,7 @@ var clientsOrder = []string{}
 
 type Client struct {
 	Name        string
-	Info        *string // TODO: NEW! use this when the company can't be outright named!
+	Info        *string // TODO: ADD INFO TO ALL CLIENTS AND DISPLAY
 	Projects    []*Project
 	projectsSet utils.Set[string]
 	//Languages []string // Calculated later
@@ -33,7 +33,7 @@ func (pg *Client) Link() string {
 	if pg == nil {
 		return "NO_LINK"
 	}
-	return fmt.Sprintf("[%s](client/%s)", pg.Name, withoutSpaces(pg.Name))
+	return linkFor(pg.Name, "cv", "client", withoutSpaces(pg.Name))
 }
 
 func NewClient(name string, info ...string) *Client {
@@ -99,7 +99,7 @@ func (c *Client) WithProjects(projs ...*Project) *Client {
 			c.projectsSet.Add(proj.Name)
 			c.Projects = append(c.Projects, proj)
 		}
-		proj.TypeInfo = proj.TypeInfo.setClient(c) // TODO: ?????
+		proj.TypeInfo = proj.TypeInfo.setClient(c)
 		for lang, _ := range proj.Languages {
 			langs[lang].AddClient(c)
 		}

@@ -45,7 +45,7 @@ func (pg *CloudProviderPage) Link() string {
 	if pg == nil {
 		return "NO_LINK"
 	}
-	return fmt.Sprintf("[%s](provider/%s)", pg.Name, withoutSpaces(pg.Name))
+	return linkFor(pg.Name, "cv", "provider", withoutSpaces(pg.Name))
 }
 
 func NewCloudProvider(name string, services ...string) *CloudProviderPage {

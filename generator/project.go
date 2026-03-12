@@ -143,7 +143,7 @@ func (pg *Project) Link() string {
 	if pg == nil {
 		return "NO_LINK"
 	}
-	return fmt.Sprintf("[%s](project/%s)", pg.Name, withoutSpaces(pg.Name))
+	return linkFor(pg.Name, "cv", "project", withoutSpaces(pg.Name))
 }
 
 func (pg *Project) WithStatus(status projectStatus) *Project {

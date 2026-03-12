@@ -55,7 +55,7 @@ func (pg *SchoolPage) Link() string {
 	if pg == nil {
 		return "NO_LINK"
 	}
-	return fmt.Sprintf("[%s](school/%s)", pg.Name, withoutSpaces(pg.Name))
+	return linkFor(pg.Name, "cv", "school", withoutSpaces(pg.Name))
 }
 
 func (sp *SchoolPage) Bytes() []byte {

@@ -13,7 +13,7 @@ func (pg *DbPage) Link() string {
 	if pg == nil {
 		return "NO_LINK"
 	}
-	return fmt.Sprintf("[%s](db/%s)", pg.Name, withoutSpaces(pg.Name))
+	return linkFor(pg.Name, "cv", "db", withoutSpaces(pg.Name))
 }
 
 func NewDb(name string) *DbPage {

@@ -21,7 +21,7 @@ func (pg *LanguagePage) Link() string {
 	if pg == nil {
 		return "NO_LINK"
 	}
-	return fmt.Sprintf("[%s](language/%s)", pg.Name, withoutSpaces(pg.Name))
+	return linkFor(pg.Name, "cv", "language", withoutSpaces(pg.Name))
 }
 
 func (pg *LanguagePage) Bytes() []byte {

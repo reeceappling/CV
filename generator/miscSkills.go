@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 var miscSkills = map[string]*MiscSkill{}
 
 type MiscSkill struct {
@@ -13,7 +11,7 @@ func (pg *MiscSkill) Link() string {
 	if pg == nil {
 		return "NO_LINK"
 	}
-	return fmt.Sprintf("[%s](miscSkills/%s)", pg.Name, withoutSpaces(pg.Name))
+	return linkFor(pg.Name, "cv", "miscSkills", withoutSpaces(pg.Name)) // TODO: plural??
 }
 
 func NewSkill(name string) *MiscSkill {

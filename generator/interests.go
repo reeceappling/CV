@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 var interests = map[string]*Interest{}
 
 type Interest struct {
@@ -23,7 +21,7 @@ func (i *Interest) Link() string {
 }
 
 func linkForInterest(name string) string {
-	return fmt.Sprintf("[%s](interest/%s)", name, withoutSpaces(name))
+	return linkFor(name, "cv", "interest", withoutSpaces(name))
 }
 
 var (
