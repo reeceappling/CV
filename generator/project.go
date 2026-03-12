@@ -502,6 +502,9 @@ func NewSchoolProject(name string, summary string, school *SchoolPage, link *str
 }
 
 func newProject(name string, summary string, info projectTypeInfo, link *string) *Project {
+	if strings.Contains(name, ".") || strings.Contains(name, "%") {
+		panic("invalid character in project " + name)
+	}
 	out := &Project{
 		Name:             name,
 		Summary:          summary,
@@ -530,7 +533,7 @@ func newProject(name string, summary string, info projectTypeInfo, link *string)
 // )
 var measurementsUrl = "github.com/reeceappling/measurements" // TODO: ensure ok
 var mushDbUrl = "github.com/reeceappling/mushDb"             // TODO: ensure ok
-var cvUrl = "github.com/reeceappling/cv"                     // TODO: ensure ok
+var cvUrl = "github.com/reeceappling/CV"                     // TODO: ensure ok
 var nfcScannerUrl = "github.com/reeceappling/nfcScanner"     // TODO: ensure ok
 var coreShufflerUrl = "github.com/reeceappling/coreShuffler" // TODO: ensure ok
 
@@ -540,19 +543,20 @@ var (
 	tileGenProject        = NewProfessionalProject("Tile Generator", fixmeLink, jdClient, nil)
 	GhaRunnersProject     = NewProfessionalProject("Github Actions GPU Runners", "FIX SUMMARY", jdClient, nil)
 	ogreProject           = NewProfessionalProject("Organizational Geospatial Rollup Engine", fixmeLink, jdClient, nil)
-	renderProject         = NewProfessionalProject("Render", fixmeLink, jdClient, nil) // TODO: MORE!
-	statsProject          = NewProfessionalProject("Statistics", fixmeLink, jdClient, nil)
-	billingProject        = NewProfessionalProject("Billing", fixmeLink, jdClient, nil)
+	renderProject         = NewProfessionalProject("Render Cluster", fixmeLink, jdClient, nil) // TODO: MORE!
+	statsProject          = NewProfessionalProject("Statistics Cluster", fixmeLink, jdClient, nil)
+	billingProject        = NewProfessionalProject("Billing Cluster", fixmeLink, jdClient, nil)
 	explorerProject       = NewProfessionalProject("Transform Explorer", fixmeLink, jdClient, nil)
 	wqdbProject           = NewProfessionalProject("Work Queue Database", fixmeLink, jdClient, nil)
-	supportProject        = NewProfessionalProject("Support Api", fixmeLink, jdClient, nil)
-	scudsProject          = NewProfessionalProject("Scuds Api", fixmeLink, jdClient, nil)
+	supportProject        = NewProfessionalProject("Support Cluster", fixmeLink, jdClient, nil)
+	scudsProject          = NewProfessionalProject("Scuds API", fixmeLink, jdClient, nil)
 	ufoProject            = NewProfessionalProject("UFO API", fixmeLink, jdClient, nil)
 	goweProject           = NewProfessionalProject("Gowe Builder", fixmeLink, jdClient, nil)
-	saiCollegeProject     = NewProfessionalProject("SimpsonUniv", fixmeLink, sourceAlliesClient, nil) // TODO: MORE!
+	saiCollegeProject     = NewProfessionalProject("Simpson University", fixmeLink, sourceAlliesClient, nil) // TODO: MORE!
 	mushDbProject         = NewPersonalProject("MushDb", fixmeLink, &mushDbUrl)
 	cvProject             = NewPersonalProject("Personal Site and CV", "This project! A generator which creates markdown files that can be viewed via Obsidian, or published to the web.", &cvUrl) // TODO: make multiple strings an available option for summary
-	// TODO: LINKS PAGE
+	// TODO: fix links page stuff
+	linksPage                  = NewPersonalProject("Personal Links Page", "A page to put all my links", nil) // TODO: LINKS PAGE
 	measurementsProject        = NewPersonalProject("Measurements", fixmeLink, &measurementsUrl)
 	nfcScannerProject          = NewPersonalProject("Nfc Scanner", fixmeLink, &nfcScannerUrl)
 	coreShufflerProject        = NewPersonalProject("Simulate Core Shuffler", fixmeLink, &coreShufflerUrl)
@@ -791,13 +795,13 @@ func initProjectsFinal() {
 		WithSubjectMatters(smCiCd, smContainerization, smIAC, smClusterComputing, smDistributedComputing, smLinearAlgebra, smBackend).
 		finalize()
 	saiCollegeProject = saiCollegeProject.WithStatus(statusComplete). // TODO: MORE!
-										WithSummary("SUMMARY HERE"). // TODO: MORE!
-										WithLang("Html", Regularly).
-										WithLang("CSS", Regularly).
-										WithLang("Javascript", Some).
-										WithSubjectMatters(smFrontend).
-										WithTechnologies("Drupal").
-										finalize()
+		WithSummary("SUMMARY HERE"). // TODO: MORE!
+		WithLang("Html", Regularly).
+		WithLang("CSS", Regularly).
+		WithLang("Javascript", Some).
+		WithSubjectMatters(smFrontend).
+		WithTechnologies("Drupal").
+		finalize()
 	// TODO: sai project for JAMF
 	mushDbProject = mushDbProject.WithStatus(statusBuilding).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!
