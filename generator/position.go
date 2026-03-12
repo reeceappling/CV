@@ -83,7 +83,7 @@ func NewPosition(name string, startMo, startYr int, endMo, endYr *int) *Position
 
 func (pg *Position) Bytes() []byte {
 	builder := strings.Builder{}
-	// TODO: NAME
+	builder.WriteString(frontmatterFor(pg.Name))
 	// TODO: Start/end
 	// Company and clients
 	builder.WriteString(fmt.Sprintf("Company: %s\n", pg.company.Link()))
@@ -112,25 +112,12 @@ func (pg *Position) Bytes() []byte {
 		}
 	}
 
-	//// Clients
-	//if len(pg.Projects) > 0 { // TODO: CLIENTS ARE CURRENTLY BROKEN
-	//
-	//	tempC := make([][]string, len(pg.Clients))
-	//	for i, cl := range pg.Clients {
-	//		tempC[i] = make([]string, len(cl.Projects)+1)
-	//		tempC[i][1] = fmt.Sprintf("- %s\n", cl.Link())
-	//		for _, pr := range cl.Projects {
-	//			builder.WriteString(fmt.Sprintf("%s | %s\n", cl.Link(), pr.Link()))
-	//		}
-	//	}
-	//
-	//}
 	// ALL LOWEST
 	builder.WriteString(bytesForAll(pg, false))
 	return []byte(builder.String())
 }
 
-// TODO: PROJECT GOES ON CLIENT AND POSITION!!!!! SHOULD GO ON CLIENT FIRST!!!!!
+// PROJECT GOES ON CLIENT AND POSITION. SHOULD GO ON CLIENT FIRST
 func (pg *Position) MapName() string {
 	if pg.company == nil {
 		panic("no company name!")
@@ -168,7 +155,6 @@ func (pg *Position) WithProjects(projs ...*Project) *Position {
 		}
 		pg.miscSkills.Add(proj.MiscSkills.AsSlice()...)
 	}
-	// TODO: put position on clients too?
 	return pg
 }
 
@@ -188,7 +174,7 @@ func initLowest() (outCaches map[string]*CachePage, outDbs map[string]*DbPage, o
 	outProviders = map[string]*CloudProviderPage{}
 	outServices = map[string]map[string]*CloudServicePage{}
 	outTechnologies = map[string]*TechologyPage{}
-	// TODO: MISC SKILLS
+	// TODO: MISC SKILLS?
 	return
 }
 
@@ -233,15 +219,14 @@ var (
 
 func initPositionsAfterProjects() {
 	// TODO: ANY MISC SKILLS
-	// TODO: BEFORE OR AFTER CLIENTS?
-	positionLifeguard = NewPosition("Lifeguard", 1, 2013, utils.Pointer(6), utils.Pointer(2014))                              // TODO: ensure dates are right
-	positionSeniorLifeguard = NewPosition("Senior Lifeguard", 6, 2014, utils.Pointer(8), utils.Pointer(2016))                 // TODO: ensure dates are right
+	positionLifeguard = NewPosition("Lifeguard", 1, 2013, utils.Pointer(6), utils.Pointer(2014))              // TODO: ensure dates are right
+	positionSeniorLifeguard = NewPosition("Senior Lifeguard", 6, 2014, utils.Pointer(8), utils.Pointer(2016)) // TODO: ensure dates are right
 	positionTAE = NewPosition("Civil Structural Engineer and Tower Climber", 5, 2017, utils.Pointer(3), utils.Pointer(2018)). // TODO: ensure dates are right
-																	WithMiscSkills("Excel", "Climbing Cell Towers", "AutoDesk Inventor", "AutoCAD", "Autodesk Revit", "Drafting").
-																	WithSubjectMatters(smCivilEngineering, smStructuralEngineering)
-	positionTEI = NewPosition("Tower Climber", 1, 2019, utils.Pointer(3), utils.Pointer(2020)). // TODO: ensure dates are right
-													WithMiscSkills("Climbing Cell Towers", "Drafting").
-													WithSubjectMatters(smCivilEngineering, smStructuralEngineering)
+		WithMiscSkills("Excel", "Climbing", "AutoDesk Inventor", "AutoCAD", "Autodesk Revit", "Drafting").
+		WithSubjectMatters(smCivilEngineering, smStructuralEngineering)
+	positionTEI = NewPosition("Cell Tower Inspector and Tower Climber", 1, 2019, utils.Pointer(3), utils.Pointer(2020)). // TODO: ensure dates are right
+		WithMiscSkills("Climbing", "Drafting").
+		WithSubjectMatters(smCivilEngineering, smStructuralEngineering)
 	freelancePosition = NewPosition("Software Engineer", 1, 2012, utils.Pointer(5), utils.Pointer(2022)).
 		WithProjects(WellAwareProject, CharityProject, CritColaProject, MastersDataAnalysisProject)
 	sai1 = NewPosition("Software Engineer", 5, 2022, utils.Pointer(6), utils.Pointer(2023)).

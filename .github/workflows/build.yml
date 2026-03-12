@@ -111,7 +111,7 @@ jobs:
             cd quartzModified/quartz && find . -type f -print0
           ) | while IFS= read -r -d '' file_relative_path; do
             clean_path="${file_relative_path#./}"
-            echo "Replacing: $clean_path"
+            echo "Replacing: quartz/quartz/$clean_path from quartzModified/quartz/$clean_path"
             rm -f quartz/quartz/$clean_path && mv quartzModified/quartz/$clean_path quartz/quartz/$clean_path
           done
       - name: Build Quartz
