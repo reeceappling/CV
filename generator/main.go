@@ -27,8 +27,8 @@ func createMainPage() {
 	b := strings.Builder{}
 	b.WriteString(frontmatterFor("Home - Reece Appling"))
 	b.WriteString("# CV\n")
-	b.WriteString("[Check out my CV](cv.md). It is a living document that is updated occasionally.\n")                                                                  // TODO: ENSURE OK
-	b.WriteString("Looking for a resume instead? [Download my resume here](static/Resume.pdf) or view [another thing i was using to test with](static/textfile.txt)\n") // TODO: ENSURE OK
+	b.WriteString("[Check out my CV](cv.md). It is a living document that is updated occasionally.\n\n")        // TODO: why does this need 2x \n?
+	b.WriteString("Looking for a resume instead? [Download my resume here](static/Resume_Reece_Appling.pdf)\n") // TODO: ENSURE OK
 	b.WriteString("# Blog\n")
 	b.WriteString("[Blog](Blog.md) where I host any blog posts I make.\n") // TODO: ENSURE OK
 	b.WriteString("# Public Notes\n")
@@ -203,19 +203,6 @@ func MakeCVDir(dir string) {
 	if err := os.MkdirAll(root+"cv/"+dir, 777); err != nil {
 		panic("failed to create cv/" + dir + " dir: " + err.Error())
 	}
-}
-
-func createMainBlogPage() {
-	b := strings.Builder{}
-	b.WriteString(frontmatterFor("Blog"))
-	b.WriteString("No blog posts present at this time\n") // TODO: ADD
-	WriteFile("Blog.md", b.String())
-}
-func createMainNotesPage() {
-	b := strings.Builder{}
-	b.WriteString(frontmatterFor("Notes"))
-	b.WriteString("No notes present at this time\n") // TODO: ADD
-	WriteFile("Notes.md", b.String())
 }
 
 func createErrorPage() {
@@ -423,7 +410,7 @@ func alphabetizedLinks[T any](inpMap map[string]T, dir string) string {
 }
 
 func main() {
-	for _, dir := range []string{"cv", "post", "note"} {
+	for _, dir := range []string{"cv", "blog", "note"} {
 		if err := os.MkdirAll("./quartz/content/"+dir, 777); err != nil {
 			panic("failed to create content/" + dir + " dir: " + err.Error())
 		}
@@ -462,8 +449,8 @@ func main() {
 	createErrorPage()
 	createMainPage()
 	createMainCVPage()
-	createMainBlogPage()
-	createMainNotesPage()
+	createBlogPages()
+	createNotesPages()
 
 }
 

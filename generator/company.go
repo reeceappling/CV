@@ -11,6 +11,9 @@ import (
 var companies = map[string]*CompanyPage{}
 var companiesOrder = []string{}
 
+type dayMonthYr struct {
+	Month, Day, Year int
+}
 type monthYr struct {
 	Month int
 	Year  int

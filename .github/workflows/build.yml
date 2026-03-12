@@ -41,6 +41,8 @@ jobs:
           sparse-checkout: |
             generator
             go.mod
+            blogPosts
+            notes
       - name: Fix workspace permissions
         run: sudo chown -R $USER:$USER ${{ github.workspace }}
       - uses: actions/setup-go@v6
