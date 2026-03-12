@@ -97,25 +97,24 @@ jobs:
         with:
           name: markdownFiles
           path: ./quartz/content
-          # TODO: MORE!!!
-#      - name: set modified quartz files at top level
-#        run: |
-#          rm -f quartz/quartz.layout.ts && mv quartzModified/quartz.layout.ts quartz/quartz.layout.ts
-#          rm -f quartz/quartz.config.ts && mv quartzModified/quartz.config.ts quartz/quartz.config.ts
-#          rm -f quartz/quartz/components/Footer.tsx && mv quartzModified/quartz/components/Footer.tsx quartz/quartz/components/Footer.tsx
-#          rm -f quartz/quartz/components/scripts/darkmode.inline.ts && mv quartzModified/quartz/components/scripts/darkmode.inline.ts quartz/quartz/components/scripts/darkmode.inline.ts
-#          rm -f quartz/quartz/components/styles/darkmode.scss && mv quartzModified/quartz/components/styles/darkmode.scss quartz/quartz/components/styles/darkmode.scss
-#          rm -f quartz/quartz/components/styles/footer.scss && mv quartzModified/quartz/components/styles/footer.scss quartz/quartz/components/styles/footer.scss
-      - name: set modified quartz files
+      - name: set modified quartz files at top level
         run: |
-          (
-            cd quartzModified && find . -type f -print0
-          ) | while IFS= read -r -d '' file_relative_path; do
-            clean_path="${file_relative_path#./}"
-            echo "Replacing: $clean_path"
-            rm -f "./quartz/$clean_path"
-            mv "quartzModified/$clean_path" "quartz/$clean_path"
-          done
+          rm -f quartz/quartz.layout.ts && mv quartzModified/quartz.layout.ts quartz/quartz.layout.ts
+          rm -f quartz/quartz.config.ts && mv quartzModified/quartz.config.ts quartz/quartz.config.ts
+          rm -f quartz/quartz/components/Footer.tsx && mv quartzModified/quartz/components/Footer.tsx quartz/quartz/components/Footer.tsx
+          rm -f quartz/quartz/components/scripts/darkmode.inline.ts && mv quartzModified/quartz/components/scripts/darkmode.inline.ts quartz/quartz/components/scripts/darkmode.inline.ts
+          rm -f quartz/quartz/components/styles/darkmode.scss && mv quartzModified/quartz/components/styles/darkmode.scss quartz/quartz/components/styles/darkmode.scss
+          rm -f quartz/quartz/components/styles/footer.scss && mv quartzModified/quartz/components/styles/footer.scss quartz/quartz/components/styles/footer.scss
+#      - name: set modified quartz files
+#        run: |
+#          (
+#            cd quartzModified && find . -type f -print0
+#          ) | while IFS= read -r -d '' file_relative_path; do
+#            clean_path="${file_relative_path#./}"
+#            echo "Replacing: $clean_path"
+#            rm -f "./quartz/$clean_path"
+#            mv "quartzModified/$clean_path" "quartz/$clean_path"
+#          done
       - name: Build Quartz
         run: npx --quiet quartz build
         working-directory: ./quartz
