@@ -6,7 +6,6 @@ import (
 	"os"
 	"slices"
 	"sort"
-	"strconv"
 	"strings"
 )
 
@@ -17,11 +16,51 @@ import (
 // TODO: DesktopOnly.tsx???
 // TODO: sort projects on projects page? (maybe chronological?) (alphabetical?)
 // TODO: backlinks only on the subject matter pages????
+// TODO: PUT TAGS ALL OVER PROJECTS???!!!!!!
 
-const fixmeLink = "[FIX ME](error.md)"
+func main() {
+	for _, dir := range []string{"cv", "blog", "note"} {
+		if err := os.MkdirAll("./quartz/content/"+dir, 777); err != nil {
+			panic("failed to create content/" + dir + " dir: " + err.Error())
+		}
+	}
+	for _, dir := range []string{"subjectMatter", "interest", "school", "client", "project", "company", "position", "language", "platform", "db", "cache", "provider", "service", "technology", "miscSkill"} {
+		if err := os.MkdirAll("./quartz/content/cv/"+dir, 777); err != nil {
+			panic("failed to create " + dir + " dir: " + err.Error())
+		}
+	}
 
-func linkFor(text string, path ...string) string {
-	return fmt.Sprintf("[%s](%s)", text, strings.Join(path, "/"))
+	// Create data structures representing the content of the pages to write
+	// initSchools() // Done outside of init
+	// initClientsFirst() // Done in vars
+	//initProjectsAfterClients()  // Done in vars?
+	initProjectsFinal()
+	initClientsAfterProjectsComplete() // Sets client on projects as well
+	initPositionsAfterProjects()
+	initCompaniesAfterPositions() // Must be done after positions and project setup, but before projects pages. What about clients?
+
+	// Start creating actual pages
+	createLanguagesPages()
+	createSchoolsPages()
+	createPositionsPages()
+	createProjectsPages()
+	createClientsPages()
+	createCompaniesPages()
+	createPlatformsPages()
+	createDbsPages()
+	createCachesPages()
+	createProvidersPages()
+	createServicesPages()
+	createTechnologiesPages()
+	createMiscSkillsPages()
+	createInterestsPages()
+	createSubjectMatterPages()
+	createErrorPage()
+	createMainPage()
+	createMainCVPage()
+	createBlogPages()
+	createNotesPages()
+
 }
 
 func createMainPage() {
@@ -33,7 +72,6 @@ func createMainPage() {
 		"This entire site is auto-generated from Go code and text files into markdown files \\(for [Obsidian](https://obsidian.md)\\), which are exported to html, css, and javascript via [Quartz 4](https://quartz.jzhao.xyz), hosted on AWS S3, and accessed via AWS CloudFront and Cloudflare. Feel free to check out the [source code](https://github.com/reeceappling/CV).",
 		"__Want to get in contact with me?__ Some contact info should be at the footer of this page. Otherwise, [my links page](https://links.reece.appli.ng) contains many of my socials, as well as my email and phone number.",
 	)
-
 	b.WriteString("# CV\n")
 	writeMultipleTextLines(b,
 		// TODO: CV LAST UPDATED DATE?
@@ -46,9 +84,6 @@ func createMainPage() {
 	b.WriteString("# Public Notes\n")
 	b.WriteString("Lastly, here are [my notes](Notes)\n")
 	WriteFile("index.md", b.String())
-}
-func writeMultipleTextLines(b strings.Builder, lines ...string) {
-	b.WriteString(strings.Join(lines, "\n\n") + "\n")
 }
 
 func createMainCVPage() { // TODO: TAGS EVERYWHERE????
@@ -199,267 +234,11 @@ func createMainCVPage() { // TODO: TAGS EVERYWHERE????
 	WriteFile("cv.md", b.String())
 }
 
-func WriteFile(filenameLessRoot string, content string) {
-	if err := os.WriteFile(root+filenameLessRoot, []byte(content), 777); err != nil {
-		panic("failed to write " + filenameLessRoot + " file: " + err.Error())
-	}
-}
-func WriteCVFile(filenameLessRootAndCv string, content string) {
-	WriteFile("cv/"+filenameLessRootAndCv, content)
-}
-func MakeCVDir(dir string) {
-	if err := os.MkdirAll(root+"cv/"+dir, 777); err != nil {
-		panic("failed to create cv/" + dir + " dir: " + err.Error())
-	}
-}
-
 func createErrorPage() {
 	b := strings.Builder{}
 	b.WriteString(frontmatterFor("Not Found Page"))
 	b.WriteString("Page does not exist!\n") // TODO: PUT LINK TO HOME ON EVERY PAGE
 	WriteFile("error.md", b.String())
-}
-
-// Company -> position -> client -> project ->>>>
-// languages, platforms, providers(and services), dbs, caches
-
-// TODO: PUT TAGS ALL OVER PROJECTS!!!!!!
-
-type showAll interface {
-	GetAllLowest() (outCaches map[string]*CachePage, outDbs map[string]*DbPage, outLanguages map[string]Frequency, outPlatforms map[string]*PlatformPage, outProviders map[string]*CloudProviderPage, outServices map[string]map[string]*CloudServicePage, outTechnologies map[string]*TechologyPage)
-	NameValue() string
-}
-
-func bytesForAll(item showAll, showFrequencies bool) string {
-	b := strings.Builder{}
-	tempC, tempD, tempL, tempP, _, tempS, tempT := item.GetAllLowest()
-	if len(tempL) > 0 {
-		b.WriteString("# Languages\n")
-		showFreqLink := ""
-		if showFrequencies {
-			showFreqLink = "[[" + withoutSpaces(item.NameValue()) + "#^usageFrequencies\\|*]]"
-		}
-		b.WriteString("Language | Usage Frequency" + showFreqLink + "\n")
-		b.WriteString(":-- | :--\n")
-		freqs := make(map[Frequency][]string, 6)
-		for name, freq := range tempL {
-			if freqs[freq] == nil {
-				freqs[freq] = []string{name}
-			} else {
-				freqs[freq] = append(freqs[freq], name)
-			}
-		}
-		for f := 5; f >= 0; f-- {
-			for _, name := range freqs[Frequency(f)] {
-				b.WriteString(fmt.Sprintf("%s | %s\n", langs[name].Link(), Frequency(f).String()))
-			}
-		}
-	}
-	if len(tempC) > 0 {
-		b.WriteString("# Caches\n")
-		for name, _ := range tempC {
-			b.WriteString(fmt.Sprintf("%s\n", caches[name].Link()))
-		}
-	}
-	if len(tempD) > 0 {
-		b.WriteString("# Databases\n")
-		for name, _ := range tempD {
-			b.WriteString(fmt.Sprintf("%s\n", dbs[name].Link()))
-		}
-	}
-	if len(tempP) > 0 {
-		b.WriteString("# Platforms\n")
-		for name, _ := range tempP {
-			b.WriteString(fmt.Sprintf("%s\n", platforms[name].Link()))
-		}
-	}
-	if len(tempT) > 0 {
-		b.WriteString("# Technologies\n")
-		for name, _ := range tempT {
-			b.WriteString(fmt.Sprintf("%s\n", techs[name].Link()))
-		}
-	}
-	if len(tempS) > 0 {
-		b.WriteString("# Providers\n")
-		for name, svcs := range tempS {
-			tempSvcs := make([]string, len(svcs))
-			for i, svc := range slices.Collect(maps.Keys(svcs)) {
-				tempSvcs[i] = fmt.Sprintf("%s\n", cloudServices[svc].Link())
-			}
-			b.WriteString(fmt.Sprintf("%s: %s\n", providers[name].Link(), strings.Join(tempSvcs, ", ")))
-		}
-	}
-	if showFrequencies {
-		b.WriteString(definitionsArea())
-		b.WriteString(usageFrequencyDefinitions())
-	}
-	return b.String()
-}
-
-type tracked struct {
-	Companies map[string]*CompanyPage
-	Positions map[string]*Position
-	Clients   map[string]*Client
-	Schools   map[string]*SchoolPage
-	Projects  map[string]*Project
-}
-
-func newTracked() *tracked {
-	return &tracked{
-		Companies: map[string]*CompanyPage{},
-		Positions: map[string]*Position{},
-		Clients:   map[string]*Client{},
-		Schools:   map[string]*SchoolPage{},
-		Projects:  map[string]*Project{},
-	}
-}
-func (pg *tracked) Bytes(title string, typ string) []byte {
-	builder := strings.Builder{}
-	if title != "" {
-		builder.WriteString(frontmatterFor(title, typ))
-	}
-
-	if pg.Companies != nil && len(pg.Companies) > 0 {
-		builder.WriteString("# Companies\n")
-		for _, com := range pg.Companies {
-			builder.WriteString(fmt.Sprintf("- %s\n", com.Link()))
-		}
-	}
-	if pg.Positions != nil && len(pg.Positions) > 0 {
-		builder.WriteString("# Positions\n")
-		for _, pos := range pg.Positions {
-			builder.WriteString(fmt.Sprintf("- %s\n", pos.Link()))
-		}
-	}
-	if pg.Clients != nil && len(pg.Clients) > 0 {
-		builder.WriteString("# Clients\n")
-		for _, cli := range pg.Clients {
-			builder.WriteString(fmt.Sprintf("- %s\n", cli.Link()))
-		}
-	}
-	if pg.Projects != nil && len(pg.Projects) > 0 {
-		builder.WriteString("# Projects\n")
-		//builder.WriteString("Project | Usage Frequency | Project Type\n")
-		//builder.WriteString(":-- | :--: | :--\n")
-		for _, proj := range pg.Projects {
-			builder.WriteString(fmt.Sprintf("- %s\n", proj.Link()))
-		}
-	}
-	return []byte(builder.String())
-}
-
-func (pg *tracked) AddClient(client *Client) {
-	pg.Clients[client.Name] = client
-}
-func (pg *tracked) AddSchool(school *SchoolPage) {
-	pg.Schools[school.Name] = school
-}
-func (pg *tracked) AddProject(proj *Project) {
-	pg.Projects[proj.Name] = proj
-}
-
-func (pg *tracked) AddPosition(pos *Position) {
-	pg.Positions[pos.Name] = pos // TODO: or mapName?
-}
-func (pg *tracked) AddCompany(comp *CompanyPage) {
-	pg.Companies[comp.Name] = comp
-}
-
-func (tr *tracked) String() string {
-	if tr == nil {
-		return ""
-	}
-	b := strings.Builder{}
-	if tr.Projects != nil {
-		b.WriteString("# Projects\n")
-		for _, proj := range tr.Projects {
-			b.WriteString(fmt.Sprintf("- %s\n", proj.Link()))
-		}
-	}
-	if tr.Positions != nil {
-		b.WriteString("# Positions\n")
-		for _, pos := range tr.Positions { // TODO: ENSURE THESE ARE IN ORDER
-			b.WriteString(fmt.Sprintf("- %s at %s\n", pos.Link(), pos.company.Link()))
-		}
-	}
-	if tr.Companies != nil {
-		b.WriteString("# Companies\n")
-		for _, item := range tr.Companies {
-			b.WriteString(fmt.Sprintf("- %s\n", item.Link()))
-		}
-	}
-	if tr.Clients != nil {
-		b.WriteString("# Clients\n")
-		for _, client := range tr.Clients {
-			b.WriteString(fmt.Sprintf("- %s\n", client.Link()))
-		}
-	}
-	return b.String()
-}
-
-// Create project, add project to client, add project to position, add position to company (client will be automatically linked this way)
-const root = "./quartz/content/"
-
-func alphabetizedLinksCompressed[T any](inpMap map[string]T, dir string) string {
-	allKeys := slices.Collect(maps.Keys(inpMap))
-	sort.Strings(allKeys)
-	for i, db := range allKeys {
-		allKeys[i] = linkFor(db, "cv", dir, withoutSpaces(db))
-	}
-	return strings.Join(allKeys, ", ") + "\n"
-}
-func alphabetizedLinks[T any](inpMap map[string]T, dir string) string {
-	allKeys := slices.Collect(maps.Keys(inpMap))
-	sort.Strings(allKeys)
-	for i, db := range allKeys {
-		allKeys[i] = linkFor(db, "cv", dir, withoutSpaces(db))
-	}
-	return strings.Join(allKeys, "") + "\n"
-}
-
-func main() {
-	for _, dir := range []string{"cv", "blog", "note"} {
-		if err := os.MkdirAll("./quartz/content/"+dir, 777); err != nil {
-			panic("failed to create content/" + dir + " dir: " + err.Error())
-		}
-	}
-	for _, dir := range []string{"subjectMatter", "interest", "school", "client", "project", "company", "position", "language", "platform", "db", "cache", "provider", "service", "technology", "miscSkill"} {
-		if err := os.MkdirAll("./quartz/content/cv/"+dir, 777); err != nil {
-			panic("failed to create " + dir + " dir: " + err.Error())
-		}
-	}
-
-	// Create data structures representing the content of the pages to write
-	// initSchools() // Done outside of init
-	// initClientsFirst() // Done in vars
-	//initProjectsAfterClients()
-	initProjectsFinal()
-	initClientsAfterProjectsComplete() // Sets client on projects as well
-	initPositionsAfterProjects()
-	initCompaniesAfterPositions() // Must be done after positions and project setup, but before projects pages. What about clients?
-
-	// Start creating actual pages
-	createLanguagesPages()
-	createSchoolsPages()
-	createPositionsPages()
-	createProjectsPages()
-	createClientsPages()
-	createCompaniesPages()
-	createPlatformsPages()
-	createDbsPages()
-	createCachesPages()
-	createProvidersPages()
-	createServicesPages()
-	createTechnologiesPages()
-	createMiscSkillsPages()
-	createInterestsPages()
-	createSubjectMatterPages()
-	createErrorPage()
-	createMainPage()
-	createMainCVPage()
-	createBlogPages()
-	createNotesPages()
-
 }
 
 func createLanguagesPages() {
@@ -660,10 +439,6 @@ func createCompaniesPages() {
 	for name, company := range companies {
 		WriteCVFile("company/"+withoutSpaces(name)+".md", string(company.Bytes()))
 	}
-}
-
-type Linkable interface {
-	Link() string
 }
 
 func createPlatformsPages() {
@@ -878,58 +653,5 @@ func createSubjectMatterPages() {
 	for sm, _ := range subjectMatters {
 		// TODO: LIKELY USE A TAG SYSTEM INSTEAD!!!!!
 		WriteCVFile("subjectMatter/"+withoutSpaces(string(sm))+".md", string(sm.Bytes()))
-	}
-}
-
-func withoutSpaces(s string) string {
-	return strings.Join(strings.Split(s, " "), "_")
-}
-
-type Frequency int
-
-const (
-	Minimal = iota
-	Rarely
-	Some
-	Regularly
-	Often
-	Extensively
-)
-
-func (f Frequency) String() string {
-	switch f {
-	case Minimal:
-		return "Minimal"
-	case Rarely:
-		return "Rarely"
-	case Some:
-		return "Some"
-	case Regularly:
-		return "Regularly"
-	case Often:
-		return "Often"
-	case Extensively:
-		return "Extensively"
-	default:
-		panic("unhandled frequency: " + strconv.Itoa(int(f)))
-	}
-}
-
-func FrequencyFromString(s string) Frequency {
-	switch s {
-	case "Minimal":
-		return Minimal
-	case "Rarely":
-		return Rarely
-	case "Some":
-		return Some
-	case "Regularly":
-		return Regularly
-	case "Often":
-		return Often
-	case "Extensively":
-		return Extensively
-	default:
-		panic("unhandled frequency: " + s)
 	}
 }
