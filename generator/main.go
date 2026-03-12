@@ -359,7 +359,7 @@ func (pg *tracked) AddProject(proj *Project) {
 }
 
 func (pg *tracked) AddPosition(pos *Position) {
-	pg.Positions[pos.Name] = pos
+	pg.Positions[pos.Name] = pos // TODO: or mapName?
 }
 func (pg *tracked) AddCompany(comp *CompanyPage) {
 	pg.Companies[comp.Name] = comp

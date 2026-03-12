@@ -21,7 +21,7 @@ type Position struct {
 }
 
 func (pg *Position) NameValue() string {
-	return pg.Name
+	return pg.Name // TODO: or mapName?
 }
 
 func (pg *Position) Link() string {

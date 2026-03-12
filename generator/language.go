@@ -123,6 +123,6 @@ func (lp *LanguagePage) AddCompany(comp *CompanyPage) *LanguagePage {
 	return lp
 }
 func (lp *LanguagePage) AddPosition(pos *Position) *LanguagePage {
-	lp.Positions[pos.Name] = pos
+	lp.Positions[pos.Name] = pos // TODO: or mapName?
 	return lp
 }
