@@ -24,9 +24,9 @@ func createNotesPages() {
 
 type Note struct {
 	Title        string
-	CreationDate dayMonthYr  // TODO: ok? use
-	ModifiedDate *dayMonthYr // TODO: ok? use
-	Content      []byte
+	CreationDate dayMonthYr
+	ModifiedDate *dayMonthYr
+	ContentFile  string
 	Tags         []string
 }
 
@@ -42,6 +42,11 @@ func (note Note) Bytes() []byte {
 		}
 	}
 	b.WriteString("---\n")
+	contentBytes, err := os.ReadFile(notesDir + note.ContentFile)
+	if err != nil {
+		panic("failed to read note file " + note.ContentFile + ": " + err.Error())
+	}
+	b.Write(contentBytes)
 	// TODO: DATES!!!
 	return []byte(b.String())
 }
@@ -56,10 +61,6 @@ var notes []Note
 var noteNames = utils.Set[string]{}
 
 func newNote(title string, creationDate dayMonthYr, modifiedDate *dayMonthYr, contentFileName string, tags ...string) {
-	contentBytes, err := os.ReadFile(notesDir + contentFileName)
-	if err != nil {
-		panic("failed to read note file " + contentFileName + ": " + err.Error())
-	}
 	if noteNames.Contains(title) {
 		panic("note " + contentFileName + " already exists")
 	}
@@ -67,11 +68,11 @@ func newNote(title string, creationDate dayMonthYr, modifiedDate *dayMonthYr, co
 		Title:        title,
 		CreationDate: creationDate,
 		ModifiedDate: modifiedDate,
-		Content:      contentBytes,
+		ContentFile:  contentFileName,
 		Tags:         tags,
 	})
 	blogPostNames.Add(title)
 }
 func initNotes() {
-	newNote("Example Note", dayMonthYr{3, 12, 2026}, nil, "exampleNote.md")
+	newNote("Example Note", *NewPostDate(3, 12, 2026), nil, "exampleNote.md")
 }

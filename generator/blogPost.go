@@ -24,9 +24,9 @@ func createBlogPages() {
 
 type BlogPost struct {
 	Title        string
-	CreationDate dayMonthYr  // TODO: ok? use
-	ModifiedDate *dayMonthYr // TODO: ok? use
-	Content      []byte
+	CreationDate dayMonthYr
+	ModifiedDate *dayMonthYr
+	ContentFile  string
 	Tags         []string
 }
 
@@ -42,6 +42,11 @@ func (post BlogPost) Bytes() []byte {
 		}
 	}
 	b.WriteString("---\n")
+	contentBytes, err := os.ReadFile(blogPostDir + post.ContentFile)
+	if err != nil {
+		panic("failed to read blog post " + post.ContentFile + ": " + err.Error())
+	}
+	b.Write(contentBytes)
 	// TODO: DATES!!!
 	return []byte(b.String())
 }
@@ -56,10 +61,6 @@ var blogPosts []BlogPost
 var blogPostNames = utils.Set[string]{}
 
 func newBlogPost(title string, creationDate dayMonthYr, modifiedDate *dayMonthYr, contentFileName string, tags ...string) {
-	contentBytes, err := os.ReadFile(blogPostDir + contentFileName)
-	if err != nil {
-		panic("failed to read blog post " + contentFileName + ": " + err.Error())
-	}
 	if blogPostNames.Contains(title) {
 		panic("blog post " + contentFileName + " already exists")
 	}
@@ -67,11 +68,11 @@ func newBlogPost(title string, creationDate dayMonthYr, modifiedDate *dayMonthYr
 		Title:        title,
 		CreationDate: creationDate,
 		ModifiedDate: modifiedDate,
-		Content:      contentBytes,
+		ContentFile:  contentFileName,
 		Tags:         tags,
 	})
 	blogPostNames.Add(title)
 }
 func initBlogPosts() {
-	newBlogPost("Example Blog Post", dayMonthYr{3, 12, 2026}, nil, "exampleBlogPost.md")
+	newBlogPost("Example Blog Post", *NewPostDate(3, 12, 2026), nil, "exampleBlogPost.md")
 }
