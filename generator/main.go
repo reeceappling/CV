@@ -24,10 +24,9 @@ func createMainPage() {
 	b := strings.Builder{}
 	b.WriteString(frontmatterFor("Home - Reece Appling"))
 	b.WriteString("# About\n")
-	b.WriteString("*Hi, I'm Reece*. Welcome to my personal website! This site is primarily a living document for [my CV](cv.md). I also host [my personal blog](Blog.md) here, as well as an area to publish [my notes](Notes).\n\n")
-	b.WriteString("The entire site is auto-generated markdown files \\(for Obsidian\\)[https://obsidian.md], which are exported to html via [Quartz 4](https://quartz.jzhao.xyz), hosted on AWS S3, and accessed via AWS CloudFront and Cloudflare. The [source code can be found here](https://github.com/reeceappling/CV)\n\n")
+	b.WriteString("*Hi, I'm Reece*. Welcome to my personal website! This site is primarily a living document for [my CV](cv.md), and [my resume](static/Resume_Reece_Appling.pdf), both of which I try to keep current. I also host [my personal blog](Blog.md) here, as well as an area to publish [my notes](Notes).\n\n")
+	b.WriteString("This entire site is auto-generated from Go code and text files into markdown files \\(for [Obsidian](https://obsidian.md)\\), which are exported to html, css, and javascript via [Quartz 4](https://quartz.jzhao.xyz), hosted on AWS S3, and accessed via AWS CloudFront and Cloudflare. The source code for this site can be found [here](https://github.com/reeceappling/CV)\n\n")
 	b.WriteString("*Want to get in contact with me?* Some contact info should be at the footer of this page. Otherwise, many of my socials, as well as my email and phone number, can be found on [my links page](https://links.reece.appli.ng)\n\n")
-
 	b.WriteString("# CV\n")
 	b.WriteString("[Check out my CV](cv.md). It is a living document that is updated occasionally.\n\n")        // TODO: why does this need 2x \n?
 	b.WriteString("Looking for a resume instead? [Download my resume here](static/Resume_Reece_Appling.pdf)\n") // TODO: ENSURE OK
