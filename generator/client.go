@@ -161,7 +161,7 @@ func (pg *Client) GetAllLowest() (outCaches map[string]*CachePage, outDbs map[st
 	return
 }
 
-var ( // TODO: ADD ALL INFO!
+var (
 	jdClient = NewClient("John Deere",
 		"Fortune 100 Agricultural Business (Think: Green Tractors)", // TODO: FIX ALL POINTS
 	)
@@ -193,14 +193,15 @@ var ( // TODO: ADD ALL INFO!
 
 func initClientsAfterProjectsComplete() {
 	jdClient = jdClient.WithProjects(polygonBuilderProject, ogreProject, renderProject, statsProject, billingProject, explorerProject, wqdbProject, supportProject, scudsProject, ufoProject, goweProject, tileGenProject, GhaRunnersProject)
-	sourceAlliesClient = sourceAlliesClient.WithProjects(saiCollegeProject) // TODO: SIMPSON COLLEGE // TODO: USE!
+	sourceAlliesClient = sourceAlliesClient.WithProjects(saiCollegeProject) // TODO: USE!
+	// TODO: SIMPSON COLLEGE // TODO: USE!
 	critColaClient = critColaClient.WithProjects(CritColaProject)
 	wellAwareClient = wellAwareClient.WithProjects(WellAwareProject)
 	clarkClient = clarkClient.WithProjects(MastersDataAnalysisProject)
 	charityClient = charityClient.WithProjects(CharityProject)
-	//teiClient = NewClient("TEI")
+	//teiClient = NewClient("TEI") // TODO: add projects (like NM, TX, IA, NC?)
 	//taeClient = NewClient("Talley Associates of Engineering") // TODO: JS photo parser
-	//mafcClient = NewClient("Monroe Aquatics and Fitness Center")
+	//mafcClient = NewClient("Monroe Aquatics and Fitness Center") // TODO: Indoor and outdoor pool?
 }
 
 var ()
