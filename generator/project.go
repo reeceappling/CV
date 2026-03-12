@@ -535,23 +535,24 @@ var nfcScannerUrl = "github.com/reeceappling/nfcScanner"     // TODO: ensure ok
 var coreShufflerUrl = "github.com/reeceappling/coreShuffler" // TODO: ensure ok
 
 var (
-	projectAgentSwarm          = NewPersonalProject("AI Agent Swarm", fixmeLink, nil)
-	polygonBuilderProject      = NewProfessionalProject("Polygon Builder", fixmeLink, jdClient, nil)
-	tileGenProject             = NewProfessionalProject("Tile Generator", fixmeLink, jdClient, nil)
-	GhaRunnersProject          = NewProfessionalProject("Github Actions GPU Runners", "FIX SUMMARY", jdClient, nil)
-	ogreProject                = NewProfessionalProject("Organizational Geospatial Rollup Engine", fixmeLink, jdClient, nil)
-	renderProject              = NewProfessionalProject("Render", fixmeLink, jdClient, nil) // TODO: MORE!
-	statsProject               = NewProfessionalProject("Statistics", fixmeLink, jdClient, nil)
-	billingProject             = NewProfessionalProject("Billing", fixmeLink, jdClient, nil)
-	explorerProject            = NewProfessionalProject("Transform Explorer", fixmeLink, jdClient, nil)
-	wqdbProject                = NewProfessionalProject("Work Queue Database", fixmeLink, jdClient, nil)
-	supportProject             = NewProfessionalProject("Support Api", fixmeLink, jdClient, nil)
-	scudsProject               = NewProfessionalProject("Scuds Api", fixmeLink, jdClient, nil)
-	ufoProject                 = NewProfessionalProject("UFO API", fixmeLink, jdClient, nil)
-	goweProject                = NewProfessionalProject("Gowe Builder", fixmeLink, jdClient, nil)
-	saiCollegeProject          = NewProfessionalProject("SimpsonUniv", fixmeLink, sourceAlliesClient, nil) // TODO: MORE!
-	mushDbProject              = NewPersonalProject("MushDb", fixmeLink, &mushDbUrl)
-	cvProject                  = NewPersonalProject("CV", "This project! A generator which creates markdown files that can be viewed via Obsidian, or published to the web.", &cvUrl)
+	projectAgentSwarm     = NewPersonalProject("AI Agent Swarm", fixmeLink, nil)
+	polygonBuilderProject = NewProfessionalProject("Polygon Builder", fixmeLink, jdClient, nil)
+	tileGenProject        = NewProfessionalProject("Tile Generator", fixmeLink, jdClient, nil)
+	GhaRunnersProject     = NewProfessionalProject("Github Actions GPU Runners", "FIX SUMMARY", jdClient, nil)
+	ogreProject           = NewProfessionalProject("Organizational Geospatial Rollup Engine", fixmeLink, jdClient, nil)
+	renderProject         = NewProfessionalProject("Render", fixmeLink, jdClient, nil) // TODO: MORE!
+	statsProject          = NewProfessionalProject("Statistics", fixmeLink, jdClient, nil)
+	billingProject        = NewProfessionalProject("Billing", fixmeLink, jdClient, nil)
+	explorerProject       = NewProfessionalProject("Transform Explorer", fixmeLink, jdClient, nil)
+	wqdbProject           = NewProfessionalProject("Work Queue Database", fixmeLink, jdClient, nil)
+	supportProject        = NewProfessionalProject("Support Api", fixmeLink, jdClient, nil)
+	scudsProject          = NewProfessionalProject("Scuds Api", fixmeLink, jdClient, nil)
+	ufoProject            = NewProfessionalProject("UFO API", fixmeLink, jdClient, nil)
+	goweProject           = NewProfessionalProject("Gowe Builder", fixmeLink, jdClient, nil)
+	saiCollegeProject     = NewProfessionalProject("SimpsonUniv", fixmeLink, sourceAlliesClient, nil) // TODO: MORE!
+	mushDbProject         = NewPersonalProject("MushDb", fixmeLink, &mushDbUrl)
+	cvProject             = NewPersonalProject("Personal Site and CV", "This project! A generator which creates markdown files that can be viewed via Obsidian, or published to the web.", &cvUrl) // TODO: make multiple strings an available option for summary
+	// TODO: LINKS PAGE
 	measurementsProject        = NewPersonalProject("Measurements", fixmeLink, &measurementsUrl)
 	nfcScannerProject          = NewPersonalProject("Nfc Scanner", fixmeLink, &nfcScannerUrl)
 	coreShufflerProject        = NewPersonalProject("Simulate Core Shuffler", fixmeLink, &coreShufflerUrl)
@@ -818,12 +819,16 @@ func initProjectsFinal() {
 		WithSummary("This project! A generator which creates markdown files that can be viewed via Obsidian, or published to the web."). // TODO: MORE!
 		WithLang("Go", Extensively).
 		WithLang("Bash", Some).
+		WithLang("Typescript", Some).
 		WithLang("Javascript", Rarely).
-		WithTechnologies("Github Actions", "Obsidian", "Markdown", "Quartz").
+		WithLang("Html", Rarely).
+		WithLang("CSS", Rarely).
+		WithLang("SCSS", Rarely).
+		WithTechnologies("Github Actions", "Obsidian", "Markdown", "Quartz", "Quartz 4").
 		// TODO: add info to technologies????
 		WithPlatforms("Github").
-		WithCloudProvider("AWS", "S3", "IAM"). // Cloudflare or route53?
-		WithSubjectMatters(smCiCd, smFrontend).
+		WithCloudProvider("AWS", "S3", "IAM", "Cloudfront", "Cloudfront Functions", "ACM").
+		WithSubjectMatters(smCiCd, smFrontend). // TODO: ????
 		finalize()
 	measurementsProject = measurementsProject.WithStatus(statusShelved).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!

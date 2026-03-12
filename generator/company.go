@@ -23,12 +23,12 @@ func (m *monthYr) String() string {
 	return fmt.Sprintf("%d-%d", m.Month, m.Year)
 }
 
-type CompanyPage struct { // TODO: USE
+type CompanyPage struct {
 	Name      string
-	Positions []*Position // TODO: NEW!!!!!
+	Positions []*Position
 	Start     monthYr
 	End       *monthYr // None == current
-	//Clients   []*Client // TODO: LIKELY REMOVE?
+	//Clients   []*Client // resolved later
 	//Projects  []string // Resolved from clients
 	//Languages []string // Calculated later
 }

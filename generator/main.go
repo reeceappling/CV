@@ -24,7 +24,7 @@ func createMainPage() {
 	b := strings.Builder{}
 	b.WriteString(frontmatterFor("Home - Reece Appling"))
 	b.WriteString("# CV\n")
-	b.WriteString("[Check out my CV](CV.md). It is a living document that is updated occasionally.\n")   // TODO: ENSURE OK
+	b.WriteString("[Check out my CV](cv.md). It is a living document that is updated occasionally.\n")   // TODO: ENSURE OK
 	b.WriteString("Looking for a resume instead? [Download my resume here](Resume.pdf)ENSURE WORKING\n") // TODO: ENSURE OK
 	b.WriteString("# Blog\n")
 	b.WriteString("[Blog](Blog.md) where I host any blog posts I make.\n") // TODO: ENSURE OK
@@ -185,7 +185,7 @@ func createMainCVPage() { // TODO: TAGS EVERYWHERE????
 	for _, name := range alphabetizedSms {
 		b.WriteString(fmt.Sprintf("- %s\n", name.Link()))
 	}
-	WriteFile("CV.md", b.String())
+	WriteFile("cv.md", b.String())
 }
 
 func WriteFile(filenameLessRoot string, content string) {

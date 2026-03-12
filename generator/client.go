@@ -13,7 +13,7 @@ var clientsOrder = []string{}
 
 type Client struct {
 	Name        string
-	Info        *string // TODO: ADD INFO TO ALL CLIENTS AND DISPLAY
+	Info        []string // Information points on a client. // TODO: ADD INFO TO ALL CLIENTS AND DISPLAY
 	Projects    []*Project
 	projectsSet utils.Set[string]
 	//Languages []string // Calculated later
@@ -41,9 +41,7 @@ func NewClient(name string, info ...string) *Client {
 	if _, exists := clients[name]; exists {
 		panic("client already exists")
 	}
-	if len(info) > 0 {
-		out.Info = &info[0]
-	}
+	out.Info = info
 	clients[name] = out
 	clientsOrder = append(clientsOrder, name)
 	return out
@@ -52,6 +50,12 @@ func NewClient(name string, info ...string) *Client {
 func (pg *Client) Bytes() []byte {
 	builder := strings.Builder{}
 	builder.WriteString(frontmatterFor(pg.Name, "Client"))
+	if pg.Info != nil && len(pg.Info) > 0 {
+		builder.WriteString("# Responsibilities and Achievements \n")
+		for _, info := range pg.Info {
+			builder.WriteString(fmt.Sprintf("- %s\n", info))
+		}
+	}
 	if pg.Projects != nil && len(pg.Projects) > 0 {
 		builder.WriteString("# Projects\n")
 		for _, proj := range pg.Projects {
@@ -157,16 +161,34 @@ func (pg *Client) GetAllLowest() (outCaches map[string]*CachePage, outDbs map[st
 	return
 }
 
-var (
-	jdClient           = NewClient("Undisclosed Fortune 100 Agribusiness Company", "Fortune 100 Agricultural Business (Think: Green Tractors)")
-	sourceAlliesClient = NewClient("Source Allies", "Source Allies internal projects")
-	critColaClient     = NewClient("CritCola")
-	wellAwareClient    = NewClient("Well Aware NC")
-	clarkClient        = NewClient("Chapel Hill Masters Student in Public Health")
-	charityClient      = NewClient("Undisclosed Charity")
-	teiClient          = NewClient("TEI")
-	taeClient          = NewClient("Talley Associates of Engineering") // TODO: JS photo parser
-	mafcClient         = NewClient("Monroe Aquatics and Fitness Center")
+var ( // TODO: ADD ALL INFO!
+	jdClient = NewClient("John Deere",
+		"Fortune 100 Agricultural Business (Think: Green Tractors)", // TODO: FIX ALL POINTS
+	)
+	sourceAlliesClient = NewClient("Source Allies",
+		"Source Allies internal projects", // TODO: FIX ALL POINTS
+	)
+	critColaClient = NewClient("CritCola",
+		"ADD SUMMARY POINTS", // TODO: FIX ALL POINTS
+	)
+	wellAwareClient = NewClient("Well Aware NC",
+		"ADD SUMMARY POINTS", // TODO: FIX ALL POINTS
+	)
+	clarkClient = NewClient("Chapel Hill Masters Student in Public Health",
+		"ADD SUMMARY POINTS", // TODO: FIX ALL POINTS
+	)
+	charityClient = NewClient("Undisclosed Charity",
+		"ADD SUMMARY POINTS", // TODO: FIX ALL POINTS
+	)
+	teiClient = NewClient("TEI",
+		"ADD SUMMARY POINTS", // TODO: FIX ALL POINTS
+	)
+	taeClient = NewClient("Talley Associates of Engineering", // TODO: JS photo parser
+		"ADD SUMMARY POINTS", // TODO: FIX ALL POINTS
+	)
+	mafcClient = NewClient("Monroe Aquatics and Fitness Center",
+		"ADD SUMMARY POINTS", // TODO: FIX ALL POINTS
+	)
 )
 
 func initClientsAfterProjectsComplete() {
