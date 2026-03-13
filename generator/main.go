@@ -147,7 +147,6 @@ func createMainCVPage() { // TODO: TAGS EVERYWHERE????
 		}
 		b.WriteString(fmt.Sprintf("%s | %s | %s | %s\n", cert.Name, cert.CertDate.String(), expiryDate, link))
 	}
-	// TODO: any others?
 
 	b.WriteString("# [Languages](Languages.md)\n")
 	b.WriteString("[see all languages LINK BROKEN](language/)\n") // TODO: delete?

@@ -616,7 +616,7 @@ func initProjectsFinal() {
 		WithDbs("Aurora", "DynamoDB", "Postgres").
 		WithCaches("Redis", "memcached").
 		WithTechnologies("Github Actions", "Parquet", "Avro").
-		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow").
+		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "Azure DevOps", "Jira", "Confluence").
 		WithSubjectMatters(smBackend, smTopology, smLinearAlgebra, smClusterComputing, smDistributedComputing, smContainerization, smIAC, smCiCd).
 		//WithTags(tagBackend, tagTopology, tagLinearAlgebra, tagClusterComputing, tagDistributedComputing, tagContainerization, tagIAC, tagCiCd)
 		finalize()
@@ -633,7 +633,7 @@ func initProjectsFinal() {
 		WithDbs("DynamoDB", "Postgres").
 		WithCaches("Redis", "memcached", "DAX").
 		WithTechnologies("CUDA", "Github Actions", "Parquet", "Avro", "LocalStack").
-		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow").
+		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "Azure DevOps", "Jira", "Confluence").
 		WithSubjectMatters(smBackend, smLinearAlgebra, smClusterComputing, smDistributedComputing, smContainerization, smIAC, smCiCd).
 		finalize()
 	GhaRunnersProject = GhaRunnersProject.WithStatus(statusMaintaining).
@@ -645,7 +645,7 @@ func initProjectsFinal() {
 			"ECS", "S3", "EC2", "IAM", "SecretsManager", "Cloudwatch", "Lambda", "ECR", "Route53", // Route53 add networking sm
 		).
 		WithTechnologies("Github Actions").
-		WithPlatforms("Datadog", "Logcentral", "Github").
+		WithPlatforms("Datadog", "Logcentral", "Github", "Azure DevOps", "Jira", "Confluence").
 		WithSubjectMatters(smBackend, smCiCd, smDevOps, smContainerization, smIAC, smCiCd).
 		finalize()
 	ogreProject = ogreProject.WithStatus(statusBuilding).
@@ -658,7 +658,7 @@ func initProjectsFinal() {
 		WithDbs("Aurora", "DynamoDB", "Postgres").
 		WithCaches("Redis", "memcached").
 		WithTechnologies("Github Actions", "Parquet", "Avro").
-		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow").
+		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "Azure DevOps", "Jira", "Confluence").
 		WithCloudProvider("AWS",
 			"ECS", "S3", "EC2", "IAM", "SecretsManager", "DynamoDB", "DAX", "Cloudwatch", "Lambda", "ECR", "Route53", "Kinesis", "SQS", "SNS",
 		).
@@ -674,7 +674,7 @@ func initProjectsFinal() {
 		WithTechnologies("Github Actions", "Parquet", "Avro", "GraphQL").
 		WithDbs("Postgres").
 		WithCaches("Redis", "memcached").
-		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "GraphQL Apollo").
+		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "GraphQL Apollo", "Azure DevOps", "Jira", "Confluence").
 		WithCloudProvider("AWS",
 			"ECS", "S3", "EC2", "IAM", "SecretsManager", "DynamoDB", "DAX", "Cloudwatch", "Lambda", "ECR", "Route53", "Kinesis", "SQS", "SNS",
 		).
@@ -695,7 +695,7 @@ func initProjectsFinal() {
 		WithDbs("Aurora", "Postgres").
 		WithCaches("Redis", "memcached").
 		WithTechnologies("CUDA", "Github Actions", "Parquet", "Avro", "GraphQL", "SIMD").
-		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "GraphQL Apollo").
+		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "GraphQL Apollo", "Azure DevOps", "Jira", "Confluence").
 		WithCloudProvider("AWS",
 			"ECS", "S3", "EC2", "IAM", "SecretsManager", "DynamoDB", "DAX", "Cloudwatch", "Lambda", "ECR", "Route53", "Kinesis", "SQS", "SNS",
 		).
@@ -715,7 +715,7 @@ func initProjectsFinal() {
 		WithDbs("DynamoDB", "Postgres").
 		WithCaches("Redis", "memcached").
 		WithTechnologies("Github Actions", "Parquet", "Avro").
-		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow").
+		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "Azure DevOps", "Jira", "Confluence").
 		WithSubjectMatters(smCiCd, smClusterComputing, smDistributedComputing, smContainerization, smIAC, smStatistics, smBackend).
 		finalize()
 	explorerProject = explorerProject.WithStatus(statusMaintaining).
@@ -731,7 +731,7 @@ func initProjectsFinal() {
 		WithDbs("Aurora", "DynamoDB", "Postgres").
 		WithCaches("Redis", "memcached").
 		WithTechnologies("Github Actions").
-		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow").
+		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "Azure DevOps", "Jira", "Confluence").
 		WithSubjectMatters(smCiCd, smContainerization, smIAC, smFullStack).
 		finalize()
 	wqdbProject = wqdbProject.WithStatus(statusComplete).
@@ -746,7 +746,7 @@ func initProjectsFinal() {
 			"ECS", "Fargate", "S3", "EC2", "IAM", "SecretsManager", "DynamoDB", "DAX", "Cloudwatch", "Lambda", "ECR", "Route53", "Kinesis", "SQS", "SNS",
 		).WithDbs("Aurora", "Postgres").
 		WithTechnologies("Github Actions").
-		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow").
+		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "Azure DevOps", "Jira", "Confluence").
 		WithSubjectMatters(smCiCd, smIAC, smBackend).
 		finalize()
 	supportProject = supportProject.WithStatus(statusComplete).
@@ -760,7 +760,7 @@ func initProjectsFinal() {
 			"ECS", "Fargate", "S3", "EC2", "IAM", "SecretsManager", "DynamoDB", "DAX", "Cloudwatch", "Lambda", "ECR", "Route53", "Kinesis", "SQS", "SNS",
 		).
 		WithTechnologies("Github Actions").
-		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow").
+		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "Azure DevOps", "Jira", "Confluence").
 		WithSubjectMatters(smCiCd, smContainerization, smIAC, smBackend).
 		finalize()
 	scudsProject = scudsProject.WithStatus(statusComplete).
@@ -776,7 +776,7 @@ func initProjectsFinal() {
 		WithDbs("ElasticSearch").
 		WithCaches("Redis").
 		WithTechnologies("ElasticSearch", "Github Actions", "Parquet", "Avro").
-		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow").
+		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "Azure DevOps", "Jira", "Confluence").
 		WithSubjectMatters(smCiCd, smContainerization, smIAC, smStatistics, smBackend).
 		finalize()
 	ufoProject = ufoProject.WithStatus(statusMaintaining).
@@ -791,7 +791,7 @@ func initProjectsFinal() {
 		).
 		WithCaches("Redis").
 		WithTechnologies("Github Actions").
-		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow").
+		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "Azure DevOps", "Jira", "Confluence").
 		WithSubjectMatters(smCiCd, smContainerization, smIAC, smStatistics, smBackend).
 		finalize()
 	goweProject = goweProject.WithStatus(statusMaintaining).
@@ -806,7 +806,7 @@ func initProjectsFinal() {
 		WithDbs("DuckDB", "Aurora", "Postgres").
 		WithCaches("Redis").
 		WithTechnologies("Github Actions", "Parquet", "Avro").
-		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow").
+		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "Azure DevOps", "Jira", "Confluence").
 		WithSubjectMatters(smCiCd, smContainerization, smIAC, smClusterComputing, smDistributedComputing, smLinearAlgebra, smBackend).
 		finalize()
 	simpsonUnivProject = simpsonUnivProject.WithStatus(statusComplete). // TODO: MORE!
@@ -816,6 +816,7 @@ func initProjectsFinal() {
 										WithLang("Javascript", Some).
 										WithSubjectMatters(smFrontend).
 										WithTechnologies("Drupal").
+										WithPlatforms("Confluence"). // TODO: SOURCE JAMF
 										finalize()
 	// TODO: sai project for JAMF
 	mushDbProject = mushDbProject.WithStatus(statusBuilding).
