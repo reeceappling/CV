@@ -130,7 +130,8 @@ jobs:
   deploy:
     needs: [build-quartz, generate-markdown]
     if: |
-      always() && !cancelled()
+      github.ref == 'refs/heads/main'
+      && always() && !cancelled()
       && (needs.generate-markdown.result == 'success')
       && needs.build-quartz.result == 'success'
     runs-on: ubuntu-latest

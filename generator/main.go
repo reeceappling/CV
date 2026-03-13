@@ -100,9 +100,9 @@ func createMainCVPage() { // TODO: TAGS EVERYWHERE????
 	b.WriteString(frontmatterFor("CV"))
 	// TODO: HEADER AREA FOR LINKS TO CV, RESUME, BLOG, NOTES?
 
-	b.WriteString("Welcome to my CV! It is a living document that is updated occasionally.\n\n")                     // Why does this need 2 newlines? // TODO: move down?
-	b.WriteString("Looking for a resume instead? [Download it here](Resume.pdf)ENSURE WORKING\n\n")                  // TODO: ENSURE OK
-	b.WriteString("Feel free to check out the [source code](https://github.com/reeceappling/CV) for this website\n") // TODO: ENSURE OK
+	b.WriteString("Welcome to my CV! It is a living document that is updated occasionally.\n\n")    // Why does this need 2 newlines?
+	b.WriteString("Looking for a resume instead? [Download it here](Resume.pdf)ENSURE WORKING\n\n") // TODO: ENSURE OK
+	b.WriteString("Feel free to check out the [source code](https://github.com/reeceappling/CV) for this website\n")
 
 	b.WriteString("# About\n")
 
@@ -157,10 +157,10 @@ func createMainCVPage() { // TODO: TAGS EVERYWHERE????
 	b.WriteString("## All\n")
 	b.WriteString(alphabetizedLinksCompressed(langs, "language"))
 
-	b.WriteString("# Databases\n[Full Page](dbs.md)\n\n") // TODO: why does this take 2 newlines??
+	b.WriteString("# Databases\n[Full Page](dbs.md)\n\n")
 	b.WriteString(alphabetizedLinksCompressed(dbs, "db"))
 
-	b.WriteString("# Caches\n[Full Page](caches.md)\n\n") // TODO: why does this take 2 newlines??
+	b.WriteString("# Caches\n[Full Page](caches.md)\n\n")
 	b.WriteString(alphabetizedLinksCompressed(caches, "cache"))
 
 	b.WriteString("# Cloud Providers\n[Full Page](providers.md)\n")
@@ -173,10 +173,12 @@ func createMainCVPage() { // TODO: TAGS EVERYWHERE????
 	// TODO: ADD GCP! Azure!
 
 	b.WriteString("# Technologies and Libraries\n[Full Page](technologies.md)\n\n") // TODO: why does this take 2 newlines??
-	b.WriteString(alphabetizedLinksCompressed(techs, "technology"))                 // TODO: dir correct?
+	b.WriteString(alphabetizedLinksCompressed(techs, "technology"))
 
-	b.WriteString("## Containerization\n\n")      // TODO: why does this take 2 newlines??
-	b.WriteString("## Distributed Computing\n\n") // TODO: why does this take 2 newlines??
+	b.WriteString("## Containerization\n\n")
+	b.WriteString(fixmeLink + "\n") // TODO: this!
+	b.WriteString("## Distributed Computing\n\n")
+	b.WriteString(fixmeLink + "\n") // TODO: this!
 
 	// TODO: POPULATE THIS AREA!!!!!!!!!!!!!
 
