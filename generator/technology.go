@@ -37,103 +37,63 @@ func (pg *TechologyPage) WithTags(tags ...string) *TechologyPage {
 	return pg
 }
 
-func NewTechnology(name string) *TechologyPage {
+func NewTechnology(name string, subjectMatters ...SubjectMatter) *TechologyPage {
 	out := &TechologyPage{
 		Name:           name,
 		tracked:        newTracked(),
-		SubjectMatters: utils.Set[SubjectMatter]{},
+		SubjectMatters: utils.SetFrom(subjectMatters...),
 	}
 	techs[name] = out
 	return out
 }
 
 func setupTechSubjectMatters() {
-	NewTechnology("Github Actions").
-		WithSubjectMatters(smCiCd)
-	NewTechnology("Gitlab CI").
-		WithSubjectMatters(smCiCd)
-	NewTechnology("Drone CI").
-		WithSubjectMatters(smCiCd)
-	NewTechnology("LangGraph").
-		WithSubjectMatters(smAI)
-	NewTechnology("LangChain").
-		WithSubjectMatters(smAI)
-	NewTechnology("LLM").
-		WithSubjectMatters(smAI)
-	NewTechnology("AI").
-		WithSubjectMatters(smAI)
-	NewTechnology("AI Agents").
-		WithSubjectMatters(smAI)
-	NewTechnology("OpenAI API spec").
-		WithSubjectMatters(smAI, smBackend)
-	NewTechnology("CUDA").
-		WithSubjectMatters(smGPU, smGraphics)
-	NewTechnology("Avro").
-		WithSubjectMatters(smBackend).
+	NewTechnology("Github Actions", smCiCd)
+	NewTechnology("Gitlab CI", smCiCd)
+	NewTechnology("Drone CI", smCiCd)
+	NewTechnology("LangGraph", smAI)
+	NewTechnology("LangChain", smAI)
+	NewTechnology("LLM", smAI)
+	NewTechnology("AI", smAI)
+	NewTechnology("AI Agents", smAI)
+	NewTechnology("OpenAI API spec", smAI, smBackend)
+	NewTechnology("CUDA", smGPU, smGraphics)
+	NewTechnology("Avro", smBackend).
 		WithTags("DataFormat")
-	NewTechnology("Parquet").
-		WithSubjectMatters(smBackend).
+	NewTechnology("Parquet", smBackend).
 		WithTags("DataFormat")
-	NewTechnology("CUDA").
-		WithSubjectMatters(smGPU, smGraphics)
+	NewTechnology("CUDA", smGPU, smGraphics)
 	// TODO: GRAPHQL????
-	NewTechnology("Kubernetes").
-		WithSubjectMatters(smBackend, smDistributedComputing, smContainerization, smIAC, smCloudComputing, smNetworking)
+	NewTechnology("Kubernetes", smBackend, smDistributedComputing, smContainerization, smIAC, smCloudComputing, smNetworking)
 	// TODO: ansible? chef?
-	NewTechnology("RFID").
-		WithSubjectMatters(smRobotics, smEmbeddedSystems, smElectronics)
-	NewTechnology("NFC").
-		WithSubjectMatters(smRobotics, smEmbeddedSystems, smElectronics)
-	NewTechnology("I2C").
-		WithSubjectMatters(smRobotics, smEmbeddedSystems, smElectronics)
-	NewTechnology("SPI").
-		WithSubjectMatters(smRobotics, smEmbeddedSystems, smElectronics)
-	NewTechnology("Drupal").
-		WithSubjectMatters(smFrontend)
-	NewTechnology("React").
-		WithSubjectMatters(smFrontend)
-	NewTechnology("Quartz 4").
-		WithSubjectMatters(smFrontend)
-	NewTechnology("Quartz").
-		WithSubjectMatters(smFrontend)
-	NewTechnology("NextJs").
-		WithSubjectMatters(smFullStack)
-	NewTechnology("GraphQL").
-		WithSubjectMatters(smBackend, smNetworking)
-	NewTechnology("Obsidian").
-		WithSubjectMatters(smFrontend)
-	NewTechnology("SIMD").
-		WithSubjectMatters(smBackend, smRobotics, smEmbeddedSystems)
-	NewTechnology("Cloudflare Tunnels").
-		WithSubjectMatters(smNetworking)
-	NewTechnology("LocalStack").
-		WithSubjectMatters(smBackend, smCloudComputing, smNetworking)
-	NewTechnology("ElasticSearch").
-		WithSubjectMatters(smBackend)
-	NewTechnology("NodeJS").
-		WithSubjectMatters(smBackend)
-	NewTechnology("Markdown").
-		WithSubjectMatters(smObservability)
-	NewTechnology("Websockets").
-		WithSubjectMatters(smFullStack, smNetworking)
-	NewTechnology("Server-Sent Events").
-		WithSubjectMatters(smFullStack, smNetworking)
-	NewTechnology("SIMULATE3").
-		WithSubjectMatters(smNuclearEngineering, smParticlePhysics)
-	NewTechnology("CASMO4e").
-		WithSubjectMatters(smNuclearEngineering, smParticlePhysics)
-	NewTechnology("Pub-Sub").
-		WithSubjectMatters(smBackend, smNetworking)
-	NewTechnology("Git").
-		WithSubjectMatters(smFullStack, smDevOps)
-	NewTechnology("Webhooks").
-		WithSubjectMatters(smFullStack, smNetworking)
-	NewTechnology("JQuery").
-		WithSubjectMatters(smFrontend)
-	NewTechnology("Arduino").
-		WithSubjectMatters(smEmbeddedSystems, smElectronics, smRobotics)
-	NewTechnology("PWM").
-		WithSubjectMatters(smEmbeddedSystems, smElectronics, smRobotics)
+	NewTechnology("RFID", smRobotics, smEmbeddedSystems, smElectronics)
+	NewTechnology("NFC", smRobotics, smEmbeddedSystems, smElectronics)
+	NewTechnology("I2C", smRobotics, smEmbeddedSystems, smElectronics)
+	NewTechnology("SPI", smRobotics, smEmbeddedSystems, smElectronics)
+	NewTechnology("Drupal", smFrontend)
+	NewTechnology("React", smFrontend)
+	NewTechnology("Quartz 4", smFrontend)
+	NewTechnology("Quartz", smFrontend)
+	NewTechnology("NextJs", smFullStack)
+	NewTechnology("GraphQL", smBackend, smNetworking)
+	NewTechnology("Obsidian", smFrontend)
+	NewTechnology("SIMD", smBackend, smRobotics, smEmbeddedSystems)
+	NewTechnology("Cloudflare Tunnels", smNetworking)
+	NewTechnology("LocalStack", smBackend, smCloudComputing, smNetworking)
+	NewTechnology("ElasticSearch", smBackend)
+	NewTechnology("NodeJS", smBackend)
+	NewTechnology("Markdown", smObservability)
+	NewTechnology("Websockets", smFullStack, smNetworking)
+	NewTechnology("Server-Sent Events", smFullStack, smNetworking)
+	// TODO: ADD NDSF(?) FILES FOR NUC STUFF
+	NewTechnology("SIMULATE3", smNuclearEngineering, smParticlePhysics)
+	NewTechnology("CASMO4e", smNuclearEngineering, smParticlePhysics)
+	NewTechnology("Pub-Sub", smBackend, smNetworking)
+	NewTechnology("Git", smFullStack, smDevOps)
+	NewTechnology("Webhooks", smFullStack, smNetworking)
+	NewTechnology("JQuery", smFrontend)
+	NewTechnology("Arduino", smEmbeddedSystems, smElectronics, smRobotics)
+	NewTechnology("PWM", smEmbeddedSystems, smElectronics, smRobotics)
 }
 
 // TODO: list all backlinks????
