@@ -64,7 +64,7 @@ func setupTechSubjectMatters() {
 	NewTechnology("ENDF", smNuclearEngineering).WithTags("DataFormat")
 	NewTechnology("JEFF", smNuclearEngineering).WithTags("DataFormat")
 	NewTechnology("XML", smFullStack).WithTags("DataFormat")
-	NewTechnology("YAML", smFullStack).WithTags("DataFormat")
+	NewTechnology("YAML", smFullStack, smCiCd).WithTags("DataFormat")
 	NewTechnology("TOML", smFullStack).WithTags("DataFormat")
 	NewTechnology("CUDA", smGPU, smGraphics)
 	// TODO: GRAPHQL????
@@ -80,13 +80,13 @@ func setupTechSubjectMatters() {
 	NewTechnology("Quartz", smFrontend)
 	NewTechnology("NextJs", smFullStack)
 	NewTechnology("GraphQL", smBackend, smNetworking)
-	NewTechnology("Obsidian", smFrontend)
+	NewTechnology("Obsidian", smDocumentation)
 	NewTechnology("SIMD", smBackend, smRobotics, smEmbeddedSystems)
 	NewTechnology("Cloudflare Tunnels", smNetworking)
 	NewTechnology("LocalStack", smBackend, smCloudComputing, smNetworking)
 	NewTechnology("ElasticSearch", smBackend)
 	NewTechnology("NodeJS", smBackend)
-	NewTechnology("Markdown", smObservability)
+	NewTechnology("Markdown", smDocumentation)
 	NewTechnology("Websockets", smFullStack, smNetworking)
 	NewTechnology("Server-Sent Events", smFullStack, smNetworking)
 	// TODO: ADD NDSF(?) FILES FOR NUC STUFF
@@ -99,6 +99,8 @@ func setupTechSubjectMatters() {
 	NewTechnology("Arduino", smEmbeddedSystems, smElectronics, smRobotics)
 	NewTechnology("PWM", smEmbeddedSystems, smElectronics, smRobotics)
 	NewTechnology("G and M codes", smElectronics, smRobotics)
+	NewTechnology("OpenApi", smDocumentation) // TODO: USE
+	NewTechnology("Swagger", smDocumentation) // TODO: USE
 }
 
 // TODO: list all backlinks????
