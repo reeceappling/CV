@@ -58,10 +58,14 @@ func setupTechSubjectMatters() {
 	NewTechnology("AI Agents", smAI)
 	NewTechnology("OpenAI API spec", smAI, smBackend)
 	NewTechnology("CUDA", smGPU, smGraphics)
-	NewTechnology("Avro", smBackend).
-		WithTags("DataFormat")
-	NewTechnology("Parquet", smBackend).
-		WithTags("DataFormat")
+	NewTechnology("Avro", smBackend).WithTags("DataFormat")
+	NewTechnology("Parquet", smBackend).WithTags("DataFormat")
+	NewTechnology("JSON", smFullStack).WithTags("DataFormat")
+	NewTechnology("ENDF", smNuclearEngineering).WithTags("DataFormat")
+	NewTechnology("JEFF", smNuclearEngineering).WithTags("DataFormat")
+	NewTechnology("XML", smFullStack).WithTags("DataFormat")
+	NewTechnology("YAML", smFullStack).WithTags("DataFormat")
+	NewTechnology("TOML", smFullStack).WithTags("DataFormat")
 	NewTechnology("CUDA", smGPU, smGraphics)
 	// TODO: GRAPHQL????
 	NewTechnology("Kubernetes", smBackend, smDistributedComputing, smContainerization, smIAC, smCloudComputing, smNetworking)
@@ -94,6 +98,7 @@ func setupTechSubjectMatters() {
 	NewTechnology("JQuery", smFrontend)
 	NewTechnology("Arduino", smEmbeddedSystems, smElectronics, smRobotics)
 	NewTechnology("PWM", smEmbeddedSystems, smElectronics, smRobotics)
+	NewTechnology("G and M codes", smElectronics, smRobotics)
 }
 
 // TODO: list all backlinks????

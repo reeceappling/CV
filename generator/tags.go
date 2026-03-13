@@ -29,7 +29,7 @@ var (
 	tagStructuralEngineering = NewTag("Structural Engineering")
 	tagThermodynamics        = NewTag("Thermodynamics")
 	tagFluidMechanics        = NewTag("Fluid Mechanics")
-	tagCybersecurity         = NewTag("Cyberecurity")
+	tagCybersecurity         = NewTag("Cybersecurity")
 	tagCryptography          = NewTag("Cryptography")
 	tagEmbeddedSystems       = NewTag("Embedded Systems")
 	tagElectronics           = NewTag("Electronics")

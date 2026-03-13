@@ -196,7 +196,7 @@ var (
 
 func initClientsAfterProjectsComplete() {
 	jdClient = jdClient.WithProjects(polygonBuilderProject, ogreProject, renderProject, statsProject, billingProject, explorerProject, wqdbProject, supportProject, scudsProject, ufoProject, goweProject, tileGenProject, GhaRunnersProject)
-	sourceAlliesClient = sourceAlliesClient.WithProjects(saiCollegeProject) // TODO: USE!
+	sourceAlliesClient = sourceAlliesClient.WithProjects(simpsonUnivProject) // TODO: USE!
 	// TODO: SIMPSON COLLEGE // TODO: USE!
 	critColaClient = critColaClient.WithProjects(CritColaProject)
 	wellAwareClient = wellAwareClient.WithProjects(WellAwareProject)

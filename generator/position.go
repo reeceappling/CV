@@ -238,7 +238,7 @@ func initPositionsAfterProjects() {
 		WithProjects(WellAwareProject, CharityProject, CritColaProject, MastersDataAnalysisProject)
 	sai1 = NewPosition("Software Engineer", 5, 2022, utils.Pointer(6), utils.Pointer(2023)).
 		WithSubjectMatters(smFullStack).
-		WithProjects(tileGenProject, renderProject, statsProject, explorerProject, wqdbProject, supportProject, scudsProject, ufoProject, goweProject, saiCollegeProject) // TODO: MOVE PROJECTS AROUND
+		WithProjects(tileGenProject, renderProject, statsProject, explorerProject, wqdbProject, supportProject, scudsProject, ufoProject, goweProject, simpsonUnivProject) // TODO: MOVE PROJECTS AROUND
 	sai2 = NewPosition("Senior Software Engineer", 6, 2023, utils.Pointer(2), utils.Pointer(2025)).
 		WithSubjectMatters(smBackend).
 		WithProjects(polygonBuilderProject, GhaRunnersProject)

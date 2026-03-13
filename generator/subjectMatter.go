@@ -81,7 +81,7 @@ var (
 	smStructuralEngineering = NewSubjectMatter("Structural Engineering")
 	smThermodynamics        = NewSubjectMatter("Thermodynamics")
 	smFluidMechanics        = NewSubjectMatter("Fluid Mechanics")
-	smCybersecurity         = NewSubjectMatter("Cyberecurity")
+	smCybersecurity         = NewSubjectMatter("Cybersecurity")
 	smCryptography          = NewSubjectMatter("Cryptography")
 	smEmbeddedSystems       = NewSubjectMatter("Embedded Systems")
 	smElectronics           = NewSubjectMatter("Electronics")
@@ -102,6 +102,7 @@ var (
 	smEducation             = NewSubjectMatter("Education")
 	smStatics               = NewSubjectMatter("Statics")
 	smNetworking            = NewSubjectMatter("Networking") // TODO: maybe get rid of
+	smChemistry             = NewSubjectMatter("Chemistry")
 )
 
 func setupSubjectMatters() {

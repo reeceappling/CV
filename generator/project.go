@@ -539,7 +539,7 @@ func newProject(name string, summary string, info projectTypeInfo, link *string)
 
 // var (
 //
-//	projectLinAlgCryptography, MastersDataAnalysisProject, capstoneProject, cherenkovProject, roboticsTeamProject, cncLaserCutterProject, aerospaceFinalProject, coreShufflerProject, WellAwareProject, CritColaProject, CharityProject, nfcScannerProject, measurementsProject, mushDbProject, cvProject, polygonBuilderProject, tileGenProject, ogreProject, renderProject, statsProject, billingProject, explorerProject, wqdbProject, supportProject, scudsProject, ufoProject, goweProject, saiCollegeProject, GhaRunnersProject, projectAgentSwarm *Project
+//	projectLinAlgCryptography, MastersDataAnalysisProject, capstoneProject, cherenkovProject, roboticsTeamProject, cncLaserCutterProject, aerospaceFinalProject, coreShufflerProject, WellAwareProject, CritColaProject, CharityProject, nfcScannerProject, measurementsProject, mushDbProject, cvProject, polygonBuilderProject, tileGenProject, ogreProject, renderProject, statsProject, billingProject, explorerProject, wqdbProject, supportProject, scudsProject, ufoProject, goweProject, simpsonUnivProject, GhaRunnersProject, projectAgentSwarm *Project
 //
 // )
 var measurementsUrl = "github.com/reeceappling/measurements" // TODO: ensure ok
@@ -549,25 +549,24 @@ var nfcScannerUrl = "github.com/reeceappling/nfcScanner"     // TODO: ensure ok
 var coreShufflerUrl = "github.com/reeceappling/coreShuffler" // TODO: ensure ok
 
 var (
-	projectAgentSwarm     = NewPersonalProject("AI Agent Swarm", fixmeLink, nil)
-	polygonBuilderProject = NewProfessionalProject("Polygon Builder", fixmeLink, jdClient, nil)
-	tileGenProject        = NewProfessionalProject("Tile Generator", fixmeLink, jdClient, nil)
-	GhaRunnersProject     = NewProfessionalProject("Github Actions GPU Runners", "FIX SUMMARY", jdClient, nil)
-	ogreProject           = NewProfessionalProject("Organizational Geospatial Rollup Engine", fixmeLink, jdClient, nil)
-	renderProject         = NewProfessionalProject("Render Cluster", fixmeLink, jdClient, nil) // TODO: MORE!
-	statsProject          = NewProfessionalProject("Statistics Cluster", fixmeLink, jdClient, nil)
-	billingProject        = NewProfessionalProject("Billing Cluster", fixmeLink, jdClient, nil)
-	explorerProject       = NewProfessionalProject("Transform Explorer", fixmeLink, jdClient, nil)
-	wqdbProject           = NewProfessionalProject("Work Queue Database", fixmeLink, jdClient, nil)
-	supportProject        = NewProfessionalProject("Support Cluster", fixmeLink, jdClient, nil)
-	scudsProject          = NewProfessionalProject("Scuds API", fixmeLink, jdClient, nil)
-	ufoProject            = NewProfessionalProject("UFO API", fixmeLink, jdClient, nil)
-	goweProject           = NewProfessionalProject("Gowe Builder", fixmeLink, jdClient, nil)
-	saiCollegeProject     = NewProfessionalProject("Simpson University", fixmeLink, sourceAlliesClient, nil) // TODO: MORE!
-	mushDbProject         = NewPersonalProject("MushDb", fixmeLink, &mushDbUrl)
-	cvProject             = NewPersonalProject("Personal Site and CV", "This project! A generator which creates markdown files that can be viewed via Obsidian, or published to the web.", &cvUrl) // TODO: make multiple strings an available option for summary
-	// TODO: fix links page stuff
-	linksPage                  = NewPersonalProject("Personal Links Page", "A page to put all my links", nil) // TODO: LINKS PAGE
+	projectAgentSwarm          = NewPersonalProject("AI Agent Swarm", fixmeLink, nil)
+	polygonBuilderProject      = NewProfessionalProject("Polygon Builder", fixmeLink, jdClient, nil)
+	tileGenProject             = NewProfessionalProject("Tile Generator", fixmeLink, jdClient, nil)
+	GhaRunnersProject          = NewProfessionalProject("Github Actions GPU Runners", "FIX SUMMARY", jdClient, nil)
+	ogreProject                = NewProfessionalProject("Organizational Geospatial Rollup Engine", fixmeLink, jdClient, nil)
+	renderProject              = NewProfessionalProject("Render Cluster", fixmeLink, jdClient, nil) // TODO: MORE!
+	statsProject               = NewProfessionalProject("Statistics Cluster", fixmeLink, jdClient, nil)
+	billingProject             = NewProfessionalProject("Billing Cluster", fixmeLink, jdClient, nil)
+	explorerProject            = NewProfessionalProject("Transform Explorer", fixmeLink, jdClient, nil)
+	wqdbProject                = NewProfessionalProject("Work Queue Database", fixmeLink, jdClient, nil)
+	supportProject             = NewProfessionalProject("Support Cluster", fixmeLink, jdClient, nil)
+	scudsProject               = NewProfessionalProject("Scuds API", fixmeLink, jdClient, nil)
+	ufoProject                 = NewProfessionalProject("UFO API", fixmeLink, jdClient, nil)
+	goweProject                = NewProfessionalProject("Gowe Builder", fixmeLink, jdClient, nil)
+	simpsonUnivProject         = NewProfessionalProject("Simpson University", fixmeLink, sourceAlliesClient, nil) // TODO: MORE!
+	mushDbProject              = NewPersonalProject("MushDb", fixmeLink, &mushDbUrl)
+	cvProject                  = NewPersonalProject("Personal Site and CV", "This project! A generator which creates markdown files that can be viewed via Obsidian, or published to the web.", &cvUrl) // TODO: make multiple strings an available option for summary
+	linksPage                  = NewPersonalProject("Personal Links Page", "A page to put all my links", nil)                                                                                           // TODO: LINKS PAGE
 	measurementsProject        = NewPersonalProject("Measurements", fixmeLink, &measurementsUrl)
 	nfcScannerProject          = NewPersonalProject("Nfc Scanner", fixmeLink, &nfcScannerUrl)
 	teiProjects                = NewProfessionalProject("Tei Projects", fixmeLink, teiClient, nil)   // TODO: maybe add an actual project
@@ -580,7 +579,7 @@ var (
 	MastersDataAnalysisProject = NewProfessionalProject("Masters Data Analysis", fixmeLink, clarkClient, nil)
 	capstoneProject            = NewSchoolProject("Capstone Project-Uranium Silicide Accident Tolerant Fuel cycle design for Duke Energy Catawba Nuclear Plant", "FIX M_E", schoolNCSU, &coreShufflerUrl)
 	projectLinAlgCryptography  = NewSchoolProject("Linear algebra cryptography algorithm", "FIX M_E", schoolNCSU, nil)
-	cherenkovProject           = NewSchoolProject("Cherenkov radiation detector", fixmeLink, schoolNCSU, nil)
+	cherenkovProject           = NewSchoolProject("Cherenkov radiation sensor", fixmeLink, schoolNCSU, nil)
 	roboticsTeamProject        = NewSchoolProject("Robotics team 3720", fixmeLink, schoolCata, nil)
 	cncLaserCutterProject      = NewSchoolProject("CNC Laser Cutter", fixmeLink, schoolCata, nil)
 	aerospaceFinalProject      = NewSchoolProject("Aerospace senior design course", "Designed, created, and tested a rocket from scratch", schoolCata, nil)
@@ -632,8 +631,8 @@ func initProjectsFinal() {
 			"ECS", "S3", "EC2", "IAM", "SecretsManager", "DynamoDB", "DAX", "Cloudwatch", "Lambda", "ECR", "Route53", "Kinesis", "SQS", "SNS", "ApiGateway",
 		).
 		WithDbs("DynamoDB", "Postgres").
-		WithCaches("Redis", "memcached", "DAX").                                     // TODO: DAX link from cache or provider page?
-		WithTechnologies("CUDA", "Github Actions", "Parquet", "Avro", "LocalStack"). // TODO: parquet and avro tag as data formats????
+		WithCaches("Redis", "memcached", "DAX").
+		WithTechnologies("CUDA", "Github Actions", "Parquet", "Avro", "LocalStack").
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow").
 		WithSubjectMatters(smBackend, smLinearAlgebra, smClusterComputing, smDistributedComputing, smContainerization, smIAC, smCiCd).
 		finalize()
@@ -810,7 +809,7 @@ func initProjectsFinal() {
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow").
 		WithSubjectMatters(smCiCd, smContainerization, smIAC, smClusterComputing, smDistributedComputing, smLinearAlgebra, smBackend).
 		finalize()
-	saiCollegeProject = saiCollegeProject.WithStatus(statusComplete). // TODO: MORE!
+	simpsonUnivProject = simpsonUnivProject.WithStatus(statusComplete). // TODO: MORE!
 										WithSummary("SUMMARY HERE"). // TODO: MORE!
 										WithLang("Html", Regularly).
 										WithLang("CSS", Regularly).
@@ -838,6 +837,7 @@ func initProjectsFinal() {
 	cvProject = cvProject.WithStatus(statusBuilding).
 		WithSummary("This project! A generator which creates markdown files that can be viewed via Obsidian, or published to the web."). // TODO: MORE!
 		WithLang("Go", Extensively).
+		WithLang("Terraform", Often).
 		WithLang("Bash", Some).
 		WithLang("Typescript", Some).
 		WithLang("Javascript", Rarely).
@@ -848,7 +848,7 @@ func initProjectsFinal() {
 		// TODO: add info to technologies????
 		WithPlatforms("Github").
 		WithCloudProvider("AWS", "S3", "IAM", "Cloudfront", "Cloudfront Functions", "ACM").
-		WithSubjectMatters(smCiCd, smFrontend). // TODO: ????
+		WithSubjectMatters(smCiCd, smFrontend, smDevOps, smServerless).
 		finalize()
 	linksPage = linksPage.
 		WithStatus(statusComplete).
@@ -857,7 +857,7 @@ func initProjectsFinal() {
 		WithLang("Javascript", Rarely).
 		WithSubjectMatters(smFrontend)
 	measurementsProject = measurementsProject.WithStatus(statusShelved).
-		WithSummary("SUMMARY HERE"). // TODO: MORE!
+		WithSummary("A library to do arbitrary conversion rates, which can be time-dependent, multivariate, nested, and compound").
 		WithLang("Go", Extensively).
 		WithTechnologies("Github Actions").
 		WithPlatforms("Github").
@@ -866,7 +866,7 @@ func initProjectsFinal() {
 	nfcScannerProject = nfcScannerProject.WithStatus(statusBuilding).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!
 		WithLang("Go", Extensively).
-		WithTechnologies("Github Actions", "Webhooks", "Websockets", "Server-Sent Events", "Pub-Sub", "NFC").
+		WithTechnologies("Github Actions", "Webhooks", "Websockets", "Server-Sent Events", "Pub-Sub", "NFC", "I2C", "SPI", "RFID").
 		WithPlatforms("Github").
 		WithSubjectMatters(smContainerization, smDistributedComputing).
 		WithInterests(string(smMycology)).
@@ -874,20 +874,22 @@ func initProjectsFinal() {
 	coreShufflerProject = coreShufflerProject.WithStatus(statusComplete).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!
 		WithLang("Javascript", Extensively).
+		WithLang("Html", Extensively).
+		WithLang("CSS", Extensively).
 		WithTechnologies("JQuery").
 		WithPlatforms("Github", "Gitlab").
 		WithSubjectMatters(smNuclearEngineering, smParticlePhysics, smFluidMechanics).
 		WithInterests(string(smNuclearEngineering)).
 		finalize()
 	CharityProject = CharityProject.WithStatus(statusComplete).
-		WithSummary("SUMMARY HERE"). // TODO: MORE!
+		WithSummary("Designed, created, and hosted website for a local charity."). // TODO: MORE!
 		WithLang("Html", Often).
 		WithLang("CSS", Often).
 		WithLang("Javascript", Often).
 		WithSubjectMatters(smFrontend).
 		finalize()
 	WellAwareProject = WellAwareProject.WithStatus(statusComplete).
-		WithSummary("SUMMARY HERE"). // TODO: this
+		WithSummary("Designed, created, and hosted website for WellAware NC. A University of North Carolina, Chapel Hill lab-affiliated organization."). // TODO: this
 		WithLang("Html", Often).
 		WithLang("CSS", Often).
 		WithLang("Javascript", Often).
@@ -911,14 +913,14 @@ func initProjectsFinal() {
 		WithInterests("Gaming").
 		finalize()
 	MastersDataAnalysisProject = MastersDataAnalysisProject.WithStatus(statusComplete).
-		WithSummary("SUMMARY HERE"). // TODO: this
+		WithSummary("Created scripts to automate the data analysis for an individual's project for his master's degree in Public Health at UNC Chapel Hill."). // TODO: this
 		WithLang("Python", Often).
 		WithTechnologies("Gitlab CI").
 		WithPlatforms("Gitlab").
 		WithSubjectMatters(smStatistics, smLinearAlgebra).
 		finalize()
 	capstoneProject = capstoneProject.WithStatus(statusComplete).
-		WithSummary("SUMMARY HERE"). // TODO: this
+		WithSummary("Capstone project for my undergraduate degree at NC State. Designed a 3 year fuel cycle utilizing Uranium Silicide Accident-Tolerant fuel rods. Sponsored by the Catawba Nuclear plant and Duke Energy."). // TODO: this
 		WithLang("Javascript", Some).
 		WithLang("Fortran", Often).
 		WithLang("Bash", Some).
@@ -928,14 +930,14 @@ func initProjectsFinal() {
 		WithInterests(string(smNuclearEngineering)).
 		finalize()
 	projectLinAlgCryptography = projectLinAlgCryptography.
-		WithSummary("SUMMARY HERE"). // TODO: this
+		WithSummary("Created and analyzed the efficacy of a cryptographic algorithm utilizing basic matrix mathematics. STATS"). // TODO: this
 		WithMiscSkills("Linear Algebra").
 		WithInterests("Cryptography").
 		WithSubjectMatters(smCybersecurity, smCryptography).
 		WithInterests(string(smCryptography), string(smCybersecurity)).
 		finalize()
 	cherenkovProject = cherenkovProject.WithStatus(statusComplete).
-		WithSummary("SUMMARY HERE"). // TODO: this
+		WithSummary("Designed and built a sensor for Cherenkov radiation, which was tested by lowering the sensor into the core of the PULSTAR reactor at "+schoolNCSU.Link()+". The sensor utilized and Arduino for signal processing."). // TODO: this
 		WithLang("Python", Often).
 		WithTechnologies("Arduino").
 		WithPlatforms("Github").
@@ -943,7 +945,7 @@ func initProjectsFinal() {
 		WithInterests(string(smNuclearEngineering)).
 		finalize()
 	roboticsTeamProject = roboticsTeamProject.WithStatus(statusComplete).
-		WithSummary("SUMMARY HERE"). // TODO: this
+		WithSummary("FIRST team 3720 robots for competition each year. Design, construction, programming, and competing.").
 		WithLang("Java", Extensively).
 		WithLang("Html", Some).
 		WithLang("CSS", Some).
@@ -953,20 +955,21 @@ func initProjectsFinal() {
 		WithInterests(string(smRobotics)).
 		finalize()
 	cncLaserCutterProject = cncLaserCutterProject.WithStatus(statusComplete).
-		WithSummary("SUMMARY HERE"). // TODO: this
+		WithSummary("Designed and build a 2-axis CNC laser cutter. Worked with standard G&M codes (except the ones used to typically change drill bit speed).").
 		WithLang("Java", Often).
 		WithLang("Javascript", Regularly).
 		WithLang("Html", Regularly).
-		WithTechnologies("PWM").
+		WithTechnologies("PWM", "G and M codes").
 		WithSubjectMatters(smRobotics, smLinearAlgebra, smEmbeddedSystems, smElectronics).
 		finalize()
 	aerospaceFinalProject = aerospaceFinalProject.WithStatus(statusComplete).
-		WithSummary("SUMMARY HERE"). // TODO: this
+		WithSummary("Designed and built a rocket from scratch, including the fuel (Used Potassium Nitrate and Glucose/Sucrose).").
 		WithLang("Java", Minimal).
 		WithLang("Javascript", Minimal).
-		WithSubjectMatters(smFluidMechanics).
+		WithSubjectMatters(smFluidMechanics, smElectronics, smChemistry).
 		finalize()
 	miscSmallPersonalProjects = miscSmallPersonalProjects.
+		WithSummary("A catch-all for my miscellaneous personal projects I didn't want to add entire pages for").
 		WithStatus(statusShelved).
 		WithLang("Python", Regularly, smScripting).
 		WithLang("Fortran", Some, smScripting, smThermodynamics, smFluidMechanics, smParticlePhysics, smNuclearEngineering, smEducation, smEmbeddedSystems, smStatistics, smLinearAlgebra, smStatics).
@@ -979,12 +982,15 @@ func initProjectsFinal() {
 		WithSubjectMatters(smCryptocurrency).
 		finalize()
 	teiProjects = teiProjects.
+		WithSummary("A catch-all for all projects at my position at TEI.").
 		WithStatus(statusComplete).
-		WithSubjectMatters(smStructuralEngineering, smCivilEngineering) // TODO: ok?
+		WithSubjectMatters(smStructuralEngineering, smCivilEngineering)
 	taeProjects = taeProjects.
+		WithSummary("A catch-all for all projects at my position at Talley Associates of Engineering.").
 		WithStatus(statusComplete).
-		WithSubjectMatters(smStructuralEngineering, smCivilEngineering) // TODO: ok?
+		WithSubjectMatters(smStructuralEngineering, smCivilEngineering)
 	mafcProjects = mafcProjects.
+		WithSummary("Lifeguarding stuff, I guess.").
 		WithStatus(statusComplete).
-		WithSubjectMatters(smFirstAid) // TODO: ok?
+		WithSubjectMatters(smFirstAid)
 }
