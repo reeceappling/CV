@@ -80,6 +80,60 @@ func setupTechSubjectMatters() {
 	NewTechnology("Kubernetes").
 		WithSubjectMatters(smBackend, smDistributedComputing, smContainerization, smIAC, smCloudComputing, smNetworking)
 	// TODO: ansible? chef?
+	NewTechnology("RFID").
+		WithSubjectMatters(smRobotics, smEmbeddedSystems, smElectronics)
+	NewTechnology("NFC").
+		WithSubjectMatters(smRobotics, smEmbeddedSystems, smElectronics)
+	NewTechnology("I2C").
+		WithSubjectMatters(smRobotics, smEmbeddedSystems, smElectronics)
+	NewTechnology("SPI").
+		WithSubjectMatters(smRobotics, smEmbeddedSystems, smElectronics)
+	NewTechnology("Drupal").
+		WithSubjectMatters(smFrontend)
+	NewTechnology("React").
+		WithSubjectMatters(smFrontend)
+	NewTechnology("Quartz 4").
+		WithSubjectMatters(smFrontend)
+	NewTechnology("Quartz").
+		WithSubjectMatters(smFrontend)
+	NewTechnology("NextJs").
+		WithSubjectMatters(smFullStack)
+	NewTechnology("GraphQL").
+		WithSubjectMatters(smBackend, smNetworking)
+	NewTechnology("Obsidian").
+		WithSubjectMatters(smFrontend)
+	NewTechnology("SIMD").
+		WithSubjectMatters(smBackend, smRobotics, smEmbeddedSystems)
+	NewTechnology("Cloudflare Tunnels").
+		WithSubjectMatters(smNetworking)
+	NewTechnology("LocalStack").
+		WithSubjectMatters(smBackend, smCloudComputing, smNetworking)
+	NewTechnology("ElasticSearch").
+		WithSubjectMatters(smBackend)
+	NewTechnology("NodeJS").
+		WithSubjectMatters(smBackend)
+	NewTechnology("Markdown").
+		WithSubjectMatters(smObservability)
+	NewTechnology("Websockets").
+		WithSubjectMatters(smFullStack, smNetworking)
+	NewTechnology("Server-Sent Events").
+		WithSubjectMatters(smFullStack, smNetworking)
+	NewTechnology("SIMULATE3").
+		WithSubjectMatters(smNuclearEngineering, smParticlePhysics)
+	NewTechnology("CASMO4e").
+		WithSubjectMatters(smNuclearEngineering, smParticlePhysics)
+	NewTechnology("Pub-Sub").
+		WithSubjectMatters(smBackend, smNetworking)
+	NewTechnology("Git").
+		WithSubjectMatters(smFullStack, smDevOps)
+	NewTechnology("Webhooks").
+		WithSubjectMatters(smFullStack, smNetworking)
+	NewTechnology("JQuery").
+		WithSubjectMatters(smFrontend)
+	NewTechnology("Arduino").
+		WithSubjectMatters(smEmbeddedSystems, smElectronics, smRobotics)
+	NewTechnology("PWM").
+		WithSubjectMatters(smEmbeddedSystems, smElectronics, smRobotics)
 }
 
 // TODO: list all backlinks????

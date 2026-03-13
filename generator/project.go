@@ -827,10 +827,10 @@ func initProjectsFinal() {
 		WithLang("Javascript", Extensively).
 		WithLang("Docker", Often).
 		WithLang("Docker Compose", Often).
-		WithLang("Kubernetes", Some).
+		//WithLang("Kubernetes", Some). // TODO: lang or tech?
 		WithDbs("mongodb").
-		WithTechnologies("Github Actions", "React", "NextJs", "RFID", "NFC", "I2C", "SPI", "Cloudflare Tunnels", "Grafana").
-		WithPlatforms("Github", "Cloudflare").
+		WithTechnologies("Github Actions", "React", "NextJs", "RFID", "NFC", "I2C", "SPI", "Cloudflare Tunnels", "Kubernetes").
+		WithPlatforms("Github", "Cloudflare", "Grafana").
 		WithCloudProvider("GCP", "Google Cloud DNS", "Identity Platform").
 		WithSubjectMatters(smContainerization, smDistributedComputing, smMycology, smFullStack).
 		WithInterests(string(smMycology)).
@@ -843,13 +843,19 @@ func initProjectsFinal() {
 		WithLang("Javascript", Rarely).
 		WithLang("Html", Rarely).
 		WithLang("CSS", Rarely).
-		WithLang("SCSS", Rarely).
+		WithLang("SCSS", Rarely, smFrontend).
 		WithTechnologies("Github Actions", "Obsidian", "Markdown", "Quartz", "Quartz 4").
 		// TODO: add info to technologies????
 		WithPlatforms("Github").
 		WithCloudProvider("AWS", "S3", "IAM", "Cloudfront", "Cloudfront Functions", "ACM").
 		WithSubjectMatters(smCiCd, smFrontend). // TODO: ????
 		finalize()
+	linksPage = linksPage.
+		WithStatus(statusComplete).
+		WithLang("Html", Regularly).
+		WithLang("CSS", Some).
+		WithLang("Javascript", Rarely).
+		WithSubjectMatters(smFrontend)
 	measurementsProject = measurementsProject.WithStatus(statusShelved).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!
 		WithLang("Go", Extensively).
@@ -901,6 +907,7 @@ func initProjectsFinal() {
 		WithPlatforms("Gitlab").
 		WithCloudProvider("AWS",
 			"S3", "EC2", "IAM", "SecretsManager", "ECR", "Route53").
+		WithSubjectMatters(smBackend, smCiCd, smDevOps, smScripting).
 		WithInterests("Gaming").
 		finalize()
 	MastersDataAnalysisProject = MastersDataAnalysisProject.WithStatus(statusComplete).

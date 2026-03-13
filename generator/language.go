@@ -1,6 +1,7 @@
 package main
 
 import (
+	"appli.ng/cv/generator/utils"
 	"fmt"
 	"strings"
 )
@@ -107,12 +108,13 @@ func NewLanguage(name string) *LanguagePage {
 		panic("tried to create language twice: " + name)
 	}
 	out := &LanguagePage{
-		Name:      name,
-		Companies: map[string]*CompanyPage{},
-		Clients:   map[string]*Client{},
-		Projects:  map[string]Frequency{},
-		Schools:   map[string]*SchoolPage{},
-		Positions: map[string]*Position{},
+		Name:                name,
+		Companies:           map[string]*CompanyPage{},
+		Clients:             map[string]*Client{},
+		Projects:            map[string]Frequency{},
+		Schools:             map[string]*SchoolPage{},
+		Positions:           map[string]*Position{},
+		SubjectMattersField: SubjectMattersField{utils.Set[SubjectMatter]{}},
 	}
 	langs[name] = out
 	return out

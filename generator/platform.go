@@ -52,4 +52,10 @@ func setupPlatformSubjectMatters() {
 		WithSubjectMatters(smObservability)
 	NewPlatform("Prometheus").
 		WithSubjectMatters(smObservability)
+	NewPlatform("GraphQL Apollo").
+		WithSubjectMatters(smBackend, smNetworking)
+	NewPlatform("Cloudflare").
+		WithSubjectMatters(smBackend, smNetworking)
+	NewPlatform("Gitlab").
+		WithSubjectMatters(smCiCd)
 }

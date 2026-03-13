@@ -4,7 +4,7 @@ import "appli.ng/cv/generator/utils"
 
 type Tag string
 
-var tags utils.Set[Tag]
+var tags = utils.Set[Tag]{}
 
 func NewTag(name string) Tag {
 	out := Tag(name)
