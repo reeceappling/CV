@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-var subjectMatters map[SubjectMatter]map[string]utils.Set[string] = nil // Map of SM to map of linkType to []link
+var subjectMatters = map[SubjectMatter]map[string]utils.Set[string]{} // Map of SM to map of linkType to []link
 
 type SubjectMatter string
 
