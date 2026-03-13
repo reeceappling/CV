@@ -1,6 +1,7 @@
 package main
 
 import (
+	"appli.ng/cv/generator/utils"
 	"fmt"
 	"maps"
 	"strings"
@@ -14,6 +15,7 @@ type SchoolPage struct {
 	Degrees          []*Degree
 	Projects         []*Project
 	Extracurriculars []Extracurricular
+	SubjectMatters   utils.Set[SubjectMatter] // TODO: DISPLAY THIS???
 }
 
 func NewSchool(name string) *SchoolPage {
@@ -23,12 +25,26 @@ func NewSchool(name string) *SchoolPage {
 		Degrees:          []*Degree{},
 		Projects:         []*Project{},
 		Extracurriculars: []Extracurricular{},
+		SubjectMatters:   map[SubjectMatter]struct{}{},
 	}
 	schools[name] = out
 	return out
 }
 func (pg *SchoolPage) WithSummary(info string) *SchoolPage {
 	pg.Info = &info
+	return pg
+}
+func (pg *SchoolPage) WithSubjectMatters(sms ...SubjectMatter) *SchoolPage {
+	if pg == nil {
+		return pg
+	}
+	for _, sm := range sms {
+		if sm == smFullStack {
+			pg.SubjectMatters.Add(smFrontend, smBackend)
+		}
+		pg.SubjectMatters.Add(sm)
+	}
+
 	return pg
 }
 func (pg *SchoolPage) ProjectTypeInfo() projectTypeInfo {
@@ -39,11 +55,16 @@ func (pg *SchoolPage) Link() string {
 	if pg == nil {
 		return "NO_LINK"
 	}
-	return fmt.Sprintf("[%s](school/%s)", pg.Name, withoutSpaces(pg.Name))
+	return linkFor(pg.Name, "cv", "school", withoutSpaces(pg.Name))
+}
+
+func (pg *SchoolPage) EntryType() string {
+	return "School"
 }
 
 func (sp *SchoolPage) Bytes() []byte {
 	b := strings.Builder{}
+	b.WriteString(frontmatterFor(sp.Name, "School"))
 	// Write all degrees
 	b.WriteString("# Degrees\n")
 	for i, deg := range sp.Degrees {
@@ -56,7 +77,7 @@ func (sp *SchoolPage) Bytes() []byte {
 	// Write all projects
 	b.WriteString("# Projects\n")
 	for _, proj := range sp.Projects {
-		b.WriteString(fmt.Sprintf("- [%s](project/%s)\n", proj.Name, withoutSpaces(proj.Name)))
+		b.WriteString(fmt.Sprintf("- %s\n", proj.Link()))
 	}
 	// Write all extracurriculars
 	b.WriteString("# Extracurriculars and positions held\n")
@@ -69,6 +90,13 @@ func (sp *SchoolPage) Bytes() []byte {
 					b.WriteString(fmt.Sprintf(" - %s\n", pos.notes))
 				}
 			}
+		}
+	}
+	// SubjectMatters
+	if len(sp.SubjectMatters) > 0 {
+		b.WriteString("# Related Subject Matters\n")
+		for sm, _ := range sp.SubjectMatters {
+			b.WriteString(fmt.Sprintf("- %s\n", sm.Link()))
 		}
 	}
 
@@ -137,9 +165,10 @@ func NewEcPosition(title, notes string) EcPosition {
 
 var (
 	schoolCata = NewSchool("Central Academy of Technology and Arts").
-			WithSummary("Magnet High School, Engineering").
-			WithDegree(DegHS).
-			WithExtracurriculars(
+		WithSummary("Magnet High School, Engineering").
+		WithSubjectMatters(smEducation, smStatics, smElectronics).
+		WithDegree(DegHS).
+		WithExtracurriculars(
 			NewExtracurricular("Soccer", fixmeLink,
 				NewEcPosition("Varsity", "Sophomore-Senior year"),
 				NewEcPosition("Junior Varsity", "Freshman year"),
@@ -161,16 +190,16 @@ var (
 			NewExtracurricular("Beta club", fixmeLink),
 		)
 	schoolNCSU = NewSchool("North Carolina State University").
-			WithSummary("Undergraduate studies").
-			WithDegree(DegNE).
-			WithDegree(DegMath).
-			WithExtracurriculars(
+		WithSummary("Undergraduate studies").
+		WithDegree(DegNE).
+		WithDegree(DegMath).
+		WithSubjectMatters(smNuclearEngineering, smParticlePhysics, smFluidMechanics, smThermodynamics, smEducation, smStatics, smElectronics).
+		WithExtracurriculars(
 			NewExtracurricular("American Nuclear Society", fixmeLink),
 			NewExtracurricular("88.1 WKNC FM HD1 Raleigh", fixmeLink,
 				NewEcPosition("DJ", "Sophomore-Junior years"),
 			),
 			NewExtracurricular("Wolftrax music group", fixmeLink),
-			// TODO: others?
 		)
 )
 

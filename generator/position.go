@@ -15,20 +15,24 @@ type Position struct {
 	//Clients  []*Client // clients may contain projects which are outside of this position
 	Projects map[string]*Project
 	// Parent
-	company    *CompanyPage
-	miscSkills utils.Set[string]
-	// TODO: MISC SKILLS??????
+	company        *CompanyPage
+	miscSkills     utils.Set[string]        // TODO: MISC SKILLS??????
+	SubjectMatters utils.Set[SubjectMatter] // TODO: DISPLAY THIS??? // TODO: maybe dont have this on here
 }
 
-func (pg *Position) NameValue() string {
-	return pg.Name
+func (pg *Position) NameValue() string { // The name to be used on the link. NOT the URL
+	return pg.Name // TODO: or mapName?
+}
+
+func (pg *Position) EntryType() string {
+	return "Position"
 }
 
 func (pg *Position) Link() string {
 	if pg == nil {
 		return "NO_LINK"
 	}
-	return fmt.Sprintf("[%s](position/%s)", pg.Name, withoutSpaces(pg.MapName()))
+	return linkFor(pg.Name, "cv", "position", withoutSpaces(pg.MapName()))
 }
 func (pg *Position) WithMiscSkills(skills ...string) *Position {
 	if pg == nil {
@@ -43,6 +47,19 @@ func (pg *Position) WithMiscSkills(skills ...string) *Position {
 	}
 	return pg
 }
+func (pg *Position) WithSubjectMatters(sms ...SubjectMatter) *Position {
+	if pg == nil {
+		return pg
+	}
+	for _, sm := range sms {
+		if sm == smFullStack {
+			pg.SubjectMatters.Add(smFrontend, smBackend)
+		}
+		pg.SubjectMatters.Add(sm)
+	}
+
+	return pg
+}
 
 func NewPosition(name string, startMo, startYr int, endMo, endYr *int) *Position {
 	if _, exists := companies[name]; exists {
@@ -54,8 +71,9 @@ func NewPosition(name string, startMo, startYr int, endMo, endYr *int) *Position
 			Month: startMo,
 			Year:  startYr,
 		},
-		End:        nil,
-		miscSkills: map[string]struct{}{},
+		End:            nil,
+		miscSkills:     map[string]struct{}{},
+		SubjectMatters: map[SubjectMatter]struct{}{},
 	}
 	if endMo != nil && endYr != nil {
 		out.End = &monthYr{
@@ -69,10 +87,10 @@ func NewPosition(name string, startMo, startYr int, endMo, endYr *int) *Position
 
 func (pg *Position) Bytes() []byte {
 	builder := strings.Builder{}
-	// TODO: NAME
+	builder.WriteString(frontmatterFor(pg.Name))
 	// TODO: Start/end
 	// Company and clients
-	builder.WriteString(fmt.Sprintf("Company: [%s](company/%s)\n", pg.company.Name, withoutSpaces(pg.company.Name)))
+	builder.WriteString(fmt.Sprintf("Company: %s\n", pg.company.Link()))
 	if len(pg.Projects) > 0 {
 		builder.WriteString("# Clients and Projects\n")
 		builder.WriteString("Client | Project\n")
@@ -87,29 +105,23 @@ func (pg *Position) Bytes() []byte {
 	if len(pg.miscSkills) > 0 {
 		builder.WriteString("# Misc Skills\n")
 		for skill, _ := range pg.miscSkills {
-			builder.WriteString(fmt.Sprintf("- [%s](miscSkill/%s)\n", skill, withoutSpaces(skill))) // TODO: FIX ME!
+			builder.WriteString(fmt.Sprintf("- %s\n", miscSkills[skill].Link()))
+		}
+	}
+	// SubjectMatters
+	if len(pg.SubjectMatters) > 0 {
+		builder.WriteString("# Related Subject Matters\n")
+		for sm, _ := range pg.SubjectMatters {
+			builder.WriteString(fmt.Sprintf("- %s\n", sm.Link()))
 		}
 	}
 
-	//// Clients
-	//if len(pg.Projects) > 0 { // TODO: CLIENTS ARE CURRENTLY BROKEN
-	//
-	//	tempC := make([][]string, len(pg.Clients))
-	//	for i, cl := range pg.Clients {
-	//		tempC[i] = make([]string, len(cl.Projects)+1)
-	//		tempC[i][1] = fmt.Sprintf("- %s\n", cl.Link())
-	//		for _, pr := range cl.Projects {
-	//			builder.WriteString(fmt.Sprintf("%s | %s\n", cl.Link(), pr.Link()))
-	//		}
-	//	}
-	//
-	//}
 	// ALL LOWEST
 	builder.WriteString(bytesForAll(pg, false))
 	return []byte(builder.String())
 }
 
-// TODO: PROJECT GOES ON CLIENT AND POSITION!!!!! SHOULD GO ON CLIENT FIRST!!!!!
+// PROJECT GOES ON CLIENT AND POSITION. SHOULD GO ON CLIENT FIRST
 func (pg *Position) MapName() string {
 	if pg.company == nil {
 		panic("no company name!")
@@ -147,7 +159,6 @@ func (pg *Position) WithProjects(projs ...*Project) *Position {
 		}
 		pg.miscSkills.Add(proj.MiscSkills.AsSlice()...)
 	}
-	// TODO: put position on clients too?
 	return pg
 }
 
@@ -167,7 +178,7 @@ func initLowest() (outCaches map[string]*CachePage, outDbs map[string]*DbPage, o
 	outProviders = map[string]*CloudProviderPage{}
 	outServices = map[string]map[string]*CloudServicePage{}
 	outTechnologies = map[string]*TechologyPage{}
-	// TODO: MISC SKILLS
+	// TODO: MISC SKILLS?
 	return
 }
 
@@ -212,22 +223,27 @@ var (
 
 func initPositionsAfterProjects() {
 	// TODO: ANY MISC SKILLS
-	// TODO: BEFORE OR AFTER CLIENTS?
-	positionLifeguard = NewPosition("Lifeguard", 1, 2013, utils.Pointer(6), utils.Pointer(2014))                              // TODO: ensure dates are right
-	positionSeniorLifeguard = NewPosition("Senior Lifeguard", 6, 2014, utils.Pointer(8), utils.Pointer(2016))                 // TODO: ensure dates are right
+	positionLifeguard = NewPosition("Lifeguard", 1, 2013, utils.Pointer(6), utils.Pointer(2014)). // TODO: ensure dates are right
+													WithSubjectMatters(smFirstAid)
+	positionSeniorLifeguard = NewPosition("Senior Lifeguard", 6, 2014, utils.Pointer(8), utils.Pointer(2016)). // TODO: ensure dates are right
+															WithSubjectMatters(smFirstAid)
 	positionTAE = NewPosition("Civil Structural Engineer and Tower Climber", 5, 2017, utils.Pointer(3), utils.Pointer(2018)). // TODO: ensure dates are right
-																	WithMiscSkills("Excel", "Climbing Cell Towers")
-	positionTEI = NewPosition("Tower Climber", 1, 2019, utils.Pointer(3), utils.Pointer(2020)). // TODO: ensure dates are right
-													WithMiscSkills("Climbing Cell Towers")
+																	WithMiscSkills("Excel", "Climbing", "AutoDesk Inventor", "AutoCAD", "Autodesk Revit", "Drafting").
+																	WithSubjectMatters(smCivilEngineering, smStructuralEngineering, smStatics)
+	positionTEI = NewPosition("Cell Tower Inspector and Tower Climber", 1, 2019, utils.Pointer(3), utils.Pointer(2020)). // TODO: ensure dates are right
+																WithMiscSkills("Climbing", "Drafting").
+																WithSubjectMatters(smCivilEngineering, smStructuralEngineering, smStatics)
 	freelancePosition = NewPosition("Software Engineer", 1, 2012, utils.Pointer(5), utils.Pointer(2022)).
+		WithSubjectMatters(smFullStack).
 		WithProjects(WellAwareProject, CharityProject, CritColaProject, MastersDataAnalysisProject)
 	sai1 = NewPosition("Software Engineer", 5, 2022, utils.Pointer(6), utils.Pointer(2023)).
-		WithProjects(tileGenProject, renderProject, statsProject, explorerProject, wqdbProject, supportProject, scudsProject, ufoProject, goweProject, saiCollegeProject) // TODO: MOVE PROJECTS AROUND
+		WithSubjectMatters(smFullStack).
+		WithProjects(tileGenProject, renderProject, statsProject, explorerProject, wqdbProject, supportProject, scudsProject, ufoProject, goweProject, simpsonUnivProject) // TODO: MOVE PROJECTS AROUND
 	sai2 = NewPosition("Senior Software Engineer", 6, 2023, utils.Pointer(2), utils.Pointer(2025)).
-		WithProjects(polygonBuilderProject, GhaRunnersProject) // TODO: FIXME! polygonBuilder
+		WithSubjectMatters(smBackend).
+		WithProjects(polygonBuilderProject, GhaRunnersProject)
 	sai3 = NewPosition("Senior Software Engineer and Tech Lead", 2, 2025, nil, nil).
-		WithProjects(ogreProject, billingProject) // TODO: FIXME! OGRE/Billing builder
+		WithSubjectMatters(smBackend).
+		WithProjects(ogreProject, billingProject)
 
 }
-
-var ()

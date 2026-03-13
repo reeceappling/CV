@@ -1,6 +1,7 @@
 name: Build and Deploy
 run-name:  ${{ github.ref_name }} - "${{ github.event.head_commit.message }}"
 on:
+  # TODO: other environments?
   pull_request:
     paths:
       - 'generator/**'
@@ -13,13 +14,16 @@ on:
       - '.github/workflows/build**'
 
 env:
-  GLOBAL_PAT: ${{ secrets.CICD_TOKEN }} # Set PAT as a global environment variable
+  AWS_REGION: "us-east-2"
+  ACTIONS_STEP_DEBUG: true
+  TF_VAR_domain: appli.ng
+  TF_VAR_subdomain: reece
 
 permissions:
-  contents: write
-  actions: write
-#  pages: write
   id-token: write
+  contents: read
+  actions: write
+
 
 concurrency:
   group: "pages"
@@ -27,32 +31,32 @@ concurrency:
 
 jobs:
   generate-markdown:
-#    env:
-#      GH_TOKEN: ${{ secrets.CICD_TOKEN }}
     runs-on: ubuntu-22.04
     permissions:
+      id-token: write
       contents: write
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Fetch all history for git info # TODO: ok??? probably dont
-      - name: Fix workspace permissions
-        run: sudo chown -R $USER:$USER ${{ github.workspace }}
+          sparse-checkout: |
+            generator
+            go.mod
+            blogPosts
+            notes
       - uses: actions/setup-go@v6
         with:
           go-version-file: 'go.mod'
           # GitHub token for authentication
           token: ${{ github.token }}
-          cache: true
+          cache: false
           cache-dependency-path: 'go.sum'
-      - name: Make quartz dirs
-        run: mkdir -p ./quartz/content
-      - name: Create Generator
-        run: go build -o generate ./generator && chmod 777 generate
-      - name: Generate and fix permissions
-        run: sudo ./generate
-      - name: Fix permissions
-        run: sudo chown -R $USER:$USER . && chmod -R 777 ./quartz/content
+      - name: Generate files
+        run: |
+          sudo chown -R $USER:$USER ${{ github.workspace }}
+          mkdir -p ./quartz/content
+          sudo go run ./generator
+          sudo chown -R $USER:$USER .
+          chmod -R 777 ./quartz/content
       - uses: actions/upload-artifact@v4
         with:
           name: markdownFiles
@@ -71,18 +75,16 @@ jobs:
           # Optional. Default is 'false'
           include-hidden-files: false
 
-
   build-quartz:
     needs: [ generate-markdown ]
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Fetch all history for git info # TODO: likely no
-      - name: clone quartz
+          sparse-checkout: |
+            quartzModified
+      - name: Clone Quartz 4
         run: git clone https://github.com/jackyzha0/quartz.git
-#      - name: Fix permissions
-#        run: sudo chown -R $USER:$USER . && chmod -R 777 ./quartz
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -96,28 +98,34 @@ jobs:
       - uses: actions/download-artifact@v5
         with:
           name: markdownFiles
-          path: ./quartz/content # TODO: ensure ok
-#      - name: Install Dependencies
-#        run: npm ci # TODO: i?
+          path: ./quartz/content
+      - name: set modified quartz files at top level
+        run: |
+          rm -f quartz/quartz.layout.ts && mv quartzModified/quartz.layout.ts quartz/quartz.layout.ts
+          rm -f quartz/quartz.config.ts && mv quartzModified/quartz.config.ts quartz/quartz.config.ts
+      - name: set modified quartz files
+        run: |
+          (
+            cd quartzModified/quartz && find . -type f -print0
+          ) | while IFS= read -r -d '' file_relative_path; do
+            clean_path="${file_relative_path#./}"
+            echo "Replacing: quartz/quartz/$clean_path from quartzModified/quartz/$clean_path"
+            rm -f quartz/quartz/$clean_path && mv quartzModified/quartz/$clean_path quartz/quartz/$clean_path
+          done
       - name: Build Quartz
-        run: npx quartz build
+        run: npx --quiet quartz build
         working-directory: ./quartz
       - uses: actions/upload-artifact@v4
         with:
           name: finalFiles
           path: ./quartz/public
           if-no-files-found: error
-          retention-days: 1 # TODO: ok????
+          retention-days: 1
           # The level of compression for Zlib to be applied to the artifact archive.
           # The value can range from 0 to 9. Default is '6'
           compression-level: 6
           overwrite: true
           include-hidden-files: false
-#      - name: Upload artifact
-#        uses: actions/upload-pages-artifact@v3
-#        working-directory: ./quartz
-#        with:
-#          path: public
 
   deploy:
     needs: [build-quartz, generate-markdown]
@@ -125,16 +133,55 @@ jobs:
       always() && !cancelled()
       && (needs.generate-markdown.result == 'success')
       && needs.build-quartz.result == 'success'
-    environment:
-      # TODO: ANY ENV VARS TO PUT IT ON S3 or GHP?
-#      name: github-pages
-#      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      actions: write
     steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            terraform
+            static
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.14.6"
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v6.0.0
+        with:
+          role-to-assume: ${{ secrets.AWS_RUNNER_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+          role-session-name: reeceSubdomainDeployment
       - uses: actions/download-artifact@v5
         with:
           name: finalFiles
-          path: public # TODO: ensure ok
-#      - name: Deploy to GitHub Pages
-#        id: deployment
-#        uses: actions/deploy-pages@v4
+          path: terraform/public
+#      - name: clean out s3 bucket # Do not do this because it is more expensive
+#        run: aws s3 rm s3://${{ env.TF_VAR_subdomain }}.${{ env.TF_VAR_domain }} --recursive
+      - name: move static files
+        run: |
+          if test -d static; then
+            if [ -z "$(find ./static -maxdepth 0 -type d -empty)" ]; then
+              mv -f static/* terraform/public/static/
+            fi
+          fi
+      # TODO: ONLY REPLACE FILES THAT HAVE CHANGED!
+      - name: initialize terraform
+        run: terraform init -backend-config='bucket=${{ vars.TERRAFORM_STATE_BUCKET }}' -backend-config='region=${{ env.AWS_REGION }}'
+        working-directory: terraform
+      - name: plan terraform
+        run: terraform plan -var-file='deploy.tfvars' -var 'cloudflare_api_token=${{secrets.CLOUDFLARE_API_TOKEN}}' -var 'cloudflare_zone_id=${{secrets.CLOUDFLARE_ZONE_ID}}' -var 'aws_region=${{env.AWS_REGION}}' -out=plan.tf
+        working-directory: terraform
+      - name: apply terraform
+        run: terraform apply -auto-approve plan.tf
+        working-directory: terraform
+        #        env:
+        #          # TODO: set tf verbose if needed
+        #          TF_LOG: TRACE
+        #      - name: plan terraform destroy
+        #        run: terraform plan -destroy -var-file='deploy.tfvars' -var 'cloudflare_api_token=${{secrets.CLOUDFLARE_API_TOKEN}}' -var 'cloudflare_zone_id=${{secrets.CLOUDFLARE_ZONE_ID}}' -var 'aws_region=${{env.AWS_REGION}}' -out=plan.tf
+        #        working-directory: terraform
+        #      - name: apply terraform destroy
+        #        run: terraform apply -auto-approve -destroy plan.tf

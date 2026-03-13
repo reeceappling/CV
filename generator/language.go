@@ -1,6 +1,7 @@
 package main
 
 import (
+	"appli.ng/cv/generator/utils"
 	"fmt"
 	"strings"
 )
@@ -14,28 +15,42 @@ type LanguagePage struct {
 	Schools   map[string]*SchoolPage
 	Projects  map[string]Frequency
 	Positions map[string]*Position
-	// TODO: SUB-LANGUAGE ITEMS, like imports? libraries?
+	SubjectMattersField
+}
+
+func (pg *LanguagePage) EntryType() string {
+	return "Language"
+}
+
+func (pg *LanguagePage) WithSubjectMatters(sms ...SubjectMatter) *LanguagePage {
+	if pg == nil {
+		return nil
+	}
+	pg.SubjectMatters = withSubjectMatters(pg, pg.SubjectMatters, sms...)
+	return pg
 }
 
 func (pg *LanguagePage) Link() string {
 	if pg == nil {
 		return "NO_LINK"
 	}
-	return fmt.Sprintf("[%s](language/%s)", pg.Name, withoutSpaces(pg.Name))
+	return linkFor(pg.Name, "cv", "language", withoutSpaces(pg.Name))
 }
 
 func (pg *LanguagePage) Bytes() []byte {
 	builder := strings.Builder{}
+	builder.WriteString(frontmatterFor(pg.Name, "Language"))
 	if pg.Companies != nil && len(pg.Companies) > 0 {
 		builder.WriteString("# Companies\n")
 		for companyName := range pg.Companies {
-			builder.WriteString(fmt.Sprintf("- [%s](Company/%s)\n", companyName, withoutSpaces(companyName)))
+
+			builder.WriteString(fmt.Sprintf("- %s\n", companies[companyName].Link()))
 		}
 	}
 	if pg.Clients != nil && len(pg.Clients) > 0 {
 		builder.WriteString("# Clients\n")
 		for name := range pg.Clients {
-			builder.WriteString(fmt.Sprintf("- [%s](Client/%s)\n", name, withoutSpaces(name)))
+			builder.WriteString(fmt.Sprintf("- %s\n", clients[name].Link()))
 		}
 	}
 	if pg.Projects != nil && len(pg.Projects) > 0 {
@@ -65,7 +80,7 @@ func (pg *LanguagePage) Bytes() []byte {
 					panic("unknown project type: " + v)
 				}
 
-				builder.WriteString(fmt.Sprintf("[%s](project/%s) | %s | %s\n", name, withoutSpaces(name), Frequency(f).String(), projTypeStr))
+				builder.WriteString(fmt.Sprintf("%s | %s | %s\n", projects[name].Link(), Frequency(f).String(), projTypeStr))
 			}
 		}
 	}
@@ -93,12 +108,13 @@ func NewLanguage(name string) *LanguagePage {
 		panic("tried to create language twice: " + name)
 	}
 	out := &LanguagePage{
-		Name:      name,
-		Companies: map[string]*CompanyPage{},
-		Clients:   map[string]*Client{},
-		Projects:  map[string]Frequency{},
-		Schools:   map[string]*SchoolPage{},
-		Positions: map[string]*Position{},
+		Name:                name,
+		Companies:           map[string]*CompanyPage{},
+		Clients:             map[string]*Client{},
+		Projects:            map[string]Frequency{},
+		Schools:             map[string]*SchoolPage{},
+		Positions:           map[string]*Position{},
+		SubjectMattersField: SubjectMattersField{utils.Set[SubjectMatter]{}},
 	}
 	langs[name] = out
 	return out
@@ -123,4 +139,19 @@ func (lp *LanguagePage) AddCompany(comp *CompanyPage) *LanguagePage {
 func (lp *LanguagePage) AddPosition(pos *Position) *LanguagePage {
 	lp.Positions[pos.Name] = pos
 	return lp
+}
+
+func setupLanguageSubjectMatters() {
+	NewLanguage("Docker").
+		WithSubjectMatters(smContainerization)
+	NewLanguage("Docker Compose").
+		WithSubjectMatters(smContainerization)
+	NewLanguage("Terraform").
+		WithSubjectMatters(smIAC)
+	NewLanguage("Html").
+		WithSubjectMatters(smFrontend)
+	NewLanguage("CSS").
+		WithSubjectMatters(smFrontend)
+	NewLanguage("Javascript").
+		WithSubjectMatters(smFullStack)
 }

@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 var caches = map[string]*CachePage{}
 
 type CachePage struct {
@@ -13,7 +11,10 @@ func (pg *CachePage) Link() string {
 	if pg == nil {
 		return "NO_LINK"
 	}
-	return fmt.Sprintf("[%s](cache/%s)", pg.Name, withoutSpaces(pg.Name))
+	return linkFor(pg.Name, "cv", "cache", withoutSpaces(pg.Name))
+}
+func (pg *CachePage) EntryType() string {
+	return "Cache"
 }
 
 func NewCache(name string) *CachePage {

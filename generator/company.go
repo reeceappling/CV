@@ -11,6 +11,14 @@ import (
 var companies = map[string]*CompanyPage{}
 var companiesOrder = []string{}
 
+type dayMonthYr struct {
+	Month, Day, Year int
+}
+
+func NewPostDate(month, day, year int) *dayMonthYr {
+	return &dayMonthYr{month, day, year}
+}
+
 type monthYr struct {
 	Month int
 	Year  int
@@ -23,12 +31,12 @@ func (m *monthYr) String() string {
 	return fmt.Sprintf("%d-%d", m.Month, m.Year)
 }
 
-type CompanyPage struct { // TODO: USE
+type CompanyPage struct {
 	Name      string
-	Positions []*Position // TODO: NEW!!!!!
+	Positions []*Position
 	Start     monthYr
 	End       *monthYr // None == current
-	//Clients   []*Client // TODO: LIKELY REMOVE?
+	//Clients   []*Client // resolved later
 	//Projects  []string // Resolved from clients
 	//Languages []string // Calculated later
 }
@@ -41,7 +49,10 @@ func (pg *CompanyPage) Link() string {
 	if pg == nil {
 		return "NO_LINK"
 	}
-	return fmt.Sprintf("[%s](company/%s)", pg.Name, withoutSpaces(pg.Name))
+	return linkFor(pg.Name, "cv", "company", withoutSpaces(pg.Name))
+}
+func (pg *CompanyPage) EntryType() string {
+	return "Company"
 }
 
 func NewCompany(name string, startMo, startYr int, endMo, endYr *int) *CompanyPage {
@@ -70,12 +81,14 @@ func NewCompany(name string, startMo, startYr int, endMo, endYr *int) *CompanyPa
 
 func (pg *CompanyPage) Bytes() []byte {
 	builder := strings.Builder{}
+	builder.WriteString(frontmatterFor(pg.Name, "Company"))
 	if pg.Positions != nil && len(pg.Positions) > 0 {
 		builder.WriteString("# Positions\n")
 		for _, pos := range pg.Positions {
 			// TODO: NOT PROPERLY SORTED
 			// TODO: ORDERING?
-			builder.WriteString(fmt.Sprintf("- [%s](position/%s)\n", pos.Name, withoutSpaces(pos.MapName())))
+			// TODO: POS NOT WORKING ON DEERE CLIENT PAGE
+			builder.WriteString(fmt.Sprintf("- %s\n", pos.Link()))
 		}
 	}
 	clis := pg.Clients()
@@ -83,7 +96,7 @@ func (pg *CompanyPage) Bytes() []byte {
 	if clis != nil && len(clis) > 0 {
 		builder.WriteString("# Clients\n")
 		for _, client := range clis {
-			builder.WriteString(fmt.Sprintf("- [%s](client/%s)\n", client.Name, withoutSpaces(client.Name)))
+			builder.WriteString(fmt.Sprintf("- %s\n", client.Link()))
 		}
 	}
 	// resolve projects
@@ -91,7 +104,7 @@ func (pg *CompanyPage) Bytes() []byte {
 	if len(ps) > 0 {
 		builder.WriteString("# Projects\n")
 		for _, proj := range ps {
-			builder.WriteString(fmt.Sprintf("- [%s](project/%s)\n", proj.Name, withoutSpaces(proj.Name)))
+			builder.WriteString(fmt.Sprintf("- %s\n", proj.Link()))
 		}
 	}
 	// Resolve languages
@@ -109,7 +122,7 @@ func (pg *CompanyPage) Bytes() []byte {
 		}
 		for f := 5; f >= 0; f-- {
 			for _, name := range freqs[Frequency(f)] {
-				builder.WriteString(fmt.Sprintf("- [%s](language/%s)\n", name, withoutSpaces(name)))
+				builder.WriteString(fmt.Sprintf("- %s\n", langs[name].Link()))
 			}
 		}
 	}
@@ -120,7 +133,6 @@ func (pg *CompanyPage) Bytes() []byte {
 
 func (c *CompanyPage) WithPositions(positions ...*Position) *CompanyPage {
 	for _, position := range slices.Backward(positions) {
-		// TODO: ADD COMPANY TO SUB-ITEMS!!!!
 		c.Positions = append(c.Positions, position) // TODO: ensure no double-add
 		position.company = c
 		for _, proj := range position.Projects { // TODO: ENSURE WORKS
@@ -152,7 +164,6 @@ func (c *CompanyPage) WithPositions(positions ...*Position) *CompanyPage {
 			val.AddCompany(c)
 		}
 	}
-	// TODO: add company to languages? Dbs? caches? providers? services? etc?
 	return c
 }
 
