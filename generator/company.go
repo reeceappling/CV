@@ -51,6 +51,9 @@ func (pg *CompanyPage) Link() string {
 	}
 	return linkFor(pg.Name, "cv", "company", withoutSpaces(pg.Name))
 }
+func (pg *CompanyPage) EntryType() string {
+	return "Company"
+}
 
 func NewCompany(name string, startMo, startYr int, endMo, endYr *int) *CompanyPage {
 	if _, exists := companies[name]; exists {
@@ -130,7 +133,6 @@ func (pg *CompanyPage) Bytes() []byte {
 
 func (c *CompanyPage) WithPositions(positions ...*Position) *CompanyPage {
 	for _, position := range slices.Backward(positions) {
-		// TODO: ADD COMPANY TO SUB-ITEMS!!!!
 		c.Positions = append(c.Positions, position) // TODO: ensure no double-add
 		position.company = c
 		for _, proj := range position.Projects { // TODO: ENSURE WORKS
@@ -162,7 +164,6 @@ func (c *CompanyPage) WithPositions(positions ...*Position) *CompanyPage {
 			val.AddCompany(c)
 		}
 	}
-	// TODO: add company to languages? Dbs? caches? providers? services? etc?
 	return c
 }
 

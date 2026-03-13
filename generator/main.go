@@ -9,6 +9,7 @@ import (
 	"strings"
 )
 
+// TODO: LAYOUT
 // TODO: remove "Aug 23, 2023 2 min read" at top of each page
 // TODO: fix this link: https://reece.appli.ng/cv/language/
 // TODO: add resume
@@ -30,6 +31,9 @@ func main() {
 		}
 	}
 
+	setupSubjectMatters()
+	// Initialize low-level things with subject matters
+
 	// Create data structures representing the content of the pages to write
 	// initSchools() // Done outside of init
 	// initClientsFirst() // Done in vars
@@ -38,6 +42,8 @@ func main() {
 	initClientsAfterProjectsComplete() // Sets client on projects as well
 	initPositionsAfterProjects()
 	initCompaniesAfterPositions() // Must be done after positions and project setup, but before projects pages. What about clients?
+
+	// TODO: POPULATE SUBJECT MATTERS ON TECHS, SERVICES, MISCSKILLS?
 
 	// Start creating actual pages
 	createLanguagesPages()
@@ -168,7 +174,9 @@ func createMainCVPage() { // TODO: TAGS EVERYWHERE????
 	b.WriteString("# Technologies and Libraries\n[Full Page](technologies.md)\n\n") // TODO: why does this take 2 newlines??
 	b.WriteString(alphabetizedLinksCompressed(techs, "technology"))                 // TODO: dir correct?
 
-	b.WriteString("## Containerization and Distributed Computing\n\n") // TODO: why does this take 2 newlines??
+	b.WriteString("## Containerization\n\n")      // TODO: why does this take 2 newlines??
+	b.WriteString("## Distributed Computing\n\n") // TODO: why does this take 2 newlines??
+
 	// TODO: POPULATE THIS AREA!!!!!!!!!!!!!
 
 	b.WriteString("# Platforms\n[Full Page](platforms.md)\n\n") // TODO: why does this take 2 newlines??
@@ -188,13 +196,14 @@ func createMainCVPage() { // TODO: TAGS EVERYWHERE????
 
 	b.WriteString("# Observability and Monitoring\n")
 	b.WriteString("## Observability\n")
+	// TODO: loop through all to find observability instead of doing it this way???
 	observabilityThings := map[string]string{
 		"Cloudwatch": "service",  // TODO: ok?
 		"Datadog":    "platform", // TODO: ok?
 		"Grafana":    "platform", // TODO: ok?
 		"Prometheus": "platform", // TODO: ok?
 		"ServiceNow": "platform", // TODO: ok?
-		// TODO: Elastic/Elasticsearch
+		// TODO: Elastic/Elasticsearch somewhere
 	}
 	tempObs := make([]string, len(observabilityThings))
 	for i, key := range slices.Collect(maps.Keys(observabilityThings)) {
@@ -224,7 +233,7 @@ func createMainCVPage() { // TODO: TAGS EVERYWHERE????
 		b.WriteString(fmt.Sprintf("- %s\n", linkForInterest(name)))
 	}
 	b.WriteString("# Subject Matters\n")
-	alphabetizedSms := subjectMatters.AsSlice()
+	alphabetizedSms := slices.Collect(maps.Keys(subjectMatters))
 	sort.Slice(alphabetizedSms, func(i, j int) bool { // TODO: ok????
 		return string(alphabetizedSms[i]) < string(alphabetizedSms[j])
 	})
@@ -251,12 +260,20 @@ func createLanguagesPages() {
 	}
 	b.WriteString("# All\n")
 	b.WriteString("[see all languages](language/)\n") // TODO: delete?
+	for _, lang := range langs {
+		if len(lang.SubjectMatters) == 0 {
+			panic("lang " + lang.Name + "has no subject matters")
+		}
+	}
 	b.WriteString(alphabetizedLinks(langs, "language"))
 	WriteCVFile("Languages.md", b.String())
 	if len(langs) > 0 {
 		MakeCVDir("language")
 	}
 	for name, lang := range langs {
+		if len(lang.SubjectMatters) == 0 {
+			panic("no subject matter on language " + name)
+		}
 		WriteCVFile("language/"+withoutSpaces(name)+".md", string(lang.Bytes()))
 	}
 }
@@ -304,6 +321,9 @@ func createProjectsPages() {
 		MakeCVDir("project")
 	}
 	for name, item := range projects {
+		if len(item.SubjectMatters) == 0 {
+			panic("no subject matter on project " + name)
+		}
 		WriteCVFile("project/"+withoutSpaces(name)+".md", string(item.Bytes()))
 	}
 }
@@ -336,6 +356,9 @@ func createSchoolsPages() {
 	}
 	// Write page for each school
 	for name, item := range schools {
+		if len(item.SubjectMatters) == 0 {
+			panic("no subject matter on school " + name)
+		}
 		WriteCVFile("school/"+withoutSpaces(name)+".md", string(item.Bytes()))
 	}
 }
@@ -383,6 +406,9 @@ func createPositionsPages() {
 		MakeCVDir("position")
 	}
 	for name, item := range positionsMap {
+		if len(item.SubjectMatters) == 0 {
+			panic("no subject matter on position " + name)
+		}
 		WriteCVFile("position/"+withoutSpaces(name)+".md", string(item.Bytes()))
 	}
 }
@@ -461,6 +487,9 @@ func createPlatformsPages() {
 		}
 	}
 	for name, platform := range platforms {
+		if len(platform.SubjectMatters) == 0 {
+			panic("no subject matter on platform " + name)
+		}
 		WriteCVFile("platform/"+withoutSpaces(name)+".md", string(platform.Bytes(name, "Platform")))
 	}
 }
@@ -582,6 +611,9 @@ func createTechnologiesPages() {
 		}
 	}
 	for name, tech := range techs {
+		if len(tech.SubjectMatters) == 0 {
+			panic("no subject matter on technology " + name)
+		}
 		WriteCVFile("technology/"+withoutSpaces(name)+".md", string(tech.Bytes(name, "Technology")))
 	}
 }
@@ -634,7 +666,7 @@ func createSubjectMatterPages() {
 	// TODO; THIS!!!!
 	b := strings.Builder{}
 	b.WriteString(frontmatterFor("Subject Matters"))
-	alphabetizedSms := subjectMatters.AsSlice()
+	alphabetizedSms := slices.Collect(maps.Keys(subjectMatters))
 	sort.Slice(alphabetizedSms, func(i, j int) bool { // TODO: ok????
 		return string(alphabetizedSms[i]) < string(alphabetizedSms[j])
 	})

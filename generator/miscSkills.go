@@ -11,7 +11,11 @@ func (pg *MiscSkill) Link() string {
 	if pg == nil {
 		return "NO_LINK"
 	}
-	return linkFor(pg.Name, "cv", "miscSkills", withoutSpaces(pg.Name)) // TODO: plural??
+	return linkFor(pg.Name, "cv", "miscSkill", withoutSpaces(pg.Name)) // TODO: plural??
+}
+
+func (pg *MiscSkill) EntryType() string {
+	return "Misc Skill"
 }
 
 func NewSkill(name string) *MiscSkill {

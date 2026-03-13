@@ -16,6 +16,10 @@ func NewInterest(name string) *Interest {
 	return out
 }
 
+func (pg *Interest) EntryType() string {
+	return "Interest"
+}
+
 func (i *Interest) Link() string {
 	return linkForInterest(i.Name)
 }
@@ -25,7 +29,9 @@ func linkForInterest(name string) string {
 }
 
 var (
-// intMycology *Interest = NewInterest(string(smMycology)) // TODO: DEL?
-// intCryptocurrency *Interest = NewInterest(string(smCryptocurrency))
-// intCryptography *Interest = NewInterest(string(smCryptography))
+//	intMycology = NewInterest(string(
+//
+// smMycology)). // TODO: DEL?
+// intCryptocurrency NewInterest(string(smCryptocurrency))
+// intCryptography NewInterest(string(smCryptography))
 )

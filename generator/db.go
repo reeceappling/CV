@@ -14,11 +14,29 @@ func (pg *DbPage) Link() string {
 	return linkFor(pg.Name, "cv", "db", withoutSpaces(pg.Name))
 }
 
+func (pg *DbPage) EntryType() string {
+	return "Database"
+}
+
 func NewDb(name string) *DbPage {
 	out := &DbPage{
 		Name:    name,
 		tracked: newTracked(),
 	}
+	//if slices.Contains([]string{"Aurora","RDS","DynamoDB","DocumentDB"}, name) {
+	//	out.EquivalentLink = cloudServices[name].Link() // TODO: ?????????
+	//}
 	dbs[name] = out
 	return out
 }
+
+//
+//func dbIsOfAnotherType(dbName string) (bool, string){ // TODO: USE THIS?!
+//	otherType, isDiff := map[string]string{
+//		"Aurora": "Cloud Service",
+//		"DynamoDB": "Cloud Service",
+//		"DocumentDB": "Cloud Service",
+//		"RDS": "Cloud Service",
+//	}[dbName]
+//	return isDiff, otherType
+//}

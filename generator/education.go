@@ -58,6 +58,10 @@ func (pg *SchoolPage) Link() string {
 	return linkFor(pg.Name, "cv", "school", withoutSpaces(pg.Name))
 }
 
+func (pg *SchoolPage) EntryType() string {
+	return "School"
+}
+
 func (sp *SchoolPage) Bytes() []byte {
 	b := strings.Builder{}
 	b.WriteString(frontmatterFor(sp.Name, "School"))
@@ -161,9 +165,10 @@ func NewEcPosition(title, notes string) EcPosition {
 
 var (
 	schoolCata = NewSchool("Central Academy of Technology and Arts").
-			WithSummary("Magnet High School, Engineering").
-			WithDegree(DegHS).
-			WithExtracurriculars(
+		WithSummary("Magnet High School, Engineering").
+		WithSubjectMatters(smEducation, smStatics, smElectronics).
+		WithDegree(DegHS).
+		WithExtracurriculars(
 			NewExtracurricular("Soccer", fixmeLink,
 				NewEcPosition("Varsity", "Sophomore-Senior year"),
 				NewEcPosition("Junior Varsity", "Freshman year"),
@@ -185,17 +190,16 @@ var (
 			NewExtracurricular("Beta club", fixmeLink),
 		)
 	schoolNCSU = NewSchool("North Carolina State University").
-			WithSubjectMatters(smNuclearEngineering, smParticlePhysics, smFluidMechanics, smThermodynamics).
-			WithSummary("Undergraduate studies").
-			WithDegree(DegNE).
-			WithDegree(DegMath).
-			WithExtracurriculars(
+		WithSummary("Undergraduate studies").
+		WithDegree(DegNE).
+		WithDegree(DegMath).
+		WithSubjectMatters(smNuclearEngineering, smParticlePhysics, smFluidMechanics, smThermodynamics, smEducation, smStatics, smElectronics).
+		WithExtracurriculars(
 			NewExtracurricular("American Nuclear Society", fixmeLink),
 			NewExtracurricular("88.1 WKNC FM HD1 Raleigh", fixmeLink,
 				NewEcPosition("DJ", "Sophomore-Junior years"),
 			),
 			NewExtracurricular("Wolftrax music group", fixmeLink),
-			// TODO: others?
 		)
 )
 

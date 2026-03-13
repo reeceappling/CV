@@ -35,6 +35,9 @@ func (pg *Client) Link() string {
 	}
 	return linkFor(pg.Name, "cv", "client", withoutSpaces(pg.Name))
 }
+func (pg *Client) EntryType() string {
+	return "Client"
+}
 
 func NewClient(name string, info ...string) *Client {
 	out := &Client{Name: name, Projects: []*Project{}, Info: nil, projectsSet: utils.Set[string]{}}
@@ -199,9 +202,9 @@ func initClientsAfterProjectsComplete() {
 	wellAwareClient = wellAwareClient.WithProjects(WellAwareProject)
 	clarkClient = clarkClient.WithProjects(MastersDataAnalysisProject)
 	charityClient = charityClient.WithProjects(CharityProject)
-	//teiClient = NewClient("TEI") // TODO: add projects (like NM, TX, IA, NC?)
-	//taeClient = NewClient("Talley Associates of Engineering") // TODO: JS photo parser
-	//mafcClient = NewClient("Monroe Aquatics and Fitness Center") // TODO: Indoor and outdoor pool?
+	teiClient = teiClient.WithProjects(teiProjects)    // TODO: add projects (like NM, TX, IA, NC?)
+	taeClient = taeClient.WithProjects(taeProjects)    // TODO: JS photo parser
+	mafcClient = mafcClient.WithProjects(mafcProjects) // TODO: Indoor and outdoor pool?
 }
 
 var ()

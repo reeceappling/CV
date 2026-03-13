@@ -1,6 +1,7 @@
 package main
 
 import (
+	"appli.ng/cv/generator/utils"
 	"fmt"
 	"maps"
 	"os"
@@ -9,6 +10,21 @@ import (
 	"strconv"
 	"strings"
 )
+
+func frontmatterFor(title string, tags ...string) string {
+	b := strings.Builder{}
+	b.WriteString("---\n")
+	b.WriteString("title: " + title + "\n")
+	b.WriteString("draft: false\n")
+	if len(tags) > 0 {
+		b.WriteString("tags:\n")
+		for _, tag := range tags {
+			b.WriteString("  - " + tag + "\n")
+		}
+	}
+	b.WriteString("---\n")
+	return b.String()
+}
 
 const fixmeLink = "[FIX ME](error.md)"
 
@@ -110,7 +126,17 @@ type tracked struct {
 	Clients   map[string]*Client
 	Schools   map[string]*SchoolPage
 	Projects  map[string]*Project
+	Tags      utils.Set[string]
 }
+
+//type trackable interface {
+//	Bytes(title string, typ string) []byte
+//	AddClient(client *Client)
+//	AddProject(proj *Project)
+//	AddPosition(pos *Position)
+//	AddCompany(comp *CompanyPage)
+//	String() string
+//}
 
 func newTracked() *tracked {
 	return &tracked{
@@ -119,6 +145,7 @@ func newTracked() *tracked {
 		Clients:   map[string]*Client{},
 		Schools:   map[string]*SchoolPage{},
 		Projects:  map[string]*Project{},
+		Tags:      utils.Set[string]{},
 	}
 }
 func (pg *tracked) Bytes(title string, typ string) []byte {
@@ -167,7 +194,7 @@ func (pg *tracked) AddProject(proj *Project) {
 }
 
 func (pg *tracked) AddPosition(pos *Position) {
-	pg.Positions[pos.Name] = pos // TODO: or mapName?
+	pg.Positions[pos.Name] = pos
 }
 func (pg *tracked) AddCompany(comp *CompanyPage) {
 	pg.Companies[comp.Name] = comp
@@ -279,5 +306,6 @@ func FrequencyFromString(s string) Frequency {
 }
 
 type Linkable interface { // TODO: use???
+	EntryType() string
 	Link() string
 }

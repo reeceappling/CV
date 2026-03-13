@@ -1,6 +1,7 @@
 package main
 
 import (
+	"appli.ng/cv/generator/utils"
 	"fmt"
 	"strings"
 )
@@ -23,10 +24,11 @@ func init() {
 	//	"VPC", "VPC Lattice", "VPN")
 }
 
-type CloudProviderPage struct { // TODO: USE
+type CloudProviderPage struct {
 	Name string
 	*tracked
 	Services map[string]*CloudServicePage
+	SubjectMattersField
 }
 
 // TODO: Bytes() for cloud provider that also uses Services!
@@ -46,6 +48,9 @@ func (pg *CloudProviderPage) Link() string {
 		return "NO_LINK"
 	}
 	return linkFor(pg.Name, "cv", "provider", withoutSpaces(pg.Name))
+}
+func (pg *CloudProviderPage) EntryType() string {
+	return "Cloud Provider"
 }
 
 func NewCloudProvider(name string, services ...string) *CloudProviderPage {
@@ -68,7 +73,11 @@ func NewCloudProvider(name string, services ...string) *CloudProviderPage {
 		Name:     name,
 		tracked:  newTracked(),
 		Services: svcs,
+		SubjectMattersField: SubjectMattersField{
+			SubjectMatters: utils.SetFrom(smCloudComputing),
+		},
 	}
+	subjectMatters[smCloudComputing][prov.EntryType()].Add() // TODO: ok?
 	providers[name] = prov
 	return prov
 }
@@ -78,8 +87,9 @@ func (pg *CloudProviderPage) AddServices(services ...*CloudServicePage) *CloudPr
 		svc, exists := pg.Services[serv.Name]
 		if !exists {
 			svc = &CloudServicePage{
-				Name:    serv.Name,
-				tracked: newTracked(),
+				Name:                serv.Name,
+				tracked:             newTracked(),
+				SubjectMattersField: SubjectMattersField{SubjectMatters: map[SubjectMatter]struct{}{}},
 			}
 		}
 		pg.Services[serv.Name] = svc
@@ -98,5 +108,3 @@ func (pg *CloudProviderPage) AddServicesByName(services ...string) []*CloudServi
 	}
 	return out
 }
-
-// TODO: OUTPUT!

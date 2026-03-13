@@ -126,13 +126,13 @@ type Project struct {
 	Dbs            utils.Set[string]
 	Caches         utils.Set[string]
 	CloudProviders map[string]utils.Set[string]
-	// TODO: CI/CD? IAC?
-	Technologies utils.Set[string]
-	Platforms    utils.Set[string]
-	MiscSkills   utils.Set[string]
+	Technologies   utils.Set[string]
+	Platforms      utils.Set[string]
+	MiscSkills     utils.Set[string]
 	// TODO: MORE!
 	RelatedInterests utils.Set[string]
 	SubjectMatters   utils.Set[SubjectMatter]
+	Tags             utils.Set[Tag]
 }
 
 func (pg *Project) NameValue() string {
@@ -199,6 +199,10 @@ func (pg *Project) Company() *CompanyPage {
 		return nil
 	}
 	return cli.company
+}
+
+func (pg *Project) EntryType() string {
+	return "Project"
 }
 
 func (pg *Project) Bytes() []byte {
@@ -327,12 +331,13 @@ func (p *Project) finalize() *Project {
 	return p
 }
 
-func (p *Project) WithLang(lang string, freq Frequency) *Project {
+func (p *Project) WithLang(lang string, freq Frequency, sms ...SubjectMatter) *Project {
 	l, exists := langs[lang]
 	if !exists {
 		l = NewLanguage(lang)
 		langs[lang] = l
 	}
+	l.WithSubjectMatters(sms...)
 	// Assert not already existing
 	if _, exists = p.Languages[lang]; exists {
 		panic(lang + " already exists on proj " + p.Name)
@@ -397,6 +402,7 @@ func (p *Project) WithCloudProvider(name string, services ...string) *Project {
 	return p
 }
 func (p *Project) WithDbs(names ...string) *Project {
+	// TODO: Aurora, DynamoDB, DocumentDB, RDS should all point to the AWS service!!!!??? (probably not)
 	for _, dbName := range names {
 		if !p.Dbs.Contains(dbName) {
 			p.Dbs.Add(dbName)
@@ -433,6 +439,10 @@ func (p *Project) WithTechnologies(names ...string) *Project {
 		}
 		temp.AddProject(p)
 	}
+	return p
+}
+func (p *Project) WithTags(tags ...Tag) *Project {
+	p.Tags.Add(tags...)
 	return p
 }
 func (p *Project) WithPlatforms(names ...string) *Project {
@@ -518,6 +528,7 @@ func newProject(name string, summary string, info projectTypeInfo, link *string)
 		Platforms:        utils.Set[string]{},
 		SubjectMatters:   map[SubjectMatter]struct{}{},
 		RelatedInterests: map[string]struct{}{},
+		Tags:             utils.Set[Tag]{},
 	}
 	if _, exists := projects[name]; exists {
 		panic("project already exists")
@@ -559,10 +570,13 @@ var (
 	linksPage                  = NewPersonalProject("Personal Links Page", "A page to put all my links", nil) // TODO: LINKS PAGE
 	measurementsProject        = NewPersonalProject("Measurements", fixmeLink, &measurementsUrl)
 	nfcScannerProject          = NewPersonalProject("Nfc Scanner", fixmeLink, &nfcScannerUrl)
+	teiProjects                = NewProfessionalProject("Tei Projects", fixmeLink, teiClient, nil)   // TODO: maybe add an actual project
+	taeProjects                = NewProfessionalProject("Tae Projects", fixmeLink, taeClient, nil)   // TODO: maybe add actual projects?
+	mafcProjects               = NewProfessionalProject("Mafc Projects", fixmeLink, mafcClient, nil) // TODO: maybe add actual projects?
 	coreShufflerProject        = NewPersonalProject("Simulate Core Shuffler", fixmeLink, &coreShufflerUrl)
 	CharityProject             = NewProfessionalProject("Charity Site", fixmeLink, charityClient, nil)
 	WellAwareProject           = NewProfessionalProject("Well Aware NC", fixmeLink, clarkClient, nil) // TODO: change client to the lab???
-	CritColaProject            = NewProfessionalProject("CritCola", fixmeLink, critColaClient, nil)
+	CritColaProject            = NewProfessionalProject("CritCola", fixmeLink, critColaClient, nil)   // TODO: ADD OTHER CRITCOLA PROJECTS
 	MastersDataAnalysisProject = NewProfessionalProject("Masters Data Analysis", fixmeLink, clarkClient, nil)
 	capstoneProject            = NewSchoolProject("Capstone Project-Uranium Silicide Accident Tolerant Fuel cycle design for Duke Energy Catawba Nuclear Plant", "FIX M_E", schoolNCSU, &coreShufflerUrl)
 	projectLinAlgCryptography  = NewSchoolProject("Linear algebra cryptography algorithm", "FIX M_E", schoolNCSU, nil)
@@ -576,26 +590,27 @@ var (
 func initProjectsFinal() {
 	projectAgentSwarm = projectAgentSwarm.WithStatus(statusMaintaining).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!
-		WithLang("Go", Extensively).
+		WithLang("Go", Extensively, smBackend).
 		WithInterests("Agentic AI", "Agent Swarms"). // TODO: any more?
 		WithPlatforms("Poolside AI").
 		WithTechnologies("LangGraph", "LangChain", "LLM", "AI", "AI Agents", "OpenAI API spec").
 		WithSubjectMatters(smAI, smBackend).
+		//WithTags(tagAI, tagBackend).
 		finalize()
 	polygonBuilderProject = polygonBuilderProject.WithStatus(statusMaintaining).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!
-		WithLang("Go", Extensively).
-		WithLang("Scala", Often).
-		WithLang("Terraform", Regularly).
-		WithLang("Docker", Regularly).
-		WithLang("Java", Some).
-		WithLang("Bash", Some).
-		WithLang("C", Some).
-		WithLang("Cpp", Some).
-		WithLang("SQL", Some).
-		WithLang("Javascript", Rarely).
-		WithLang("Python", Rarely).
-		WithLang("Rust", Minimal).
+		WithLang("Go", Extensively, smBackend, smScripting).
+		WithLang("Scala", Often, smBackend).
+		WithLang("Terraform", Regularly, smIAC).
+		WithLang("Docker", Regularly, smContainerization).
+		WithLang("Java", Some, smBackend).
+		WithLang("Bash", Some, smScripting).
+		WithLang("C", Some, smBackend).
+		WithLang("Cpp", Some, smBackend).
+		WithLang("SQL", Some, smBackend).
+		WithLang("Javascript", Rarely, smFullStack).
+		WithLang("Python", Rarely, smScripting).
+		WithLang("Rust", Minimal, smScripting).
 		WithCloudProvider("AWS",
 			"ECS", "S3", "EC2", "IAM", "SecretsManager", "DynamoDB", "DAX", "Cloudwatch", "Lambda", "ECR", "Route53", "Kinesis", "SQS", "SNS", "ApiGateway", // TODO: FARGATE NOT BEING ON THIS LIST IS CAUSING PROBLEMS
 		).
@@ -604,6 +619,7 @@ func initProjectsFinal() {
 		WithTechnologies("Github Actions", "Parquet", "Avro").
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow").
 		WithSubjectMatters(smBackend, smTopology, smLinearAlgebra, smClusterComputing, smDistributedComputing, smContainerization, smIAC, smCiCd).
+		//WithTags(tagBackend, tagTopology, tagLinearAlgebra, tagClusterComputing, tagDistributedComputing, tagContainerization, tagIAC, tagCiCd)
 		finalize()
 	tileGenProject = tileGenProject.WithStatus(statusMaintaining).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!
@@ -616,8 +632,8 @@ func initProjectsFinal() {
 			"ECS", "S3", "EC2", "IAM", "SecretsManager", "DynamoDB", "DAX", "Cloudwatch", "Lambda", "ECR", "Route53", "Kinesis", "SQS", "SNS", "ApiGateway",
 		).
 		WithDbs("DynamoDB", "Postgres").
-		WithCaches("Redis", "memcached", "DAX").
-		WithTechnologies("CUDA", "Github Actions", "Parquet", "Avro", "LocalStack").
+		WithCaches("Redis", "memcached", "DAX").                                     // TODO: DAX link from cache or provider page?
+		WithTechnologies("CUDA", "Github Actions", "Parquet", "Avro", "LocalStack"). // TODO: parquet and avro tag as data formats????
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow").
 		WithSubjectMatters(smBackend, smLinearAlgebra, smClusterComputing, smDistributedComputing, smContainerization, smIAC, smCiCd).
 		finalize()
@@ -627,7 +643,7 @@ func initProjectsFinal() {
 		WithLang("Docker", Regularly).
 		WithLang("Bash", Some).
 		WithCloudProvider("AWS",
-			"ECS", "S3", "EC2", "IAM", "SecretsManager", "Cloudwatch", "Lambda", "ECR", "Route53",
+			"ECS", "S3", "EC2", "IAM", "SecretsManager", "Cloudwatch", "Lambda", "ECR", "Route53", // Route53 add networking sm
 		).
 		WithTechnologies("Github Actions").
 		WithPlatforms("Datadog", "Logcentral", "Github").
@@ -945,13 +961,23 @@ func initProjectsFinal() {
 		finalize()
 	miscSmallPersonalProjects = miscSmallPersonalProjects.
 		WithStatus(statusShelved).
-		WithLang("Python", Regularly).
-		WithLang("Fortran", Some).
-		WithLang("Solidity", Some).
-		WithLang("Go", Extensively).
-		WithLang("Java", Some).
-		WithLang("Javascript", Often).
-		WithLang("Typescript", Often).
+		WithLang("Python", Regularly, smScripting).
+		WithLang("Fortran", Some, smScripting, smThermodynamics, smFluidMechanics, smParticlePhysics, smNuclearEngineering, smEducation, smEmbeddedSystems, smStatistics, smLinearAlgebra, smStatics).
+		WithLang("Solidity", Some, smCryptocurrency).
+		WithLang("Go", Extensively, smThermodynamics).
+		WithLang("Java", Some, smBackend).
+		WithLang("Javascript", Often, smFrontend).
+		WithLang("Typescript", Often, smFullStack).
+		WithTechnologies("Kubernetes").
 		WithSubjectMatters(smCryptocurrency).
 		finalize()
+	teiProjects = teiProjects.
+		WithStatus(statusComplete).
+		WithSubjectMatters(smStructuralEngineering, smCivilEngineering) // TODO: ok?
+	taeProjects = taeProjects.
+		WithStatus(statusComplete).
+		WithSubjectMatters(smStructuralEngineering, smCivilEngineering) // TODO: ok?
+	mafcProjects = mafcProjects.
+		WithStatus(statusComplete).
+		WithSubjectMatters(smFirstAid) // TODO: ok?
 }

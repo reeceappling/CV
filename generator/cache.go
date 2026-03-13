@@ -13,6 +13,9 @@ func (pg *CachePage) Link() string {
 	}
 	return linkFor(pg.Name, "cv", "cache", withoutSpaces(pg.Name))
 }
+func (pg *CachePage) EntryType() string {
+	return "Cache"
+}
 
 func NewCache(name string) *CachePage {
 	out := &CachePage{

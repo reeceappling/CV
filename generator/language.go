@@ -14,7 +14,19 @@ type LanguagePage struct {
 	Schools   map[string]*SchoolPage
 	Projects  map[string]Frequency
 	Positions map[string]*Position
-	// TODO: SUB-LANGUAGE ITEMS, like imports? libraries?
+	SubjectMattersField
+}
+
+func (pg *LanguagePage) EntryType() string {
+	return "Language"
+}
+
+func (pg *LanguagePage) WithSubjectMatters(sms ...SubjectMatter) *LanguagePage {
+	if pg == nil {
+		return nil
+	}
+	pg.SubjectMatters = withSubjectMatters(pg, pg.SubjectMatters, sms...)
+	return pg
 }
 
 func (pg *LanguagePage) Link() string {
@@ -123,6 +135,21 @@ func (lp *LanguagePage) AddCompany(comp *CompanyPage) *LanguagePage {
 	return lp
 }
 func (lp *LanguagePage) AddPosition(pos *Position) *LanguagePage {
-	lp.Positions[pos.Name] = pos // TODO: or mapName?
+	lp.Positions[pos.Name] = pos
 	return lp
+}
+
+func setupLanguageSubjectMatters() {
+	NewLanguage("Docker").
+		WithSubjectMatters(smContainerization)
+	NewLanguage("Docker Compose").
+		WithSubjectMatters(smContainerization)
+	NewLanguage("Terraform").
+		WithSubjectMatters(smIAC)
+	NewLanguage("Html").
+		WithSubjectMatters(smFrontend)
+	NewLanguage("CSS").
+		WithSubjectMatters(smFrontend)
+	NewLanguage("Javascript").
+		WithSubjectMatters(smFullStack)
 }
