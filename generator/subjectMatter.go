@@ -104,6 +104,7 @@ var (
 	smNetworking            = NewSubjectMatter("Networking") // TODO: maybe get rid of
 	smChemistry             = NewSubjectMatter("Chemistry")
 	smDocumentation         = NewSubjectMatter("Documentation")
+	smGeospatial            = NewSubjectMatter("Geospatial")
 )
 
 func setupSubjectMatters() {

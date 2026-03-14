@@ -96,6 +96,10 @@ func createMainCVPage() { // TODO: TAGS EVERYWHERE????
 	// TODO: https://quartz.jzhao.xyz/configuration PAGE TITLE
 	// TODO: THEMEING // https://quartz.jzhao.xyz/configuration
 	// TODO: FORCE DARK MODE
+	// TODO: figure out how to change rich text preview (when sent via discord, snapchat, or RCS
+	// TODO: ADD QR CODES????
+	// TODO: MODIFY FAVICON
+	// TODO: MODIFY TAB TITLES
 	b := strings.Builder{}
 	b.WriteString(frontmatterFor("CV"))
 	// TODO: HEADER AREA FOR LINKS TO CV, RESUME, BLOG, NOTES?
@@ -105,7 +109,6 @@ func createMainCVPage() { // TODO: TAGS EVERYWHERE????
 	b.WriteString("Feel free to check out the [source code](https://github.com/reeceappling/CV) for this website\n")
 
 	b.WriteString("# About\n")
-
 	b.WriteString(fixmeLink + "\n") // TODO: SUMMARY/About
 
 	b.WriteString("# Work History ([Companies](companies.md), [Positions](positions.md))\n") // TODO: RENAME

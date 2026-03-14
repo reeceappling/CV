@@ -185,7 +185,7 @@ var (
 	)
 	sourceAlliesClient = NewClient("Source Allies",
 		"Source Allies internal projects",
-		"Upgraded company internal payment gateway to a newer version of Java Spring"
+		"Upgraded company internal payment gateway to a newer version of Java Spring",
 		"Secured all company machines via JAMF to ensure the protection of company and client data",
 		"Designed and created a Slack bot integration with Small Improvements to automate monthly announcements, and employee creation and completion of personal and professional goals",
 		"Redesigned Jira workflows streamlining the hiring process and onboarding systems for remote coworkers",
@@ -204,7 +204,7 @@ var (
 	clarkClient = NewClient("Chapel Hill Masters Student in Public Health",
 		"Created programs for a student doing research for his Masters Degree in Public Health. Provided data on E.Coli samples from different waterways, the programs checked the statistical validity on different E.Coli indicating kits",
 	)
-	wildlifeRClient = NewClient("Wildlife mapping with R", // TODO: WILDLIFE MAPPING IN R: .
+	wildlifeRClient = NewClient("Wildlife mapping with R",
 		"Utilized spatiotemporal data for wildlife in a specified area over a specified date range in order to produce population density maps",
 	)
 	charityClient = NewClient("Undisclosed Charity",
@@ -213,7 +213,7 @@ var (
 	teiClient = NewClient("TEI",
 		"Internal company work for TEI",
 	)
-	taeClient = NewClient("Talley Associates of Engineering", // TODO: JS photo parser
+	taeClient = NewClient("Talley Associates of Engineering",
 		"Internal company work for Talley Associates of Engineering",
 	)
 	mafcClient = NewClient("Monroe Aquatics and Fitness Center",
@@ -223,14 +223,16 @@ var (
 
 func initClientsAfterProjectsComplete() {
 	jdClient = jdClient.WithProjects(polygonBuilderProject, ogreProject, renderProject, statsProject, billingProject, explorerProject, wqdbProject, supportProject, scudsProject, ufoProject, goweProject, tileGenProject, GhaRunnersProject)
-	sourceAlliesClient = sourceAlliesClient.WithProjects(simpsonUnivProject) // TODO: USE!
+	sourceAlliesClient = sourceAlliesClient.WithProjects(jamfProject, smallImprovementsProject, internalResumeGeneratorProject) // TODO: USE OTHERS
+	simpsonUniversityClient = simpsonUniversityClient.WithProjects(simpsonUnivProject)
 	// TODO: SIMPSON COLLEGE // TODO: USE!
 	critColaClient = critColaClient.WithProjects(CritColaProject)
 	wellAwareClient = wellAwareClient.WithProjects(WellAwareProject)
 	clarkClient = clarkClient.WithProjects(MastersDataAnalysisProject)
 	charityClient = charityClient.WithProjects(CharityProject)
-	teiClient = teiClient.WithProjects(teiProjects)    // TODO: add projects (like NM, TX, IA, NC?)
-	taeClient = taeClient.WithProjects(taeProjects)    // TODO: JS photo parser
+	teiClient = teiClient.WithProjects(teiProjects) // TODO: WEBSITE?      // TODO: add projects (like NM, TX, IA, NC?)
+	taeClient = taeClient.WithProjects(taePhotoImporter)
 	mafcClient = mafcClient.WithProjects(mafcProjects) // TODO: Indoor and outdoor pool?
-	// TODO: wildlifeRClient, arrowNailClient, simpsonUniversityClient
+	arrowNailClient = arrowNailClient.WithProjects(ArrowNailProject)
+	wildlifeRClient = wildlifeRClient.WithProjects(WildlifeRProject)
 }

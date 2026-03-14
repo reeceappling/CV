@@ -549,41 +549,46 @@ var nfcScannerUrl = "github.com/reeceappling/nfcScanner"     // TODO: ensure ok
 var coreShufflerUrl = "github.com/reeceappling/coreShuffler" // TODO: ensure ok
 
 var (
-	projectAgentSwarm          = NewPersonalProject("AI Agent Swarm", fixmeLink, nil)
-	polygonBuilderProject      = NewProfessionalProject("Polygon Builder", fixmeLink, jdClient, nil)
-	tileGenProject             = NewProfessionalProject("Tile Generator", fixmeLink, jdClient, nil)
-	GhaRunnersProject          = NewProfessionalProject("Github Actions GPU Runners", "FIX SUMMARY", jdClient, nil)
-	ogreProject                = NewProfessionalProject("Organizational Geospatial Rollup Engine", fixmeLink, jdClient, nil)
-	renderProject              = NewProfessionalProject("Render Cluster", fixmeLink, jdClient, nil) // TODO: MORE!
-	statsProject               = NewProfessionalProject("Statistics Cluster", fixmeLink, jdClient, nil)
-	billingProject             = NewProfessionalProject("Billing Cluster", fixmeLink, jdClient, nil)
-	explorerProject            = NewProfessionalProject("Transform Explorer", fixmeLink, jdClient, nil)
-	wqdbProject                = NewProfessionalProject("Work Queue Database", fixmeLink, jdClient, nil)
-	supportProject             = NewProfessionalProject("Support Cluster", fixmeLink, jdClient, nil)
-	scudsProject               = NewProfessionalProject("Scuds API", fixmeLink, jdClient, nil)
-	ufoProject                 = NewProfessionalProject("UFO API", fixmeLink, jdClient, nil)
-	goweProject                = NewProfessionalProject("Gowe Builder", fixmeLink, jdClient, nil)
-	simpsonUnivProject         = NewProfessionalProject("Simpson University", fixmeLink, sourceAlliesClient, nil) // TODO: MORE!
-	mushDbProject              = NewPersonalProject("MushDb", fixmeLink, &mushDbUrl)
-	cvProject                  = NewPersonalProject("Personal Site and CV", "This project! A generator which creates markdown files that can be viewed via Obsidian, or published to the web.", &cvUrl) // TODO: make multiple strings an available option for summary
-	linksPage                  = NewPersonalProject("Personal Links Page", "A page to put all my links", nil)                                                                                           // TODO: LINKS PAGE
-	measurementsProject        = NewPersonalProject("Measurements", fixmeLink, &measurementsUrl)
-	nfcScannerProject          = NewPersonalProject("Nfc Scanner", fixmeLink, &nfcScannerUrl)
-	teiProjects                = NewProfessionalProject("Tei Projects", fixmeLink, teiClient, nil)   // TODO: maybe add an actual project
-	taeProjects                = NewProfessionalProject("Tae Projects", fixmeLink, taeClient, nil)   // TODO: maybe add actual projects?
-	mafcProjects               = NewProfessionalProject("Mafc Projects", fixmeLink, mafcClient, nil) // TODO: maybe add actual projects?
-	coreShufflerProject        = NewPersonalProject("Simulate Core Shuffler", fixmeLink, &coreShufflerUrl)
-	CharityProject             = NewProfessionalProject("Charity Site", fixmeLink, charityClient, nil)
-	WellAwareProject           = NewProfessionalProject("Well Aware NC", fixmeLink, clarkClient, nil) // TODO: change client to the lab???
-	CritColaProject            = NewProfessionalProject("CritCola", fixmeLink, critColaClient, nil)   // TODO: ADD OTHER CRITCOLA PROJECTS
-	MastersDataAnalysisProject = NewProfessionalProject("Masters Data Analysis", fixmeLink, clarkClient, nil)
-	capstoneProject            = NewSchoolProject("Capstone Project-Uranium Silicide Accident Tolerant Fuel cycle design for Duke Energy Catawba Nuclear Plant", "FIX M_E", schoolNCSU, &coreShufflerUrl)
-	projectLinAlgCryptography  = NewSchoolProject("Linear algebra cryptography algorithm", "FIX M_E", schoolNCSU, nil)
-	cherenkovProject           = NewSchoolProject("Cherenkov radiation sensor", fixmeLink, schoolNCSU, nil)
-	roboticsTeamProject        = NewSchoolProject("Robotics team 3720", fixmeLink, schoolCata, nil)
-	cncLaserCutterProject      = NewSchoolProject("CNC Laser Cutter", fixmeLink, schoolCata, nil)
-	aerospaceFinalProject      = NewSchoolProject("Aerospace senior design course", "Designed, created, and tested a rocket from scratch", schoolCata, nil)
-	miscSmallPersonalProjects  = NewPersonalProject("Misc small personal projects", "A conglomeration of personal projects which did not each deserve their own entry", nil)
+	projectAgentSwarm              = NewPersonalProject("AI Agent Swarm", fixmeLink, nil)
+	polygonBuilderProject          = NewProfessionalProject("Polygon Builder", fixmeLink, jdClient, nil)
+	tileGenProject                 = NewProfessionalProject("Tile Generator", fixmeLink, jdClient, nil)
+	GhaRunnersProject              = NewProfessionalProject("Github Actions GPU Runners", "FIX SUMMARY", jdClient, nil)
+	ogreProject                    = NewProfessionalProject("Organizational Geospatial Rollup Engine", fixmeLink, jdClient, nil)
+	renderProject                  = NewProfessionalProject("Render Cluster", fixmeLink, jdClient, nil) // TODO: MORE!
+	statsProject                   = NewProfessionalProject("Statistics Cluster", fixmeLink, jdClient, nil)
+	billingProject                 = NewProfessionalProject("Billing Cluster", fixmeLink, jdClient, nil)
+	explorerProject                = NewProfessionalProject("Transform Explorer", fixmeLink, jdClient, nil)
+	wqdbProject                    = NewProfessionalProject("Work Queue Database", fixmeLink, jdClient, nil)
+	supportProject                 = NewProfessionalProject("Support Cluster", fixmeLink, jdClient, nil)
+	scudsProject                   = NewProfessionalProject("Scuds API", fixmeLink, jdClient, nil)
+	ufoProject                     = NewProfessionalProject("UFO API", fixmeLink, jdClient, nil)
+	goweProject                    = NewProfessionalProject("Gowe Builder", fixmeLink, jdClient, nil)
+	simpsonUnivProject             = NewProfessionalProject("Simpson University", fixmeLink, simpsonUniversityClient, nil) // TODO: MORE!
+	jamfProject                    = NewProfessionalProject("JAMF companywide setup", fixmeLink, sourceAlliesClient, nil)
+	smallImprovementsProject       = NewProfessionalProject("Small Improvements Bot", fixmeLink, sourceAlliesClient, nil)
+	internalResumeGeneratorProject = NewProfessionalProject("Source Allies Internal Consultant Resume Generator", fixmeLink, sourceAlliesClient, nil)
+	mushDbProject                  = NewPersonalProject("MushDb", fixmeLink, &mushDbUrl)
+	cvProject                      = NewPersonalProject("Personal Site and CV", "This project! A generator which creates markdown files that can be viewed via Obsidian, or published to the web.", &cvUrl) // TODO: make multiple strings an available option for summary
+	linksPage                      = NewPersonalProject("Personal Links Page", "A page to put all my links", nil)                                                                                           // TODO: LINKS PAGE
+	measurementsProject            = NewPersonalProject("Measurements", fixmeLink, &measurementsUrl)
+	nfcScannerProject              = NewPersonalProject("Nfc Scanner", fixmeLink, &nfcScannerUrl)
+	teiProjects                    = NewProfessionalProject("Tei Projects", fixmeLink, teiClient, nil) // TODO: maybe add an actual project
+	taePhotoImporter               = NewProfessionalProject("Tae Field Photograph Importer", fixmeLink, taeClient, nil)
+	mafcProjects                   = NewProfessionalProject("Mafc Projects", fixmeLink, mafcClient, nil) // TODO: maybe add actual projects?
+	coreShufflerProject            = NewPersonalProject("Simulate Core Shuffler", fixmeLink, &coreShufflerUrl)
+	CharityProject                 = NewProfessionalProject("Charity Site", fixmeLink, charityClient, nil)
+	WellAwareProject               = NewProfessionalProject("Well Aware NC", fixmeLink, clarkClient, nil) // TODO: change client to the lab???
+	CritColaProject                = NewProfessionalProject("CritCola", fixmeLink, critColaClient, nil)   // TODO: ADD OTHER CRITCOLA PROJECTS
+	ArrowNailProject               = NewProfessionalProject("Hail History Tracker", fixmeLink, arrowNailClient, nil)
+	WildlifeRProject               = NewProfessionalProject("Wildlife R Data Analysis", fixmeLink, wildlifeRClient, nil)
+	MastersDataAnalysisProject     = NewProfessionalProject("Masters Data Analysis", fixmeLink, clarkClient, nil)
+	capstoneProject                = NewSchoolProject("Capstone Project-Uranium Silicide Accident Tolerant Fuel cycle design for Duke Energy Catawba Nuclear Plant", "FIX M_E", schoolNCSU, &coreShufflerUrl)
+	projectLinAlgCryptography      = NewSchoolProject("Linear algebra cryptography algorithm", "FIX M_E", schoolNCSU, nil)
+	cherenkovProject               = NewSchoolProject("Cherenkov radiation sensor", fixmeLink, schoolNCSU, nil)
+	roboticsTeamProject            = NewSchoolProject("Robotics team 3720", fixmeLink, schoolCata, nil)
+	cncLaserCutterProject          = NewSchoolProject("CNC Laser Cutter", fixmeLink, schoolCata, nil)
+	aerospaceFinalProject          = NewSchoolProject("Aerospace senior design course", "Designed, created, and tested a rocket from scratch", schoolCata, nil)
+	miscSmallPersonalProjects      = NewPersonalProject("Misc small personal projects", "A conglomeration of personal projects which did not each deserve their own entry", nil)
 )
 
 func initProjectsFinal() {
@@ -617,7 +622,7 @@ func initProjectsFinal() {
 		WithCaches("Redis", "memcached").
 		WithTechnologies("Github Actions", "Parquet", "Avro").
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "Azure DevOps", "Jira", "Confluence").
-		WithSubjectMatters(smBackend, smTopology, smLinearAlgebra, smClusterComputing, smDistributedComputing, smContainerization, smIAC, smCiCd).
+		WithSubjectMatters(smGeospatial, smBackend, smTopology, smLinearAlgebra, smClusterComputing, smDistributedComputing, smContainerization, smIAC, smCiCd).
 		//WithTags(tagBackend, tagTopology, tagLinearAlgebra, tagClusterComputing, tagDistributedComputing, tagContainerization, tagIAC, tagCiCd)
 		finalize()
 	tileGenProject = tileGenProject.WithStatus(statusMaintaining).
@@ -634,7 +639,7 @@ func initProjectsFinal() {
 		WithCaches("Redis", "memcached", "DAX").
 		WithTechnologies("CUDA", "Github Actions", "Parquet", "Avro", "LocalStack").
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "Azure DevOps", "Jira", "Confluence").
-		WithSubjectMatters(smBackend, smLinearAlgebra, smClusterComputing, smDistributedComputing, smContainerization, smIAC, smCiCd).
+		WithSubjectMatters(smGeospatial, smBackend, smLinearAlgebra, smClusterComputing, smDistributedComputing, smContainerization, smIAC, smCiCd).
 		finalize()
 	GhaRunnersProject = GhaRunnersProject.WithStatus(statusMaintaining).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!
@@ -662,7 +667,7 @@ func initProjectsFinal() {
 		WithCloudProvider("AWS",
 			"ECS", "S3", "EC2", "IAM", "SecretsManager", "DynamoDB", "DAX", "Cloudwatch", "Lambda", "ECR", "Route53", "Kinesis", "SQS", "SNS",
 		).
-		WithSubjectMatters(smBackend, smCiCd, smClusterComputing, smDistributedComputing, smContainerization, smIAC).
+		WithSubjectMatters(smGeospatial, smBackend, smCiCd, smClusterComputing, smDistributedComputing, smContainerization, smIAC).
 		finalize()
 	renderProject = renderProject.WithStatus(statusMaintaining).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!
@@ -678,7 +683,7 @@ func initProjectsFinal() {
 		WithCloudProvider("AWS",
 			"ECS", "S3", "EC2", "IAM", "SecretsManager", "DynamoDB", "DAX", "Cloudwatch", "Lambda", "ECR", "Route53", "Kinesis", "SQS", "SNS",
 		).
-		WithSubjectMatters(smBackend, smCiCd, smClusterComputing, smDistributedComputing, smContainerization, smIAC, smGraphics).
+		WithSubjectMatters(smGeospatial, smBackend, smCiCd, smClusterComputing, smDistributedComputing, smContainerization, smIAC, smGraphics).
 		finalize()
 	statsProject = statsProject.WithStatus(statusMaintaining).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!
@@ -699,7 +704,7 @@ func initProjectsFinal() {
 		WithCloudProvider("AWS",
 			"ECS", "S3", "EC2", "IAM", "SecretsManager", "DynamoDB", "DAX", "Cloudwatch", "Lambda", "ECR", "Route53", "Kinesis", "SQS", "SNS",
 		).
-		WithSubjectMatters(smBackend, smCiCd, smClusterComputing, smDistributedComputing, smContainerization, smIAC, smGPU, smStatistics).
+		WithSubjectMatters(smGeospatial, smBackend, smCiCd, smClusterComputing, smDistributedComputing, smContainerization, smIAC, smGPU, smStatistics).
 		finalize()
 	billingProject = billingProject.WithStatus(statusBuilding).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!
@@ -716,7 +721,7 @@ func initProjectsFinal() {
 		WithCaches("Redis", "memcached").
 		WithTechnologies("Github Actions", "Parquet", "Avro").
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "Azure DevOps", "Jira", "Confluence").
-		WithSubjectMatters(smCiCd, smClusterComputing, smDistributedComputing, smContainerization, smIAC, smStatistics, smBackend).
+		WithSubjectMatters(smGeospatial, smCiCd, smClusterComputing, smDistributedComputing, smContainerization, smIAC, smStatistics, smBackend).
 		finalize()
 	explorerProject = explorerProject.WithStatus(statusMaintaining).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!
@@ -732,7 +737,7 @@ func initProjectsFinal() {
 		WithCaches("Redis", "memcached").
 		WithTechnologies("Github Actions").
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "Azure DevOps", "Jira", "Confluence").
-		WithSubjectMatters(smCiCd, smContainerization, smIAC, smFullStack).
+		WithSubjectMatters(smGeospatial, smCiCd, smContainerization, smIAC, smFullStack).
 		finalize()
 	wqdbProject = wqdbProject.WithStatus(statusComplete).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!
@@ -777,7 +782,7 @@ func initProjectsFinal() {
 		WithCaches("Redis").
 		WithTechnologies("ElasticSearch", "Github Actions", "Parquet", "Avro").
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "Azure DevOps", "Jira", "Confluence").
-		WithSubjectMatters(smCiCd, smContainerization, smIAC, smStatistics, smBackend).
+		WithSubjectMatters(smGeospatial, smCiCd, smContainerization, smIAC, smStatistics, smBackend).
 		finalize()
 	ufoProject = ufoProject.WithStatus(statusMaintaining).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!
@@ -792,7 +797,7 @@ func initProjectsFinal() {
 		WithCaches("Redis").
 		WithTechnologies("Github Actions").
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "Azure DevOps", "Jira", "Confluence").
-		WithSubjectMatters(smCiCd, smContainerization, smIAC, smStatistics, smBackend).
+		WithSubjectMatters(smGeospatial, smCiCd, smContainerization, smIAC, smStatistics, smBackend).
 		finalize()
 	goweProject = goweProject.WithStatus(statusMaintaining).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!
@@ -807,7 +812,7 @@ func initProjectsFinal() {
 		WithCaches("Redis").
 		WithTechnologies("Github Actions", "Parquet", "Avro").
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "Azure DevOps", "Jira", "Confluence").
-		WithSubjectMatters(smCiCd, smContainerization, smIAC, smClusterComputing, smDistributedComputing, smLinearAlgebra, smBackend).
+		WithSubjectMatters(smGeospatial, smCiCd, smContainerization, smIAC, smClusterComputing, smDistributedComputing, smLinearAlgebra, smBackend).
 		finalize()
 	simpsonUnivProject = simpsonUnivProject.WithStatus(statusComplete). // TODO: MORE!
 										WithSummary("SUMMARY HERE"). // TODO: MORE!
@@ -985,13 +990,55 @@ func initProjectsFinal() {
 	teiProjects = teiProjects.
 		WithSummary("A catch-all for all projects at my position at TEI.").
 		WithStatus(statusComplete).
-		WithSubjectMatters(smStructuralEngineering, smCivilEngineering)
-	taeProjects = taeProjects.
-		WithSummary("A catch-all for all projects at my position at Talley Associates of Engineering.").
+		WithSubjectMatters(smStructuralEngineering, smCivilEngineering).
+		finalize()
+	taePhotoImporter = taePhotoImporter.
+		WithSummary("Script to import photos taken in the field into the proper format and structure for use in engineering documentation").
+		WithLang("Javascript", Some).
 		WithStatus(statusComplete).
-		WithSubjectMatters(smStructuralEngineering, smCivilEngineering)
+		WithSubjectMatters(smStructuralEngineering, smCivilEngineering).
+		finalize()
 	mafcProjects = mafcProjects.
 		WithSummary("Lifeguarding stuff, I guess.").
 		WithStatus(statusComplete).
-		WithSubjectMatters(smFirstAid)
+		WithSubjectMatters(smFirstAid).
+		finalize()
+	ArrowNailProject = ArrowNailProject.
+		WithLang("Javascript", Extensively). // TODO: MORE STUFF
+		WithLang("Html", Regularly).         // TODO: MORE STUFF
+		WithLang("CSS", Regularly).          // TODO: MORE STUFF
+		WithSummary("Geospatial mapping app to track historical hail instances for use by a roofing company").
+		WithStatus(statusShelved).
+		WithTechnologies("React").
+		WithSubjectMatters(smGeospatial).
+		WithCloudProvider("AWS", "Lambda", "RDS"). // TODO: MORE STUFF?
+		finalize()
+	WildlifeRProject = WildlifeRProject.
+		WithStatus(statusComplete).
+		WithLang("R", Often, smGeospatial).
+		WithSummary("Utilized spatiotemporal data for wildlife in a specified area over a specified date range in order to produce population density maps").
+		WithSubjectMatters(smGeospatial, smStatistics).
+		finalize()
+	jamfProject = jamfProject.
+		WithSummary("JAMF companywide setup. " + fixmeLink).
+		WithStatus(statusComplete).
+		WithPlatforms("Jamf").
+		finalize()
+	smallImprovementsProject = smallImprovementsProject.
+		WithLang("Javascript", Often).
+		WithSummary("Created a Small Improvements Slack bot for Source Allies to track goal creation and achievement").
+		WithCloudProvider("AWS", "Lambda", "DynamoDB", "SAM", "Cloudformation"). // TODO: AWS
+		WithPlatforms("Slack", "Small Improvements").
+		WithStatus(statusComplete).
+		finalize()
+	internalResumeGeneratorProject = internalResumeGeneratorProject.
+		WithSummary("Updated company internal resume generator").
+		// TODO: any aws in here???
+		WithStatus(statusComplete).
+		WithLang("Java", Often, smBackend).
+		WithLang("Html", Some).
+		WithLang("CSS", Some).
+		WithLang("Javascript", Some).
+		WithTechnologies("Spring").
+		finalize()
 }
