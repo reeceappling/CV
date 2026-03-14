@@ -70,4 +70,6 @@ func setupPlatformSubjectMatters() {
 		WithSubjectMatters(smObservability)
 	NewPlatform("Teams").
 		WithSubjectMatters(smCommunication)
+	NewPlatform("Jamf").
+		WithSubjectMatters(smCybersecurity)
 }
