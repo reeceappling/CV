@@ -77,4 +77,6 @@ func setupPlatformSubjectMatters() {
 		WithSubjectMatters(smCybersecurity)
 	NewPlatform("DroneCI").
 		WithSubjectMatters(smCiCd)
+	NewPlatform("Discord").
+		WithSubjectMatters(smCommunication)
 }

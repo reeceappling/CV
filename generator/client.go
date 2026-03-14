@@ -208,10 +208,10 @@ func initClientsAfterProjectsComplete() {
 		WithProjects(jamfProject, smallImprovementsProject, internalResumeGeneratorProject). // TODO: USE OTHERS
 		WithInfo(
 			"Source Allies internal projects",
-			"Upgraded company internal payment gateway to a newer version of Java Spring",
-			"Secured all company machines via JAMF to ensure the protection of company and client data",
-			"Designed and created a Slack bot integration with Small Improvements to automate monthly announcements, and employee creation and completion of personal and professional goals",
-			"Redesigned Jira workflows streamlining the hiring process and onboarding systems for remote coworkers",
+			"Upgraded company internal payment gateway to a newer version of "+lookup("Java").Link()+" "+lookup("Spring").Link(),
+			"Secured all company machines via "+lookup("JAMF").Link()+" to ensure the protection of company and client data",
+			"Designed and created a "+lookup("Slack").Link()+" bot integration with "+lookup("Small Improvements").Link()+" to automate monthly announcements, and employee creation and completion of personal and professional goals",
+			"Redesigned "+lookup("Jira").Link()+" workflows streamlining the hiring process and onboarding systems for remote coworkers",
 		)
 	simpsonUniversityClient = simpsonUniversityClient.
 		WithProjects(simpsonUnivProject).
@@ -220,7 +220,8 @@ func initClientsAfterProjectsComplete() {
 	critColaClient = critColaClient.
 		WithProjects(CritColaProject).
 		WithInfo(
-			"Consulted on hosting game servers and discord bots for a large online community such that they could be deployed or destroyed, on short notice with persistent game data utilizing GitLabCI, Terraform, CloudFlare, and AWS (EC2, EBS, IAM)",
+			// TODO; link to discord
+			"Consulted on hosting game servers and "+lookup("Discord").Link()+" bots for a large online community such that they could be deployed or destroyed, on short notice with persistent game data utilizing "+lookup("GitlabCI").Link()+", "+lookup("Terraform").Link()+", "+lookup("Cloudflare").Link()+", and "+lookup("AWS").Link()+" ("+lookup("EC2").Link()+", "+lookup("EBS").Link()+", "+lookup("IAM").Link()+")",
 			"Created a final product with a spin-up time of approximately 3 minutes",
 		)
 	wellAwareClient = wellAwareClient.WithProjects(WellAwareProject).
@@ -235,9 +236,10 @@ func initClientsAfterProjectsComplete() {
 		WithInfo("Internal company work for Talley Associates of Engineering")
 	mafcClient = mafcClient.WithProjects(mafcProjects).
 		WithInfo("Lifeguarding work, both at the indoor and outdoor pools of the fitness center") // TODO: Indoor and outdoor pool?
+	// TODO: links in text for everything below this
 	arrowNailClient = arrowNailClient.WithProjects(ArrowNailProject).
-		WithInfo("Used serverless services on AWS to support a React geospatial web app, Node API via lambda functions, and an aurora database. Provided IT and Systems Administration Support",
-			"Set up CI/CD pipeline in Gitlab CI to make future deployments seamless")
+		WithInfo("Used "+lookup("Serverless").Link()+" services on "+lookup("AWS").Link()+" to support a "+lookup("React").Link()+" geospatial web app, Node API via "+lookup("lambda").Link()+" functions, and an "+lookup("Aurora").Link()+" database. Provided IT and Systems Administration Support",
+			"Set up [CI/CD](cv/subjectMatter/CI-CD) pipeline in "+lookup("Gitlab CI").Link()+" to make future deployments seamless")
 	wildlifeRClient = wildlifeRClient.WithProjects(WildlifeRProject).
 		WithInfo("Utilized spatiotemporal data for wildlife in a specified area over a specified date range in order to produce population density maps")
 }

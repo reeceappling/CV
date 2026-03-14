@@ -845,7 +845,7 @@ func initProjectsFinal() {
 		WithLang("Bash", Some).
 		WithLang("Javascript", Rarely).
 		WithTechnologies("Gitlab CI").
-		WithPlatforms("Gitlab").
+		WithPlatforms("Gitlab", "Discord").
 		WithCloudProvider("AWS",
 			"S3", "EC2", "IAM", "SecretsManager", "ECR", "Route53").
 		WithSubjectMatters(smBackend, smCiCd, smDevOps, smScripting).
