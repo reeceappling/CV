@@ -148,10 +148,10 @@ func newTracked() *tracked {
 		Tags:      utils.Set[string]{},
 	}
 }
-func (pg *tracked) Bytes(title string, typ string) []byte {
+func (pg *tracked) Bytes(title string, tags ...string) []byte {
 	builder := strings.Builder{}
 	if title != "" {
-		builder.WriteString(frontmatterFor(title, typ))
+		builder.WriteString(frontmatterFor(title, tags...))
 	}
 
 	if pg.Companies != nil && len(pg.Companies) > 0 {

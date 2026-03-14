@@ -619,7 +619,8 @@ func createTechnologiesPages() {
 		if len(tech.SubjectMatters) == 0 {
 			panic("no subject matter on technology " + name)
 		}
-		WriteCVFile("technology/"+withoutSpaces(name)+".md", string(tech.Bytes(name, "Technology")))
+		typePlusTags := append([]string{"Technology"}, tech.Tags.AsSlice()...)
+		WriteCVFile("technology/"+withoutSpaces(name)+".md", string(tech.Bytes(name, typePlusTags...)))
 	}
 }
 
