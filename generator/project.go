@@ -543,7 +543,7 @@ func initProjectsFinal() {
 		WithLang("Python", Rarely, smScripting).
 		WithLang("Rust", Minimal, smScripting).
 		WithCloudProvider("AWS",
-			"ECS", "S3", "EC2", "IAM", "SecretsManager", "DynamoDB", "DAX", "Cloudwatch", "Lambda", "ECR", "Route53", "Kinesis", "SQS", "SNS", "ApiGateway", "EBS", // TODO: FARGATE NOT BEING ON THIS LIST IS CAUSING PROBLEMS
+			"ECS", "S3", "EC2", "IAM", "SecretsManager", "DynamoDB", "DAX", "Cloudwatch", "Lambda", "ECR", "Route53", "Kinesis", "SQS", "SNS", "ApiGateway", "EBS", "ELB", "ALB",
 		).
 		WithDbs("Aurora", "DynamoDB", "Postgres").
 		WithCaches("Redis", "memcached").
@@ -667,7 +667,7 @@ func initProjectsFinal() {
 		WithSubjectMatters(smApi, smGeospatial, smCiCd, smContainerization, smIAC, smFullStack).
 		finalize()
 	wqdbProject = wqdbProject.WithStatus(statusComplete).
-		WithSummary("SUMMARY HERE"). // TODO: MORE!
+		WithSummary("Work queue database for the various builders"). // TODO: list builders
 		WithLang("SQL", Often).
 		WithLang("Go", Often).
 		WithLang("Scala", Often).
@@ -682,7 +682,7 @@ func initProjectsFinal() {
 		WithSubjectMatters(smCiCd, smIAC, smBackend).
 		finalize()
 	supportProject = supportProject.WithStatus(statusComplete).
-		WithSummary("SUMMARY HERE"). // TODO: MORE!
+		WithSummary("Support API cluster for troubleshooting").
 		WithLang("SQL", Regularly).
 		WithLang("Go", Often).
 		WithLang("Terraform", Often).
@@ -712,7 +712,7 @@ func initProjectsFinal() {
 		WithSubjectMatters(smApi, smGeospatial, smCiCd, smContainerization, smIAC, smStatistics, smBackend).
 		finalize()
 	ufoProject = ufoProject.WithStatus(statusMaintaining).
-		WithSummary("SUMMARY HERE"). // TODO: MORE!
+		WithSummary("Unified Field Operations API Cluster").
 		WithLang("Scala", Extensively).
 		WithLang("Go", Regularly).
 		WithLang("Terraform", Regularly).
@@ -742,10 +742,14 @@ func initProjectsFinal() {
 		WithSubjectMatters(smGeospatial, smCiCd, smContainerization, smIAC, smClusterComputing, smDistributedComputing, smLinearAlgebra, smBackend).
 		finalize()
 	rasterRenderProject = rasterRenderProject. // TODO: this whole thing!
+							WithSummary("Tile renderer API service cluster. Later replaced by the Render Cluster"). // TODO: link to render cluster
+							WithLang("Scala", Extensively).
+							WithLang("Terraform", Regularly).
+							WithLang("Bash", Some).
 							WithStatus(statusComplete).
-							WithSummary(fixmeLink).
 							WithPlatforms("DroneCI", "Rally").
 							WithSubjectMatters(smBackend).
+							WithCloudProvider("AWS", "ECS", "EC2", "API Gateway", "IAM", "ELB", "ALB").
 							finalize()
 	simpsonUnivProject = simpsonUnivProject.WithStatus(statusComplete). // TODO: MORE!
 										WithSummary("SUMMARY HERE"). // TODO: MORE!
@@ -754,9 +758,8 @@ func initProjectsFinal() {
 										WithLang("Javascript", Some).
 										WithSubjectMatters(smFrontend).
 										WithTechnologies("Drupal").
-										WithPlatforms("Confluence"). // TODO: SOURCE JAMF
+										WithPlatforms("Confluence").
 										finalize()
-	// TODO: sai project for JAMF
 	mushDbProject = mushDbProject.WithStatus(statusBuilding).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!
 		WithLang("Go", Extensively).
@@ -774,7 +777,7 @@ func initProjectsFinal() {
 		WithInterests(string(smMycology)).
 		finalize()
 	cvProject = cvProject.WithStatus(statusBuilding).
-		WithSummary("This project! A generator which creates markdown files that can be viewed via Obsidian, or published to the web."). // TODO: MORE!
+		WithSummary("This project! A generator which creates markdown files that can be viewed via Obsidian, or published to the web.").
 		WithLang("Go", Extensively).
 		WithLang("Terraform", Often).
 		WithLang("Bash", Some).
@@ -784,7 +787,6 @@ func initProjectsFinal() {
 		WithLang("CSS", Rarely).
 		WithLang("SCSS", Rarely, smFrontend).
 		WithTechnologies("Github Actions", "Obsidian", "Markdown", "Quartz", "Quartz 4").
-		// TODO: add info to technologies????
 		WithPlatforms("Github").
 		WithCloudProvider("AWS", "S3", "IAM", "Cloudfront", "Cloudfront Functions", "ACM").
 		WithSubjectMatters(smCiCd, smFrontend, smDevOps, smServerless).
@@ -811,7 +813,9 @@ func initProjectsFinal() {
 		WithInterests(string(smMycology)).
 		finalize()
 	coreShufflerProject = coreShufflerProject.WithStatus(statusComplete).
-		WithSummary("SUMMARY HERE"). // TODO: MORE!
+		// TODO: MORE! LINKS!
+		WithSummary("Related to capstone project. Takes fuel assembly layout input, allows you to shuffle them, and outputs the CASMO and SIMULATE files necessary to run a cycle with the new layout.").
+		// TODO: ADD A PICTURE!!!!!
 		WithLang("Javascript", Extensively).
 		WithLang("Html", Extensively).
 		WithLang("CSS", Extensively).
@@ -871,7 +875,7 @@ func initProjectsFinal() {
 	reactorAnalysisFinal = reactorAnalysisFinal.
 		WithLang("Javascript", Extensively).
 		WithStatus(statusComplete).
-		WithSummary("Final exam for the final course of my degree"). // TODO: this
+		WithSummary("Final exam for the final course of my Nuclear Engineering Bachelors degree"). // TODO: this! LInk!
 		WithSubjectMatters(smNuclearEngineering, smThermodynamics, smFluidMechanics).
 		finalize()
 	monteCarloProject = monteCarloProject.
@@ -882,14 +886,14 @@ func initProjectsFinal() {
 		WithSubjectMatters(smParticlePhysics, smNuclearEngineering).
 		finalize()
 	projectLinAlgCryptography = projectLinAlgCryptography.
-		WithSummary("Created and analyzed the efficacy of a cryptographic algorithm utilizing basic matrix mathematics. STATS"). // TODO: this
+		WithSummary("Created and analyzed the efficacy of a cryptographic algorithm utilizing basic matrix mathematics.").
 		WithMiscSkills("Linear Algebra").
 		WithInterests("Cryptography").
 		WithSubjectMatters(smCybersecurity, smCryptography).
 		WithInterests(string(smCryptography), string(smCybersecurity)).
 		finalize()
 	cherenkovProject = cherenkovProject.WithStatus(statusComplete).
-		WithSummary("Designed and built a sensor for Cherenkov radiation, which was tested by lowering the sensor into the core of the PULSTAR reactor at "+schoolNCSU.Link()+". The sensor utilized and Arduino for signal processing."). // TODO: this
+		WithSummary("Designed and built a sensor for Cherenkov radiation, which was tested by lowering the sensor into the core of the PULSTAR reactor at "+schoolNCSU.Link()+". The sensor utilized and Arduino for signal processing.").
 		WithLang("Python", Often).
 		WithLang("Fortran", Often).
 		WithTechnologies("Arduino").
