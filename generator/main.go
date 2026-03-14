@@ -42,7 +42,6 @@ func main() {
 	initClientsAfterProjectsComplete() // Sets client on projects as well
 	initPositionsAfterProjects()
 	initCompaniesAfterPositions() // Must be done after positions and project setup, but before projects pages. What about clients?
-
 	// TODO: POPULATE SUBJECT MATTERS ON TECHS, SERVICES, MISCSKILLS?
 
 	// Start creating actual pages

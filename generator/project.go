@@ -29,84 +29,6 @@ func (pt projectType) isCoursework() bool {
 
 }
 
-type projectTypeInfo interface {
-	Type() projectType
-	Finalize(*Project)
-	getClient() *Client
-	setClient(*Client) projectTypeInfo
-	getSchool() *SchoolPage
-	setSchool(page *SchoolPage) projectTypeInfo
-}
-type schoolProjectTypeInfo struct {
-	school *SchoolPage
-}
-
-func (schoolProjectTypeInfo) Type() projectType {
-	return projectTypeSchool
-}
-func (i schoolProjectTypeInfo) Finalize(pr *Project) {
-	i.school.withProjects(pr)
-}
-func (i schoolProjectTypeInfo) getClient() *Client {
-	return nil
-}
-func (i schoolProjectTypeInfo) getSchool() *SchoolPage {
-	return i.school
-}
-func (i schoolProjectTypeInfo) setClient(cli *Client) projectTypeInfo {
-	return i
-}
-func (i schoolProjectTypeInfo) setSchool(s *SchoolPage) projectTypeInfo {
-	i.school = s
-	return i
-}
-
-type professionalProjectTypeInfo struct {
-	client *Client
-}
-
-func (professionalProjectTypeInfo) Type() projectType {
-	return projectTypeProfessional
-}
-func (i professionalProjectTypeInfo) Finalize(pr *Project) {
-	i.client.WithProjects(pr)
-}
-func (i professionalProjectTypeInfo) getClient() *Client {
-	return i.client
-}
-func (i professionalProjectTypeInfo) getSchool() *SchoolPage {
-	return nil
-}
-func (i professionalProjectTypeInfo) setClient(cli *Client) projectTypeInfo {
-	i.client = cli
-	return i
-}
-func (i professionalProjectTypeInfo) setSchool(s *SchoolPage) projectTypeInfo {
-	return i
-}
-
-type personalProjectTypeInfo struct{}
-
-func (i personalProjectTypeInfo) getClient() *Client {
-	return nil
-}
-func (i personalProjectTypeInfo) getSchool() *SchoolPage {
-	return nil
-}
-func (i personalProjectTypeInfo) setClient(cli *Client) projectTypeInfo {
-	return i
-}
-func (i personalProjectTypeInfo) setSchool(s *SchoolPage) projectTypeInfo {
-	return i
-}
-
-func (personalProjectTypeInfo) Type() projectType {
-	return projectTypePersonal
-}
-func (personalProjectTypeInfo) Finalize(*Project) {}
-
-type projectStatus string
-
 const (
 	statusComplete    projectStatus = "Complete"
 	statusBuilding    projectStatus = "Building"
@@ -534,6 +456,7 @@ func newProject(name string, summary string, info projectTypeInfo, link *string)
 		panic("project already exists")
 	}
 	projects[name] = out
+	addLinkable(strings.ToLower(name), out)
 	return out
 }
 
@@ -699,7 +622,7 @@ func initProjectsFinal() {
 		WithLang("Rust", Minimal).
 		WithDbs("Aurora", "Postgres").
 		WithCaches("Redis", "memcached").
-		WithTechnologies("CUDA", "Github Actions", "Parquet", "Avro", "GraphQL", "SIMD", "REST API").
+		WithTechnologies("CGo", "CUDA", "Github Actions", "Parquet", "Avro", "GraphQL", "SIMD", "REST API").
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "GraphQL Apollo", "Azure DevOps", "Jira", "Confluence").
 		WithCloudProvider("AWS",
 			"ECS", "S3", "EC2", "IAM", "SecretsManager", "DynamoDB", "DAX", "Cloudwatch", "Lambda", "ECR", "Route53", "Kinesis", "SQS", "SNS",
@@ -1047,3 +970,81 @@ func initProjectsFinal() {
 		WithTechnologies("Github Actions").
 		finalize()
 }
+
+type projectTypeInfo interface {
+	Type() projectType
+	Finalize(*Project)
+	getClient() *Client
+	setClient(*Client) projectTypeInfo
+	getSchool() *SchoolPage
+	setSchool(page *SchoolPage) projectTypeInfo
+}
+type schoolProjectTypeInfo struct {
+	school *SchoolPage
+}
+
+func (schoolProjectTypeInfo) Type() projectType {
+	return projectTypeSchool
+}
+func (i schoolProjectTypeInfo) Finalize(pr *Project) {
+	i.school.withProjects(pr)
+}
+func (i schoolProjectTypeInfo) getClient() *Client {
+	return nil
+}
+func (i schoolProjectTypeInfo) getSchool() *SchoolPage {
+	return i.school
+}
+func (i schoolProjectTypeInfo) setClient(cli *Client) projectTypeInfo {
+	return i
+}
+func (i schoolProjectTypeInfo) setSchool(s *SchoolPage) projectTypeInfo {
+	i.school = s
+	return i
+}
+
+type professionalProjectTypeInfo struct {
+	client *Client
+}
+
+func (professionalProjectTypeInfo) Type() projectType {
+	return projectTypeProfessional
+}
+func (i professionalProjectTypeInfo) Finalize(pr *Project) {
+	i.client.WithProjects(pr)
+}
+func (i professionalProjectTypeInfo) getClient() *Client {
+	return i.client
+}
+func (i professionalProjectTypeInfo) getSchool() *SchoolPage {
+	return nil
+}
+func (i professionalProjectTypeInfo) setClient(cli *Client) projectTypeInfo {
+	i.client = cli
+	return i
+}
+func (i professionalProjectTypeInfo) setSchool(s *SchoolPage) projectTypeInfo {
+	return i
+}
+
+type personalProjectTypeInfo struct{}
+
+func (i personalProjectTypeInfo) getClient() *Client {
+	return nil
+}
+func (i personalProjectTypeInfo) getSchool() *SchoolPage {
+	return nil
+}
+func (i personalProjectTypeInfo) setClient(cli *Client) projectTypeInfo {
+	return i
+}
+func (i personalProjectTypeInfo) setSchool(s *SchoolPage) projectTypeInfo {
+	return i
+}
+
+func (personalProjectTypeInfo) Type() projectType {
+	return projectTypePersonal
+}
+func (personalProjectTypeInfo) Finalize(*Project) {}
+
+type projectStatus string

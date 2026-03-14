@@ -12,7 +12,7 @@ type SubjectMatter string
 func (sm SubjectMatter) Link() string {
 	return linkFor(string(sm), "cv", "subjectMatter", withoutSpaces(string(sm)))
 }
-func (pg *SubjectMatter) EntryType() string {
+func (pg SubjectMatter) EntryType() string {
 	return "Subject Matter"
 }
 func (sm SubjectMatter) Bytes() []byte {
@@ -28,6 +28,7 @@ func NewSubjectMatter(sm string) SubjectMatter {
 	if _, exists := subjectMatters[out]; !exists {
 		subjectMatters[out] = map[string]utils.Set[string]{}
 	}
+	addLinkable(strings.ToLower(sm), out)
 	return out
 }
 

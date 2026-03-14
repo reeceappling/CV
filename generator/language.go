@@ -117,6 +117,7 @@ func NewLanguage(name string) *LanguagePage {
 		SubjectMattersField: SubjectMattersField{utils.Set[SubjectMatter]{}},
 	}
 	langs[name] = out
+	addLinkable(strings.ToLower(name), out)
 	return out
 }
 

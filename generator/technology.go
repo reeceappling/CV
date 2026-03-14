@@ -1,6 +1,9 @@
 package main
 
-import "appli.ng/cv/generator/utils"
+import (
+	"appli.ng/cv/generator/utils"
+	"strings"
+)
 
 var techs = map[string]*TechologyPage{}
 
@@ -44,6 +47,7 @@ func NewTechnology(name string, subjectMatters ...SubjectMatter) *TechologyPage 
 		SubjectMatters: utils.SetFrom(subjectMatters...),
 	}
 	techs[name] = out
+	addLinkable(strings.ToLower(name), out)
 	return out
 }
 
@@ -58,6 +62,7 @@ func setupTechSubjectMatters() {
 	NewTechnology("AI Agents", smAI)
 	NewTechnology("OpenAI API spec", smAI, smBackend)
 	NewTechnology("CUDA", smGPU, smGraphics)
+	NewTechnology("CGo", smBackend)
 	NewTechnology("REST API", smBackend, smApi) // TODO: use this everywhere necessary...
 	NewTechnology("Avro", smBackend).WithTags("DataFormat")
 	NewTechnology("Parquet", smBackend).WithTags("DataFormat")

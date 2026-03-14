@@ -1,5 +1,7 @@
 package main
 
+import "strings"
+
 var platforms = map[string]*PlatformPage{}
 
 type PlatformPage struct { // Datadog, Github, etc
@@ -34,6 +36,7 @@ func NewPlatform(name string) *PlatformPage {
 		SubjectMattersField: SubjectMattersField{SubjectMatters: map[SubjectMatter]struct{}{}},
 	}
 	platforms[name] = out
+	addLinkable(strings.ToLower(name), out)
 	return out
 }
 

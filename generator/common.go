@@ -309,3 +309,26 @@ type Linkable interface { // TODO: use???
 	EntryType() string
 	Link() string
 }
+
+var linkables = map[string]Linkable{} // TODO: USE THIS
+type NoLinkable struct{}
+
+func (n NoLinkable) EntryType() string {
+	panic("nilEntryType")
+}
+
+func (n NoLinkable) Link() string {
+	return fixmeLink
+}
+
+func addLinkable(name string, item Linkable) {
+	linkables[strings.ToLower(name)] = item
+}
+
+func lookup(name string) Linkable {
+	if item, ok := linkables[strings.ToLower(name)]; ok {
+		return item
+	}
+	panic("lookup failed for " + name) // TODO: del?
+	return NoLinkable{}
+}

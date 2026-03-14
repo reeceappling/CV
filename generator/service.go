@@ -1,6 +1,9 @@
 package main
 
-import "appli.ng/cv/generator/utils"
+import (
+	"appli.ng/cv/generator/utils"
+	"strings"
+)
 
 var cloudServices = map[string]*CloudServicePage{}
 
@@ -41,6 +44,7 @@ func NewService(name string, provider string) *CloudServicePage {
 	}
 	subjectMatters[smCloudComputing][out.EntryType()].Add() // TODO: ok?
 	cloudServices[name] = out
+	addLinkable(strings.ToLower(name), out)
 	return out
 }
 

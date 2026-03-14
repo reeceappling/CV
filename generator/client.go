@@ -39,15 +39,20 @@ func (pg *Client) EntryType() string {
 	return "Client"
 }
 
-func NewClient(name string, info ...string) *Client {
+func NewClient(name string) *Client {
 	out := &Client{Name: name, Projects: []*Project{}, Info: nil, projectsSet: utils.Set[string]{}}
 	if _, exists := clients[name]; exists {
 		panic("client already exists")
 	}
-	out.Info = info
 	clients[name] = out
+	addLinkable(strings.ToLower(name), out)
 	clientsOrder = append(clientsOrder, name)
 	return out
+}
+
+func (pg *Client) WithInfo(info ...string) *Client {
+	pg.Info = info
+	return pg
 }
 
 func (pg *Client) Bytes() []byte {
@@ -164,75 +169,75 @@ func (pg *Client) GetAllLowest() (outCaches map[string]*CachePage, outDbs map[st
 	return
 }
 
+func initClientsLast() {
+
+}
+
 var (
-	jdClient = NewClient("John Deere",
+	jdClient                = NewClient("John Deere")
+	simpsonUniversityClient = NewClient("Simpson University")
+	sourceAlliesClient      = NewClient("Source Allies")
+	critColaClient          = NewClient("CritCola")
+	arrowNailClient         = NewClient("ArrowNail LLC")
+	wellAwareClient         = NewClient("Well Aware NC")
+	clarkClient             = NewClient("Chapel Hill Masters Student in Public Health")
+	wildlifeRClient         = NewClient("Wildlife mapping with R")
+	charityClient           = NewClient("Undisclosed Charity")
+	teiClient               = NewClient("TEI")
+	taeClient               = NewClient("Talley Associates of Engineering")
+	mafcClient              = NewClient("Monroe Aquatics and Fitness Center")
+)
+
+func initClientsAfterProjectsComplete() {
+	jdClient = jdClient.
+		WithProjects(polygonBuilderProject, ogreProject, renderProject, statsProject, billingProject, explorerProject, wqdbProject, supportProject, scudsProject, ufoProject, goweProject, tileGenProject, GhaRunnersProject).WithInfo(
 		"Most senior consulting engineer on a high-performance, global-scale, team of 4-8 at John Deere’s Intelligent Solutions Group; responsible for architecture, implementation, testing, optimization, and support of a complex set of diverse cloud services utilizing geospatiotemporal agribusiness data",
 		"Architected, implemented, and maintained cloud infrastructure and services for ingest, distributed processing, storage, manipulation, and retrieval of data for, datastores totalling over 50PB",
-		"Created multiple ECS clusters for use in, and consuming data from, John Deere AI platforms",
-		"Designed CUDA C/C++ Kernels used through CGo for statistics and image processing via GPU",
+		"Created multiple "+lookup("ECS").Link()+" clusters for use in, and consuming data from, John Deere AI platforms",
+		"Designed "+lookup("CUDA").Link()+" "+lookup("C").Link()+"/[C++](cv/language/Cpp) Kernels used through "+lookup("CGo").Link()+" for statistics and image processing via GPU",
 		"Improved a mission-critical image manipulation API from 65% reliability to 99.9999% success rate",
-		"Spearheaded implementation of an ECS cluster using an advanced topology algorithm (from a PhD thesis), achieving >100x performance gains over its original implementation on TB-scale datasets",
+		"Spearheaded implementation of an "+lookup("ECS").Link()+" cluster using an advanced "+lookup("topology").Link()+" algorithm (from a PhD thesis), achieving >100x performance gains over its original implementation on TB-scale datasets",
 		"Built a Go-based compiler that transformed nested JSON instructions into machine-executable operations across EC2 clusters for for retrieving and manipulating geospatial agricultural data",
-		"Saved $18M of a $28M budget (64%) in 2024, while still increasing service stability and throughput",
+		"__Saved \\$18M of a \\$28M budget (64%)__ in 2024, while still increasing service stability and throughput",
 		"Ensured maximum service uptime via careful design and rollout of CI/CD pipelines operated via self-hosted GitHub Actions runners, in conjunction with Infrastructure as Code via Terraform",
 		"Setup  monitoring, dashboards, alerting, traces, and profiling (Datadog/Grafana/CloudWatch)",
 		"Responsible for educating engineers on infrastructure, codebase, domain, and best practices",
 		"Utilized primarily Go, Terraform, Bash, and Docker on AWS, but also used Scala, Github Actions, C/C++ with CUDA, DroneCI, python, javascript, typescript, Kotlin, and more",
-		"Platforms utilized:  AWS (>30 separate services), Datadog, LogCentral, Rally, Azure DevOps, Github, DroneCI, Grafana, Prometheus, Confluence, and more",
-	)
-	simpsonUniversityClient = NewClient("Simpson University",
-		"Upgraded the University’s payment and donation gateway. Remediated resulting bugs",
-	)
-	sourceAlliesClient = NewClient("Source Allies",
-		"Source Allies internal projects",
-		"Upgraded company internal payment gateway to a newer version of Java Spring",
-		"Secured all company machines via JAMF to ensure the protection of company and client data",
-		"Designed and created a Slack bot integration with Small Improvements to automate monthly announcements, and employee creation and completion of personal and professional goals",
-		"Redesigned Jira workflows streamlining the hiring process and onboarding systems for remote coworkers",
-	)
-	critColaClient = NewClient("CritCola",
-		"Consulted on hosting game servers and discord bots for a large online community such that they could be deployed or destroyed, on short notice with persistent game data utilizing GitLabCI, Terraform, CloudFlare, and AWS (EC2, EBS, IAM)",
-		"Created a final product with a spin-up time of approximately 3 minutes",
-	)
-	arrowNailClient = NewClient("ArrowNail LLC", // TODO: ARROWNAIL CLIENT
-		"Used serverless services on AWS to support a React geospatial web app, Node API via lambda functions, and an aurora database. Provided IT and Systems Administration Support",
-		"Set up CI/CD pipeline in Gitlab CI to make future deployments seamless",
-	)
-	wellAwareClient = NewClient("Well Aware NC",
-		"Designed, created, and hosted a website for Well Aware NC, a University of North Carolina Chapel Hill affiliated nonprofit focused on the testing of well water contaminants within North Carolina",
-	)
-	clarkClient = NewClient("Chapel Hill Masters Student in Public Health",
-		"Created programs for a student doing research for his Masters Degree in Public Health. Provided data on E.Coli samples from different waterways, the programs checked the statistical validity on different E.Coli indicating kits",
-	)
-	wildlifeRClient = NewClient("Wildlife mapping with R",
-		"Utilized spatiotemporal data for wildlife in a specified area over a specified date range in order to produce population density maps",
-	)
-	charityClient = NewClient("Undisclosed Charity",
-		"Designed, created, and hosted a website for an undisclosed local charity",
-	)
-	teiClient = NewClient("TEI",
-		"Internal company work for TEI",
-	)
-	taeClient = NewClient("Talley Associates of Engineering",
-		"Internal company work for Talley Associates of Engineering",
-	)
-	mafcClient = NewClient("Monroe Aquatics and Fitness Center",
-		"Lifeguarding work, both at the indoor and outdoor pools of the fitness center",
-	)
-)
-
-func initClientsAfterProjectsComplete() {
-	jdClient = jdClient.WithProjects(polygonBuilderProject, ogreProject, renderProject, statsProject, billingProject, explorerProject, wqdbProject, supportProject, scudsProject, ufoProject, goweProject, tileGenProject, GhaRunnersProject)
-	sourceAlliesClient = sourceAlliesClient.WithProjects(jamfProject, smallImprovementsProject, internalResumeGeneratorProject) // TODO: USE OTHERS
-	simpsonUniversityClient = simpsonUniversityClient.WithProjects(simpsonUnivProject)
+		"Platforms utilized:  AWS (>30 separate services), Datadog, LogCentral, Rally, Azure DevOps, Github, DroneCI, Grafana, Prometheus, Confluence, and more")
+	sourceAlliesClient = sourceAlliesClient.
+		WithProjects(jamfProject, smallImprovementsProject, internalResumeGeneratorProject). // TODO: USE OTHERS
+		WithInfo(
+			"Source Allies internal projects",
+			"Upgraded company internal payment gateway to a newer version of Java Spring",
+			"Secured all company machines via JAMF to ensure the protection of company and client data",
+			"Designed and created a Slack bot integration with Small Improvements to automate monthly announcements, and employee creation and completion of personal and professional goals",
+			"Redesigned Jira workflows streamlining the hiring process and onboarding systems for remote coworkers",
+		)
+	simpsonUniversityClient = simpsonUniversityClient.
+		WithProjects(simpsonUnivProject).
+		WithInfo("Upgraded the University’s payment and donation gateway. Remediated resulting bugs")
 	// TODO: SIMPSON COLLEGE // TODO: USE!
-	critColaClient = critColaClient.WithProjects(CritColaProject)
-	wellAwareClient = wellAwareClient.WithProjects(WellAwareProject)
-	clarkClient = clarkClient.WithProjects(MastersDataAnalysisProject)
-	charityClient = charityClient.WithProjects(CharityProject)
-	teiClient = teiClient.WithProjects(teiProjects) // TODO: WEBSITE?      // TODO: add projects (like NM, TX, IA, NC?)
-	taeClient = taeClient.WithProjects(taePhotoImporter)
-	mafcClient = mafcClient.WithProjects(mafcProjects) // TODO: Indoor and outdoor pool?
-	arrowNailClient = arrowNailClient.WithProjects(ArrowNailProject)
-	wildlifeRClient = wildlifeRClient.WithProjects(WildlifeRProject)
+	critColaClient = critColaClient.
+		WithProjects(CritColaProject).
+		WithInfo(
+			"Consulted on hosting game servers and discord bots for a large online community such that they could be deployed or destroyed, on short notice with persistent game data utilizing GitLabCI, Terraform, CloudFlare, and AWS (EC2, EBS, IAM)",
+			"Created a final product with a spin-up time of approximately 3 minutes",
+		)
+	wellAwareClient = wellAwareClient.WithProjects(WellAwareProject).
+		WithInfo("Designed, created, and hosted a website for Well Aware NC, a University of North Carolina Chapel Hill affiliated nonprofit focused on the testing of well water contaminants within North Carolina")
+	clarkClient = clarkClient.WithProjects(MastersDataAnalysisProject).
+		WithInfo("Created programs for a student doing research for his Masters Degree in Public Health. Provided data on E.Coli samples from different waterways, the programs checked the statistical validity on different E.Coli indicating kits")
+	charityClient = charityClient.WithProjects(CharityProject).
+		WithInfo("Designed, created, and hosted a website for an undisclosed local charity")
+	teiClient = teiClient.WithProjects(teiProjects).
+		WithInfo("Internal company work for TEI") // TODO: WEBSITE?      // TODO: add projects (like NM, TX, IA, NC?)
+	taeClient = taeClient.WithProjects(taePhotoImporter).
+		WithInfo("Internal company work for Talley Associates of Engineering")
+	mafcClient = mafcClient.WithProjects(mafcProjects).
+		WithInfo("Lifeguarding work, both at the indoor and outdoor pools of the fitness center") // TODO: Indoor and outdoor pool?
+	arrowNailClient = arrowNailClient.WithProjects(ArrowNailProject).
+		WithInfo("Used serverless services on AWS to support a React geospatial web app, Node API via lambda functions, and an aurora database. Provided IT and Systems Administration Support",
+			"Set up CI/CD pipeline in Gitlab CI to make future deployments seamless")
+	wildlifeRClient = wildlifeRClient.WithProjects(WildlifeRProject).
+		WithInfo("Utilized spatiotemporal data for wildlife in a specified area over a specified date range in order to produce population density maps")
 }

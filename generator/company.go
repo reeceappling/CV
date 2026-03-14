@@ -75,6 +75,7 @@ func NewCompany(name string, startMo, startYr int, endMo, endYr *int) *CompanyPa
 		}
 	}
 	companies[name] = out
+	addLinkable(strings.ToLower(name), out)
 	companiesOrder = append(companiesOrder, name)
 	return out
 }

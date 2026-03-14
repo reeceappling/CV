@@ -1,5 +1,7 @@
 package main
 
+import "strings"
+
 var caches = map[string]*CachePage{}
 
 type CachePage struct {
@@ -23,5 +25,6 @@ func NewCache(name string) *CachePage {
 		tracked: newTracked(),
 	}
 	caches[name] = out
+	addLinkable(strings.ToLower(name), out)
 	return out
 }

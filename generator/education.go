@@ -28,6 +28,7 @@ func NewSchool(name string) *SchoolPage {
 		SubjectMatters:   map[SubjectMatter]struct{}{},
 	}
 	schools[name] = out
+	addLinkable(strings.ToLower(name), out)
 	return out
 }
 func (pg *SchoolPage) WithSummary(info string) *SchoolPage {

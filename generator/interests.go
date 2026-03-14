@@ -1,5 +1,7 @@
 package main
 
+import "strings"
+
 var interests = map[string]*Interest{}
 
 type Interest struct {
@@ -13,6 +15,7 @@ func NewInterest(name string) *Interest {
 		tracked: newTracked(),
 	}
 	interests[name] = out
+	addLinkable(strings.ToLower(name), out)
 	return out
 }
 
