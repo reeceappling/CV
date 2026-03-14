@@ -133,12 +133,11 @@ func (pg *Project) Bytes() []byte {
 	t := pg.TypeInfo.Type()
 	switch t {
 	case projectTypeSchool:
-		pgTags = append(pgTags, "Project/Coursework Related")
-		builder.WriteString("Coursework-related Project\n\n")
+		pgTags = append(pgTags, "Coursework-Related Project")
 	case projectTypeProfessional:
-		pgTags = append(pgTags, "Project/Professional")
+		pgTags = append(pgTags, "Professional Project")
 	case projectTypePersonal:
-		pgTags = append(pgTags, "Project/Personal")
+		pgTags = append(pgTags, "Personal Project")
 	default:
 		panic("unknown project type: " + string(t))
 	}
@@ -154,8 +153,8 @@ func (pg *Project) Bytes() []byte {
 	default:
 		panic("unknown project type: " + string(t))
 	}
-	// Client/company/school
 
+	// Client/company/school
 	if cli := pg.TypeInfo.getClient(); cli != nil {
 		builder.WriteString(fmt.Sprintf("Client: %s\n", cli.Link()))
 		if comp := cli.company; comp != nil {
