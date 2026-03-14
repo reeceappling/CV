@@ -815,14 +815,14 @@ func initProjectsFinal() {
 		WithSubjectMatters(smGeospatial, smCiCd, smContainerization, smIAC, smClusterComputing, smDistributedComputing, smLinearAlgebra, smBackend).
 		finalize()
 	simpsonUnivProject = simpsonUnivProject.WithStatus(statusComplete). // TODO: MORE!
-										WithSummary("SUMMARY HERE"). // TODO: MORE!
-										WithLang("Html", Regularly).
-										WithLang("CSS", Regularly).
-										WithLang("Javascript", Some).
-										WithSubjectMatters(smFrontend).
-										WithTechnologies("Drupal").
-										WithPlatforms("Confluence"). // TODO: SOURCE JAMF
-										finalize()
+		WithSummary("SUMMARY HERE"). // TODO: MORE!
+		WithLang("Html", Regularly).
+		WithLang("CSS", Regularly).
+		WithLang("Javascript", Some).
+		WithSubjectMatters(smFrontend).
+		WithTechnologies("Drupal").
+		WithPlatforms("Confluence"). // TODO: SOURCE JAMF
+		finalize()
 	// TODO: sai project for JAMF
 	mushDbProject = mushDbProject.WithStatus(statusBuilding).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!
@@ -1004,9 +1004,9 @@ func initProjectsFinal() {
 		WithSubjectMatters(smFirstAid).
 		finalize()
 	ArrowNailProject = ArrowNailProject.
-		WithLang("Javascript", Extensively). // TODO: MORE STUFF
-		WithLang("Html", Regularly).         // TODO: MORE STUFF
-		WithLang("CSS", Regularly).          // TODO: MORE STUFF
+		WithLang("Javascript", Extensively).
+		WithLang("Html", Regularly).
+		WithLang("CSS", Regularly).
 		WithSummary("Geospatial mapping app to track historical hail instances for use by a roofing company").
 		WithStatus(statusShelved).
 		WithTechnologies("React").
@@ -1023,13 +1023,16 @@ func initProjectsFinal() {
 		WithSummary("JAMF companywide setup. " + fixmeLink).
 		WithStatus(statusComplete).
 		WithPlatforms("Jamf").
+		WithSubjectMatters(smCybersecurity).
 		finalize()
 	smallImprovementsProject = smallImprovementsProject.
 		WithLang("Javascript", Often).
 		WithSummary("Created a Small Improvements Slack bot for Source Allies to track goal creation and achievement").
 		WithCloudProvider("AWS", "Lambda", "DynamoDB", "SAM", "Cloudformation"). // TODO: AWS
-		WithPlatforms("Slack", "Small Improvements").
+		WithPlatforms("Slack", "Small Improvements", "Github").
+		WithTechnologies("Github Actions").
 		WithStatus(statusComplete).
+		WithSubjectMatters(smBackend, smServerless).
 		finalize()
 	internalResumeGeneratorProject = internalResumeGeneratorProject.
 		WithSummary("Updated company internal resume generator").
@@ -1040,5 +1043,7 @@ func initProjectsFinal() {
 		WithLang("CSS", Some).
 		WithLang("Javascript", Some).
 		WithTechnologies("Spring").
+		WithSubjectMatters(smFullStack).
+		WithTechnologies("Github Actions").
 		finalize()
 }
