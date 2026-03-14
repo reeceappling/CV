@@ -142,21 +142,10 @@ func (pg *Project) Bytes() []byte {
 		panic("unknown project type: " + string(t))
 	}
 	builder.WriteString(frontmatterFor(pg.Name, pgTags...)) // TODO; do these tags need both Project and Project/*?
-	// PERSONAL/Professional
-	switch t {
-	case projectTypeSchool:
-		builder.WriteString("Coursework-related Project\n\n")
-	case projectTypeProfessional:
-		builder.WriteString("Professional Project\n\n")
-	case projectTypePersonal:
-		builder.WriteString("Personal Project\n\n")
-	default:
-		panic("unknown project type: " + string(t))
-	}
 
 	// Client/company/school
 	if cli := pg.TypeInfo.getClient(); cli != nil {
-		builder.WriteString(fmt.Sprintf("Client: %s\n", cli.Link()))
+		builder.WriteString(fmt.Sprintf("Client: %s\n\n", cli.Link()))
 		if comp := cli.company; comp != nil {
 			builder.WriteString(fmt.Sprintf("Company: %s\n", comp.Link()))
 		}
