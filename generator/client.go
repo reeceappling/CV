@@ -166,31 +166,58 @@ func (pg *Client) GetAllLowest() (outCaches map[string]*CachePage, outDbs map[st
 
 var (
 	jdClient = NewClient("John Deere",
-		"Fortune 100 Agricultural Business (Think: Green Tractors)", // TODO: FIX ALL POINTS
+		"Most senior consulting engineer on a high-performance, global-scale, team of 4-8 at John Deere’s Intelligent Solutions Group; responsible for architecture, implementation, testing, optimization, and support of a complex set of diverse cloud services utilizing geospatiotemporal agribusiness data",
+		"Architected, implemented, and maintained cloud infrastructure and services for ingest, distributed processing, storage, manipulation, and retrieval of data for, datastores totalling over 50PB",
+		"Created multiple ECS clusters for use in, and consuming data from, John Deere AI platforms",
+		"Designed CUDA C/C++ Kernels used through CGo for statistics and image processing via GPU",
+		"Improved a mission-critical image manipulation API from 65% reliability to 99.9999% success rate",
+		"Spearheaded implementation of an ECS cluster using an advanced topology algorithm (from a PhD thesis), achieving >100x performance gains over its original implementation on TB-scale datasets",
+		"Built a Go-based compiler that transformed nested JSON instructions into machine-executable operations across EC2 clusters for for retrieving and manipulating geospatial agricultural data",
+		"Saved $18M of a $28M budget (64%) in 2024, while still increasing service stability and throughput",
+		"Ensured maximum service uptime via careful design and rollout of CI/CD pipelines operated via self-hosted GitHub Actions runners, in conjunction with Infrastructure as Code via Terraform",
+		"Setup  monitoring, dashboards, alerting, traces, and profiling (Datadog/Grafana/CloudWatch)",
+		"Responsible for educating engineers on infrastructure, codebase, domain, and best practices",
+		"Utilized primarily Go, Terraform, Bash, and Docker on AWS, but also used Scala, Github Actions, C/C++ with CUDA, DroneCI, python, javascript, typescript, Kotlin, and more",
+		"Platforms utilized:  AWS (>30 separate services), Datadog, LogCentral, Rally, Azure DevOps, Github, DroneCI, Grafana, Prometheus, Confluence, and more",
+	)
+	simpsonUniversityClient = NewClient("Simpson University",
+		"Upgraded the University’s payment and donation gateway. Remediated resulting bugs",
 	)
 	sourceAlliesClient = NewClient("Source Allies",
-		"Source Allies internal projects", // TODO: FIX ALL POINTS
+		"Source Allies internal projects",
+		"Upgraded company internal payment gateway to a newer version of Java Spring"
+		"Secured all company machines via JAMF to ensure the protection of company and client data",
+		"Designed and created a Slack bot integration with Small Improvements to automate monthly announcements, and employee creation and completion of personal and professional goals",
+		"Redesigned Jira workflows streamlining the hiring process and onboarding systems for remote coworkers",
 	)
 	critColaClient = NewClient("CritCola",
-		"ADD SUMMARY POINTS", // TODO: FIX ALL POINTS
+		"Consulted on hosting game servers and discord bots for a large online community such that they could be deployed or destroyed, on short notice with persistent game data utilizing GitLabCI, Terraform, CloudFlare, and AWS (EC2, EBS, IAM)",
+		"Created a final product with a spin-up time of approximately 3 minutes",
+	)
+	arrowNailClient = NewClient("ArrowNail LLC", // TODO: ARROWNAIL CLIENT
+		"Used serverless services on AWS to support a React geospatial web app, Node API via lambda functions, and an aurora database. Provided IT and Systems Administration Support",
+		"Set up CI/CD pipeline in Gitlab CI to make future deployments seamless",
 	)
 	wellAwareClient = NewClient("Well Aware NC",
-		"ADD SUMMARY POINTS", // TODO: FIX ALL POINTS
+		"Designed, created, and hosted a website for Well Aware NC, a University of North Carolina Chapel Hill affiliated nonprofit focused on the testing of well water contaminants within North Carolina",
 	)
 	clarkClient = NewClient("Chapel Hill Masters Student in Public Health",
-		"ADD SUMMARY POINTS", // TODO: FIX ALL POINTS
+		"Created programs for a student doing research for his Masters Degree in Public Health. Provided data on E.Coli samples from different waterways, the programs checked the statistical validity on different E.Coli indicating kits",
+	)
+	wildlifeRClient = NewClient("Wildlife mapping with R", // TODO: WILDLIFE MAPPING IN R: .
+		"Utilized spatiotemporal data for wildlife in a specified area over a specified date range in order to produce population density maps",
 	)
 	charityClient = NewClient("Undisclosed Charity",
-		"ADD SUMMARY POINTS", // TODO: FIX ALL POINTS
+		"Designed, created, and hosted a website for an undisclosed local charity",
 	)
 	teiClient = NewClient("TEI",
-		"ADD SUMMARY POINTS", // TODO: FIX ALL POINTS
+		"Internal company work for TEI",
 	)
 	taeClient = NewClient("Talley Associates of Engineering", // TODO: JS photo parser
-		"ADD SUMMARY POINTS", // TODO: FIX ALL POINTS
+		"Internal company work for Talley Associates of Engineering",
 	)
 	mafcClient = NewClient("Monroe Aquatics and Fitness Center",
-		"ADD SUMMARY POINTS", // TODO: FIX ALL POINTS
+		"Lifeguarding work, both at the indoor and outdoor pools of the fitness center",
 	)
 )
 
@@ -205,6 +232,5 @@ func initClientsAfterProjectsComplete() {
 	teiClient = teiClient.WithProjects(teiProjects)    // TODO: add projects (like NM, TX, IA, NC?)
 	taeClient = taeClient.WithProjects(taeProjects)    // TODO: JS photo parser
 	mafcClient = mafcClient.WithProjects(mafcProjects) // TODO: Indoor and outdoor pool?
+	// TODO: wildlifeRClient, arrowNailClient, simpsonUniversityClient
 }
-
-var ()
