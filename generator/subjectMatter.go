@@ -92,6 +92,7 @@ var (
 	smMycology              = NewSubjectMatter("Mycology")
 	smFrontend              = NewSubjectMatter("Frontend")
 	smBackend               = NewSubjectMatter("Backend")
+	smApi                   = NewSubjectMatter("API") // TODO: USE THIS EVERYWHERE
 	smFullStack             = NewSubjectMatter("Full Stack")
 	smCloudComputing        = NewSubjectMatter("Cloud Computing")
 	smObservability         = NewSubjectMatter("Observability")

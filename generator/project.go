@@ -620,9 +620,9 @@ func initProjectsFinal() {
 		).
 		WithDbs("Aurora", "DynamoDB", "Postgres").
 		WithCaches("Redis", "memcached").
-		WithTechnologies("Github Actions", "Parquet", "Avro").
+		WithTechnologies("Github Actions", "Parquet", "Avro", "REST API").
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "Azure DevOps", "Jira", "Confluence").
-		WithSubjectMatters(smGeospatial, smBackend, smTopology, smLinearAlgebra, smClusterComputing, smDistributedComputing, smContainerization, smIAC, smCiCd).
+		WithSubjectMatters(smApi, smGeospatial, smBackend, smTopology, smLinearAlgebra, smClusterComputing, smDistributedComputing, smContainerization, smIAC, smCiCd).
 		//WithTags(tagBackend, tagTopology, tagLinearAlgebra, tagClusterComputing, tagDistributedComputing, tagContainerization, tagIAC, tagCiCd)
 		finalize()
 	tileGenProject = tileGenProject.WithStatus(statusMaintaining).
@@ -637,9 +637,9 @@ func initProjectsFinal() {
 		).
 		WithDbs("DynamoDB", "Postgres").
 		WithCaches("Redis", "memcached", "DAX").
-		WithTechnologies("CUDA", "Github Actions", "Parquet", "Avro", "LocalStack").
+		WithTechnologies("CUDA", "Github Actions", "Parquet", "Avro", "LocalStack", "REST API").
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "Azure DevOps", "Jira", "Confluence").
-		WithSubjectMatters(smGeospatial, smBackend, smLinearAlgebra, smClusterComputing, smDistributedComputing, smContainerization, smIAC, smCiCd).
+		WithSubjectMatters(smApi, smGeospatial, smBackend, smLinearAlgebra, smClusterComputing, smDistributedComputing, smContainerization, smIAC, smCiCd).
 		finalize()
 	GhaRunnersProject = GhaRunnersProject.WithStatus(statusMaintaining).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!
@@ -662,12 +662,12 @@ func initProjectsFinal() {
 		WithLang("SQL", Some).
 		WithDbs("Aurora", "DynamoDB", "Postgres").
 		WithCaches("Redis", "memcached").
-		WithTechnologies("Github Actions", "Parquet", "Avro").
+		WithTechnologies("Github Actions", "Parquet", "Avro", "REST API").
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "Azure DevOps", "Jira", "Confluence").
 		WithCloudProvider("AWS",
 			"ECS", "S3", "EC2", "IAM", "SecretsManager", "DynamoDB", "DAX", "Cloudwatch", "Lambda", "ECR", "Route53", "Kinesis", "SQS", "SNS",
 		).
-		WithSubjectMatters(smGeospatial, smBackend, smCiCd, smClusterComputing, smDistributedComputing, smContainerization, smIAC).
+		WithSubjectMatters(smApi, smGeospatial, smBackend, smCiCd, smClusterComputing, smDistributedComputing, smContainerization, smIAC).
 		finalize()
 	renderProject = renderProject.WithStatus(statusMaintaining).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!
@@ -676,14 +676,14 @@ func initProjectsFinal() {
 		WithLang("Docker", Regularly).
 		WithLang("Bash", Some).
 		WithLang("SQL", Some).
-		WithTechnologies("Github Actions", "Parquet", "Avro", "GraphQL").
+		WithTechnologies("Github Actions", "Parquet", "Avro", "REST API", "GraphQL").
 		WithDbs("Postgres").
 		WithCaches("Redis", "memcached").
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "GraphQL Apollo", "Azure DevOps", "Jira", "Confluence").
 		WithCloudProvider("AWS",
 			"ECS", "S3", "EC2", "IAM", "SecretsManager", "DynamoDB", "DAX", "Cloudwatch", "Lambda", "ECR", "Route53", "Kinesis", "SQS", "SNS",
 		).
-		WithSubjectMatters(smGeospatial, smBackend, smCiCd, smClusterComputing, smDistributedComputing, smContainerization, smIAC, smGraphics).
+		WithSubjectMatters(smApi, smGeospatial, smBackend, smCiCd, smClusterComputing, smDistributedComputing, smContainerization, smIAC, smGraphics).
 		finalize()
 	statsProject = statsProject.WithStatus(statusMaintaining).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!
@@ -699,12 +699,12 @@ func initProjectsFinal() {
 		WithLang("Rust", Minimal).
 		WithDbs("Aurora", "Postgres").
 		WithCaches("Redis", "memcached").
-		WithTechnologies("CUDA", "Github Actions", "Parquet", "Avro", "GraphQL", "SIMD").
+		WithTechnologies("CUDA", "Github Actions", "Parquet", "Avro", "GraphQL", "SIMD", "REST API").
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "GraphQL Apollo", "Azure DevOps", "Jira", "Confluence").
 		WithCloudProvider("AWS",
 			"ECS", "S3", "EC2", "IAM", "SecretsManager", "DynamoDB", "DAX", "Cloudwatch", "Lambda", "ECR", "Route53", "Kinesis", "SQS", "SNS",
 		).
-		WithSubjectMatters(smGeospatial, smBackend, smCiCd, smClusterComputing, smDistributedComputing, smContainerization, smIAC, smGPU, smStatistics).
+		WithSubjectMatters(smApi, smGeospatial, smBackend, smCiCd, smClusterComputing, smDistributedComputing, smContainerization, smIAC, smGPU, smStatistics).
 		finalize()
 	billingProject = billingProject.WithStatus(statusBuilding).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!
@@ -719,9 +719,9 @@ func initProjectsFinal() {
 		).
 		WithDbs("DynamoDB", "Postgres").
 		WithCaches("Redis", "memcached").
-		WithTechnologies("Github Actions", "Parquet", "Avro").
+		WithTechnologies("Github Actions", "Parquet", "Avro", "REST API").
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "Azure DevOps", "Jira", "Confluence").
-		WithSubjectMatters(smGeospatial, smCiCd, smClusterComputing, smDistributedComputing, smContainerization, smIAC, smStatistics, smBackend).
+		WithSubjectMatters(smApi, smGeospatial, smCiCd, smClusterComputing, smDistributedComputing, smContainerization, smIAC, smStatistics, smBackend).
 		finalize()
 	explorerProject = explorerProject.WithStatus(statusMaintaining).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!
@@ -735,9 +735,9 @@ func initProjectsFinal() {
 		).
 		WithDbs("Aurora", "DynamoDB", "Postgres").
 		WithCaches("Redis", "memcached").
-		WithTechnologies("Github Actions").
+		WithTechnologies("Github Actions", "REST API").
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "Azure DevOps", "Jira", "Confluence").
-		WithSubjectMatters(smGeospatial, smCiCd, smContainerization, smIAC, smFullStack).
+		WithSubjectMatters(smApi, smGeospatial, smCiCd, smContainerization, smIAC, smFullStack).
 		finalize()
 	wqdbProject = wqdbProject.WithStatus(statusComplete).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!
@@ -766,7 +766,7 @@ func initProjectsFinal() {
 		).
 		WithTechnologies("Github Actions").
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "Azure DevOps", "Jira", "Confluence").
-		WithSubjectMatters(smCiCd, smContainerization, smIAC, smBackend).
+		WithSubjectMatters(smApi, smCiCd, smContainerization, smIAC, smBackend).
 		finalize()
 	scudsProject = scudsProject.WithStatus(statusComplete).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!
@@ -780,9 +780,9 @@ func initProjectsFinal() {
 		).
 		WithDbs("ElasticSearch").
 		WithCaches("Redis").
-		WithTechnologies("ElasticSearch", "Github Actions", "Parquet", "Avro").
+		WithTechnologies("ElasticSearch", "Github Actions", "Parquet", "Avro", "REST API").
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "Azure DevOps", "Jira", "Confluence").
-		WithSubjectMatters(smGeospatial, smCiCd, smContainerization, smIAC, smStatistics, smBackend).
+		WithSubjectMatters(smApi, smGeospatial, smCiCd, smContainerization, smIAC, smStatistics, smBackend).
 		finalize()
 	ufoProject = ufoProject.WithStatus(statusMaintaining).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!
@@ -795,9 +795,9 @@ func initProjectsFinal() {
 			"ECS", "Fargate", "S3", "EC2", "IAM", "SecretsManager", "DynamoDB", "DAX", "Cloudwatch", "Lambda", "ECR", "Route53", "Kinesis", "SQS", "SNS",
 		).
 		WithCaches("Redis").
-		WithTechnologies("Github Actions").
+		WithTechnologies("Github Actions", "REST API").
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "Azure DevOps", "Jira", "Confluence").
-		WithSubjectMatters(smGeospatial, smCiCd, smContainerization, smIAC, smStatistics, smBackend).
+		WithSubjectMatters(smApi, smGeospatial, smCiCd, smContainerization, smIAC, smStatistics, smBackend).
 		finalize()
 	goweProject = goweProject.WithStatus(statusMaintaining).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!
@@ -834,10 +834,10 @@ func initProjectsFinal() {
 		WithLang("Docker Compose", Often).
 		//WithLang("Kubernetes", Some). // TODO: lang or tech?
 		WithDbs("mongodb").
-		WithTechnologies("Github Actions", "React", "NextJs", "RFID", "NFC", "I2C", "SPI", "Cloudflare Tunnels", "Kubernetes").
+		WithTechnologies("Github Actions", "React", "NextJs", "RFID", "NFC", "I2C", "SPI", "Cloudflare Tunnels", "Kubernetes", "REST API").
 		WithPlatforms("Github", "Cloudflare", "Grafana").
 		WithCloudProvider("GCP", "Google Cloud DNS", "Identity Platform").
-		WithSubjectMatters(smContainerization, smDistributedComputing, smMycology, smFullStack).
+		WithSubjectMatters(smApi, smContainerization, smDistributedComputing, smMycology, smFullStack).
 		WithInterests(string(smMycology)).
 		finalize()
 	cvProject = cvProject.WithStatus(statusBuilding).
@@ -872,9 +872,9 @@ func initProjectsFinal() {
 	nfcScannerProject = nfcScannerProject.WithStatus(statusBuilding).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!
 		WithLang("Go", Extensively).
-		WithTechnologies("Github Actions", "Webhooks", "Websockets", "Server-Sent Events", "Pub-Sub", "NFC", "I2C", "SPI", "RFID").
+		WithTechnologies("Github Actions", "Webhooks", "Websockets", "Server-Sent Events", "Pub-Sub", "NFC", "I2C", "SPI", "RFID", "REST API").
 		WithPlatforms("Github").
-		WithSubjectMatters(smContainerization, smDistributedComputing).
+		WithSubjectMatters(smApi, smContainerization, smDistributedComputing).
 		WithInterests(string(smMycology)).
 		finalize()
 	coreShufflerProject = coreShufflerProject.WithStatus(statusComplete).
@@ -985,7 +985,7 @@ func initProjectsFinal() {
 		WithLang("Javascript", Often, smFrontend).
 		WithLang("Typescript", Often, smFullStack).
 		WithTechnologies("Kubernetes").
-		WithSubjectMatters(smCryptocurrency).
+		WithSubjectMatters(smApi, smCryptocurrency).
 		finalize()
 	teiProjects = teiProjects.
 		WithSummary("A catch-all for all projects at my position at TEI.").
@@ -1009,8 +1009,8 @@ func initProjectsFinal() {
 		WithLang("CSS", Regularly).
 		WithSummary("Geospatial mapping app to track historical hail instances for use by a roofing company").
 		WithStatus(statusShelved).
-		WithTechnologies("React").
-		WithSubjectMatters(smGeospatial).
+		WithTechnologies("React", "REST API").
+		WithSubjectMatters(smApi, smGeospatial).
 		WithCloudProvider("AWS", "Lambda", "RDS"). // TODO: MORE STUFF?
 		finalize()
 	WildlifeRProject = WildlifeRProject.
@@ -1030,9 +1030,9 @@ func initProjectsFinal() {
 		WithSummary("Created a Small Improvements Slack bot for Source Allies to track goal creation and achievement").
 		WithCloudProvider("AWS", "Lambda", "DynamoDB", "SAM", "Cloudformation"). // TODO: AWS
 		WithPlatforms("Slack", "Small Improvements", "Github").
-		WithTechnologies("Github Actions").
+		WithTechnologies("Github Actions", "REST API").
 		WithStatus(statusComplete).
-		WithSubjectMatters(smBackend, smServerless).
+		WithSubjectMatters(smApi, smBackend, smServerless).
 		finalize()
 	internalResumeGeneratorProject = internalResumeGeneratorProject.
 		WithSummary("Updated company internal resume generator").
@@ -1042,8 +1042,8 @@ func initProjectsFinal() {
 		WithLang("Html", Some).
 		WithLang("CSS", Some).
 		WithLang("Javascript", Some).
-		WithTechnologies("Spring").
-		WithSubjectMatters(smFullStack).
+		WithTechnologies("Spring", "REST API").
+		WithSubjectMatters(smApi, smFullStack).
 		WithTechnologies("Github Actions").
 		finalize()
 }

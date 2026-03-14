@@ -58,6 +58,7 @@ func setupTechSubjectMatters() {
 	NewTechnology("AI Agents", smAI)
 	NewTechnology("OpenAI API spec", smAI, smBackend)
 	NewTechnology("CUDA", smGPU, smGraphics)
+	NewTechnology("REST API", smBackend, smApi) // TODO: use this everywhere necessary...
 	NewTechnology("Avro", smBackend).WithTags("DataFormat")
 	NewTechnology("Parquet", smBackend).WithTags("DataFormat")
 	NewTechnology("JSON", smFullStack).WithTags("DataFormat")
@@ -67,7 +68,6 @@ func setupTechSubjectMatters() {
 	NewTechnology("YAML", smFullStack, smCiCd).WithTags("DataFormat")
 	NewTechnology("TOML", smFullStack).WithTags("DataFormat")
 	NewTechnology("CUDA", smGPU, smGraphics)
-	// TODO: GRAPHQL????
 	NewTechnology("Kubernetes", smBackend, smDistributedComputing, smContainerization, smIAC, smCloudComputing, smNetworking)
 	// TODO: ansible? chef?
 	NewTechnology("RFID", smRobotics, smEmbeddedSystems, smElectronics)
@@ -79,7 +79,7 @@ func setupTechSubjectMatters() {
 	NewTechnology("Quartz 4", smFrontend)
 	NewTechnology("Quartz", smFrontend)
 	NewTechnology("NextJs", smFullStack)
-	NewTechnology("GraphQL", smBackend, smNetworking)
+	NewTechnology("GraphQL", smBackend, smNetworking).WithTags("API")
 	NewTechnology("Obsidian", smDocumentation)
 	NewTechnology("SIMD", smBackend, smRobotics, smEmbeddedSystems)
 	NewTechnology("Cloudflare Tunnels", smNetworking)
@@ -89,7 +89,6 @@ func setupTechSubjectMatters() {
 	NewTechnology("Markdown", smDocumentation)
 	NewTechnology("Websockets", smFullStack, smNetworking)
 	NewTechnology("Server-Sent Events", smFullStack, smNetworking)
-	// TODO: ADD NDSF(?) FILES FOR NUC STUFF
 	NewTechnology("SIMULATE3", smNuclearEngineering, smParticlePhysics)
 	NewTechnology("CASMO4e", smNuclearEngineering, smParticlePhysics)
 	NewTechnology("Pub-Sub", smBackend, smNetworking)

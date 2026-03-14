@@ -59,15 +59,15 @@ func setupPlatformSubjectMatters() {
 	NewPlatform("Gitlab").
 		WithSubjectMatters(smCiCd)
 	NewPlatform("Azure DevOps"). // TODO: USE
-		WithSubjectMatters(smDevOps)
+					WithSubjectMatters(smDevOps)
 	NewPlatform("Jira"). // TODO: USE
-		WithSubjectMatters(smDevOps)
+				WithSubjectMatters(smDevOps)
 	NewPlatform("Confluence"). // TODO: USE
-		WithSubjectMatters(smDocumentation)
+					WithSubjectMatters(smDocumentation)
 	NewPlatform("Slack"). // TODO: USE
-		WithSubjectMatters(smCommunication)
+				WithSubjectMatters(smCommunication)
 	NewPlatform("Small Improvements"). // TODO: USE
-		WithSubjectMatters(smObservability)
+						WithSubjectMatters(smObservability)
 	NewPlatform("Teams").
 		WithSubjectMatters(smCommunication)
 	NewPlatform("Jamf").
