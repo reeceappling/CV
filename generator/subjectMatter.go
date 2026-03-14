@@ -11,7 +11,7 @@ type SubjectMatter string
 
 func (sm SubjectMatter) Link() string {
 	if string(sm) == "CI-CD" {
-		return linkFor("CI/CD", "cv", "subjectMatter", withoutSpaces(string(sm)))
+		return linkFor("CI\\/CD", "cv", "subjectMatter", withoutSpaces(string(sm)))
 	}
 	return linkFor(string(sm), "cv", "subjectMatter", withoutSpaces(string(sm)))
 }
