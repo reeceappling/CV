@@ -35,7 +35,7 @@ func (pg *LanguagePage) Link() string {
 		return "NO_LINK"
 	}
 	if pg.Name == "Cpp" {
-		return linkFor("C++", "cv", "language", withoutSpaces(pg.Name))
+		return linkFor("C++", "cv", "language", withoutSpaces(pg.Name)) // TODO; will this need escaping on the plusses?
 	}
 	return linkFor(pg.Name, "cv", "language", withoutSpaces(pg.Name))
 }
