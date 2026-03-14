@@ -225,15 +225,19 @@ var (
 func initPositionsAfterProjects() {
 	// TODO: ANY MISC SKILLS
 	positionLifeguard = NewPosition("Lifeguard", 1, 2013, utils.Pointer(6), utils.Pointer(2014)). // TODO: ensure dates are right
-		WithSubjectMatters(smFirstAid)
+		WithSubjectMatters(smFirstAid).
+		WithProjects() // TODO: THIS!
 	positionSeniorLifeguard = NewPosition("Senior Lifeguard", 6, 2014, utils.Pointer(8), utils.Pointer(2016)). // TODO: ensure dates are right
-		WithSubjectMatters(smFirstAid)
+		WithSubjectMatters(smFirstAid).
+		WithProjects() // TODO: THIS!
 	positionTAE = NewPosition("Civil Structural Engineer and Tower Climber", 5, 2017, utils.Pointer(3), utils.Pointer(2018)). // TODO: ensure dates are right
 		WithMiscSkills("Excel", "Climbing", "AutoDesk Inventor", "AutoCAD", "Autodesk Revit", "Drafting").
-		WithSubjectMatters(smCivilEngineering, smStructuralEngineering, smStatics)
+		WithSubjectMatters(smCivilEngineering, smStructuralEngineering, smStatics).
+		WithProjects() // TODO: THIS!
 	positionTEI = NewPosition("Cell Tower Inspector and Tower Climber", 1, 2019, utils.Pointer(3), utils.Pointer(2020)). // TODO: ensure dates are right
 		WithMiscSkills("Climbing", "Drafting").
-		WithSubjectMatters(smCivilEngineering, smStructuralEngineering, smStatics)
+		WithSubjectMatters(smCivilEngineering, smStructuralEngineering, smStatics).
+		WithProjects() // TODO: THIS!
 	freelancePosition = NewPosition("Software Engineer", 1, 2012, utils.Pointer(5), utils.Pointer(2022)).
 		WithSubjectMatters(smFullStack).
 		WithProjects(WellAwareProject, CharityProject, CritColaProject, MastersDataAnalysisProject, WildlifeRProject, ArrowNailProject)
