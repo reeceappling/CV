@@ -130,7 +130,7 @@ jobs:
   deploy:
     needs: [build-quartz, generate-markdown]
     if: |
-      github.ref == 'refs/heads/main'
+      (github.ref == 'refs/heads/main' || contains(github.event.pull_request.labels.*.name, 'force deploy'))
       && always() && !cancelled()
       && (needs.generate-markdown.result == 'success')
       && needs.build-quartz.result == 'success'
