@@ -507,12 +507,15 @@ var (
 	WildlifeRProject               = NewProfessionalProject("Wildlife R Data Analysis", fixmeLink, wildlifeRClient, nil)
 	MastersDataAnalysisProject     = NewProfessionalProject("Masters Data Analysis", fixmeLink, clarkClient, nil)
 	capstoneProject                = NewSchoolProject("Capstone Project-Uranium Silicide Accident Tolerant Fuel cycle design for Duke Energy Catawba Nuclear Plant", "FIX M_E", schoolNCSU, &coreShufflerUrl)
-	projectLinAlgCryptography      = NewSchoolProject("Linear algebra cryptography algorithm", "FIX M_E", schoolNCSU, nil)
-	cherenkovProject               = NewSchoolProject("Cherenkov radiation sensor", fixmeLink, schoolNCSU, nil)
-	roboticsTeamProject            = NewSchoolProject("Robotics team 3720", fixmeLink, schoolCata, nil)
-	cncLaserCutterProject          = NewSchoolProject("CNC Laser Cutter", fixmeLink, schoolCata, nil)
-	aerospaceFinalProject          = NewSchoolProject("Aerospace senior design course", "Designed, created, and tested a rocket from scratch", schoolCata, nil)
-	miscSmallPersonalProjects      = NewPersonalProject("Misc small personal projects", "A conglomeration of personal projects which did not each deserve their own entry", nil)
+	reactorAnalysisFinal           = NewSchoolProject("Reactor Analysis Exam", "Reactor analysis final exam code", schoolNCSU, utils.Pointer(fixmeLink)) // TODO: ADD REAL LINK!
+	monteCarloProject              = NewSchoolProject("MonteCarlo scattering and decay project", "FIX_ME", schoolNCSU, utils.Pointer(fixmeLink))         // TODO: ADD REAL LINK!
+	// TODO; FORTRAN SCHOOL PROJECT
+	projectLinAlgCryptography = NewSchoolProject("Linear algebra cryptography algorithm", "FIX M_E", schoolNCSU, nil)
+	cherenkovProject          = NewSchoolProject("Cherenkov radiation sensor", fixmeLink, schoolNCSU, nil)
+	roboticsTeamProject       = NewSchoolProject("Robotics team 3720", fixmeLink, schoolCata, nil)
+	cncLaserCutterProject     = NewSchoolProject("CNC Laser Cutter", fixmeLink, schoolCata, nil)
+	aerospaceFinalProject     = NewSchoolProject("Aerospace senior design course", "Designed, created, and tested a rocket from scratch", schoolCata, nil)
+	miscSmallPersonalProjects = NewPersonalProject("Misc small personal projects", "A conglomeration of personal projects which did not each deserve their own entry", nil)
 )
 
 func initProjectsFinal() {
@@ -865,6 +868,19 @@ func initProjectsFinal() {
 		WithSubjectMatters(smNuclearEngineering, smLinearAlgebra, smFluidMechanics, smThermodynamics, smParticlePhysics).
 		WithInterests(string(smNuclearEngineering)).
 		finalize()
+	reactorAnalysisFinal = reactorAnalysisFinal.
+		WithLang("Javascript", Extensively).
+		WithStatus(statusComplete).
+		WithSummary("Final exam for the final course of my degree"). // TODO: this
+		WithSubjectMatters(smNuclearEngineering, smThermodynamics, smFluidMechanics).
+		finalize()
+	monteCarloProject = monteCarloProject.
+		WithSummary(fixmeLink).
+		WithStatus(statusComplete).
+		WithInterests(string(smParticlePhysics)). // TODO: ok?
+		WithLang("Java", Often).
+		WithSubjectMatters(smParticlePhysics, smNuclearEngineering).
+		finalize()
 	projectLinAlgCryptography = projectLinAlgCryptography.
 		WithSummary("Created and analyzed the efficacy of a cryptographic algorithm utilizing basic matrix mathematics. STATS"). // TODO: this
 		WithMiscSkills("Linear Algebra").
@@ -875,6 +891,7 @@ func initProjectsFinal() {
 	cherenkovProject = cherenkovProject.WithStatus(statusComplete).
 		WithSummary("Designed and built a sensor for Cherenkov radiation, which was tested by lowering the sensor into the core of the PULSTAR reactor at "+schoolNCSU.Link()+". The sensor utilized and Arduino for signal processing."). // TODO: this
 		WithLang("Python", Often).
+		WithLang("Fortran", Often).
 		WithTechnologies("Arduino").
 		WithPlatforms("Github").
 		WithSubjectMatters(smNuclearEngineering, smLinearAlgebra, smParticlePhysics, smStatistics, smEmbeddedSystems, smElectronics).
