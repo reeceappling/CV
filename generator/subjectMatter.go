@@ -105,6 +105,7 @@ var (
 	smChemistry             = NewSubjectMatter("Chemistry")
 	smDocumentation         = NewSubjectMatter("Documentation")
 	smGeospatial            = NewSubjectMatter("Geospatial")
+	smCommunication         = NewSubjectMatter("Communication")
 )
 
 func setupSubjectMatters() {

@@ -815,14 +815,14 @@ func initProjectsFinal() {
 		WithSubjectMatters(smGeospatial, smCiCd, smContainerization, smIAC, smClusterComputing, smDistributedComputing, smLinearAlgebra, smBackend).
 		finalize()
 	simpsonUnivProject = simpsonUnivProject.WithStatus(statusComplete). // TODO: MORE!
-		WithSummary("SUMMARY HERE"). // TODO: MORE!
-		WithLang("Html", Regularly).
-		WithLang("CSS", Regularly).
-		WithLang("Javascript", Some).
-		WithSubjectMatters(smFrontend).
-		WithTechnologies("Drupal").
-		WithPlatforms("Confluence"). // TODO: SOURCE JAMF
-		finalize()
+										WithSummary("SUMMARY HERE"). // TODO: MORE!
+										WithLang("Html", Regularly).
+										WithLang("CSS", Regularly).
+										WithLang("Javascript", Some).
+										WithSubjectMatters(smFrontend).
+										WithTechnologies("Drupal").
+										WithPlatforms("Confluence"). // TODO: SOURCE JAMF
+										finalize()
 	// TODO: sai project for JAMF
 	mushDbProject = mushDbProject.WithStatus(statusBuilding).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!

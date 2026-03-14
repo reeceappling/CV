@@ -64,4 +64,6 @@ func setupPlatformSubjectMatters() {
 				WithSubjectMatters(smDevOps)
 	NewPlatform("Confluence"). // TODO: USE
 					WithSubjectMatters(smDocumentation)
+	NewPlatform("Slack"). // TODO: USE
+				WithSubjectMatters(smCommunication)
 }

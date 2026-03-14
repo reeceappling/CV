@@ -54,7 +54,7 @@ func (pg *Client) Bytes() []byte {
 	builder := strings.Builder{}
 	builder.WriteString(frontmatterFor(pg.Name, "Client"))
 	if pg.Info != nil && len(pg.Info) > 0 {
-		builder.WriteString("# Responsibilities and Achievements \n")
+		builder.WriteString("# Notable Information\n")
 		for _, info := range pg.Info {
 			builder.WriteString(fmt.Sprintf("- %s\n", info))
 		}
