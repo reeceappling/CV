@@ -34,6 +34,9 @@ func (pg *LanguagePage) Link() string {
 	if pg == nil {
 		return "NO_LINK"
 	}
+	if pg.Name == "Cpp" {
+		return linkFor("C++", "cv", "language", withoutSpaces(pg.Name))
+	}
 	return linkFor(pg.Name, "cv", "language", withoutSpaces(pg.Name))
 }
 
