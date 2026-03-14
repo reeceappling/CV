@@ -221,7 +221,7 @@ func initClientsAfterProjectsComplete() {
 		WithProjects(CritColaProject).
 		WithInfo(
 			// TODO; link to discord
-			"Consulted on hosting game servers and "+lookup("Discord").Link()+" bots for a large online community such that they could be deployed or destroyed, on short notice with persistent game data utilizing "+lookup("GitlabCI").Link()+", "+lookup("Terraform").Link()+", "+lookup("Cloudflare").Link()+", and "+lookup("AWS").Link()+" ("+lookup("EC2").Link()+", "+lookup("EBS").Link()+", "+lookup("IAM").Link()+")",
+			"Consulted on hosting game servers and "+lookup("Discord").Link()+" bots for a large online community such that they could be deployed or destroyed, on short notice with persistent game data utilizing "+lookup("Gitlab CI").Link()+", "+lookup("Terraform").Link()+", "+lookup("Cloudflare").Link()+", and "+lookup("AWS").Link()+" ("+lookup("EC2").Link()+", "+lookup("EBS").Link()+", "+lookup("IAM").Link()+")",
 			"Created a final product with a spin-up time of approximately 3 minutes",
 		)
 	wellAwareClient = wellAwareClient.WithProjects(WellAwareProject).

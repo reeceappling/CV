@@ -79,4 +79,6 @@ func setupPlatformSubjectMatters() {
 		WithSubjectMatters(smCiCd)
 	NewPlatform("Discord").
 		WithSubjectMatters(smCommunication)
+	NewPlatform("Rally").
+		WithSubjectMatters(smObservability)
 }

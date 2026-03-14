@@ -543,7 +543,7 @@ func initProjectsFinal() {
 		WithLang("Python", Rarely, smScripting).
 		WithLang("Rust", Minimal, smScripting).
 		WithCloudProvider("AWS",
-			"ECS", "S3", "EC2", "IAM", "SecretsManager", "DynamoDB", "DAX", "Cloudwatch", "Lambda", "ECR", "Route53", "Kinesis", "SQS", "SNS", "ApiGateway", // TODO: FARGATE NOT BEING ON THIS LIST IS CAUSING PROBLEMS
+			"ECS", "S3", "EC2", "IAM", "SecretsManager", "DynamoDB", "DAX", "Cloudwatch", "Lambda", "ECR", "Route53", "Kinesis", "SQS", "SNS", "ApiGateway", "EBS", // TODO: FARGATE NOT BEING ON THIS LIST IS CAUSING PROBLEMS
 		).
 		WithDbs("Aurora", "DynamoDB", "Postgres").
 		WithCaches("Redis", "memcached").
@@ -744,7 +744,7 @@ func initProjectsFinal() {
 	rasterRenderProject = rasterRenderProject. // TODO: this whole thing!
 							WithStatus(statusComplete).
 							WithSummary(fixmeLink).
-							WithPlatforms("DroneCI").
+							WithPlatforms("DroneCI", "Rally").
 							WithSubjectMatters(smBackend).
 							finalize()
 	simpsonUnivProject = simpsonUnivProject.WithStatus(statusComplete). // TODO: MORE!
