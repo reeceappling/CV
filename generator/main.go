@@ -18,6 +18,7 @@ import (
 // TODO: sort projects on projects page? (maybe chronological?) (alphabetical?)
 // TODO: backlinks only on the subject matter pages????
 // TODO: PUT TAGS ALL OVER PROJECTS???!!!!!!
+// TODO: Folder page should alphabetize contents on list
 
 func main() {
 	for _, dir := range []string{"cv", "blog", "note"} {

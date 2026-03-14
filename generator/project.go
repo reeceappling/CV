@@ -144,7 +144,6 @@ func (pg *Project) Bytes() []byte {
 	}
 	builder.WriteString(frontmatterFor(pg.Name, pgTags...)) // TODO; do these tags need both Project and Project/*?
 	// PERSONAL/Professional
-	t := pg.TypeInfo.Type()
 	switch t {
 	case projectTypeSchool:
 		builder.WriteString("Coursework-related Project\n\n")
