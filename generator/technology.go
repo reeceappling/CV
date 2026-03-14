@@ -101,6 +101,7 @@ func setupTechSubjectMatters() {
 	NewTechnology("G and M codes", smElectronics, smRobotics)
 	NewTechnology("OpenApi", smDocumentation) // TODO: USE
 	NewTechnology("Swagger", smDocumentation) // TODO: USE
+	NewTechnology("Spring", smBackend)
 }
 
 // TODO: list all backlinks????
