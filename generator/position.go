@@ -221,29 +221,30 @@ var (
 	sai1, sai2, sai3, freelancePosition, positionTEI, positionTAE, positionSeniorLifeguard, positionLifeguard *Position
 )
 
+// TODO; ensure all professional projects are added to positions
 func initPositionsAfterProjects() {
 	// TODO: ANY MISC SKILLS
 	positionLifeguard = NewPosition("Lifeguard", 1, 2013, utils.Pointer(6), utils.Pointer(2014)). // TODO: ensure dates are right
-													WithSubjectMatters(smFirstAid)
+		WithSubjectMatters(smFirstAid)
 	positionSeniorLifeguard = NewPosition("Senior Lifeguard", 6, 2014, utils.Pointer(8), utils.Pointer(2016)). // TODO: ensure dates are right
-															WithSubjectMatters(smFirstAid)
+		WithSubjectMatters(smFirstAid)
 	positionTAE = NewPosition("Civil Structural Engineer and Tower Climber", 5, 2017, utils.Pointer(3), utils.Pointer(2018)). // TODO: ensure dates are right
-																	WithMiscSkills("Excel", "Climbing", "AutoDesk Inventor", "AutoCAD", "Autodesk Revit", "Drafting").
-																	WithSubjectMatters(smCivilEngineering, smStructuralEngineering, smStatics)
+		WithMiscSkills("Excel", "Climbing", "AutoDesk Inventor", "AutoCAD", "Autodesk Revit", "Drafting").
+		WithSubjectMatters(smCivilEngineering, smStructuralEngineering, smStatics)
 	positionTEI = NewPosition("Cell Tower Inspector and Tower Climber", 1, 2019, utils.Pointer(3), utils.Pointer(2020)). // TODO: ensure dates are right
-																WithMiscSkills("Climbing", "Drafting").
-																WithSubjectMatters(smCivilEngineering, smStructuralEngineering, smStatics)
+		WithMiscSkills("Climbing", "Drafting").
+		WithSubjectMatters(smCivilEngineering, smStructuralEngineering, smStatics)
 	freelancePosition = NewPosition("Software Engineer", 1, 2012, utils.Pointer(5), utils.Pointer(2022)).
 		WithSubjectMatters(smFullStack).
-		WithProjects(WellAwareProject, CharityProject, CritColaProject, MastersDataAnalysisProject)
+		WithProjects(WellAwareProject, CharityProject, CritColaProject, MastersDataAnalysisProject, WildlifeRProject, ArrowNailProject)
 	sai1 = NewPosition("Software Engineer", 5, 2022, utils.Pointer(6), utils.Pointer(2023)).
 		WithSubjectMatters(smFullStack).
-		WithProjects(tileGenProject, renderProject, statsProject, explorerProject, wqdbProject, supportProject, scudsProject, ufoProject, goweProject, simpsonUnivProject) // TODO: MOVE PROJECTS AROUND
+		WithProjects(rasterRenderProject, explorerProject, supportProject, scudsProject, simpsonUnivProject, jamfProject, smallImprovementsProject, internalResumeGeneratorProject) // TODO: MOVE PROJECTS AROUND
 	sai2 = NewPosition("Senior Software Engineer", 6, 2023, utils.Pointer(2), utils.Pointer(2025)).
 		WithSubjectMatters(smBackend).
-		WithProjects(polygonBuilderProject, GhaRunnersProject)
+		WithProjects(tileGenProject, polygonBuilderProject, GhaRunnersProject, statsProject, ufoProject, renderProject)
 	sai3 = NewPosition("Senior Software Engineer and Tech Lead", 2, 2025, nil, nil).
 		WithSubjectMatters(smBackend).
-		WithProjects(ogreProject, billingProject)
+		WithProjects(ogreProject, billingProject, goweProject, wqdbProject)
 
 }

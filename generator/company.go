@@ -217,7 +217,7 @@ func (pg *CompanyPage) GetAllLowest() (outCaches map[string]*CachePage, outDbs m
 
 func initCompaniesAfterPositions() {
 	_ = NewCompany("Source Allies", 5, 2022, nil, nil).
-		WithPositions(sai1, sai2, sai3)
+		WithPositions(sai1, sai2, sai3) // TODO: SAI not showing SAI as a client
 	_ = NewCompany("Freelance", 1, 2012, utils.Pointer(6), utils.Pointer(2022)). // TODO: RENAME
 											WithPositions(freelancePosition)
 	_ = NewCompany("TEI", 1, 2019, utils.Pointer(3), utils.Pointer(2020)). // TODO: ENSURE DATES ARE RIGHT
