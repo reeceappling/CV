@@ -34,13 +34,13 @@ const (
 	statusBuilding    projectStatus = "Building"
 	statusMaintaining projectStatus = "Maintaining"
 	statusNotOnTeam   projectStatus = "No longer part of project"
-	statusShelved     projectStatus = "Shelved or not actively working on this project" // TODO: change
+	statusShelved     projectStatus = "Shelved or not actively working on this project"
 )
 
 type Project struct {
 	Name     string
 	Summary  string
-	Status   projectStatus // TODO: USE THESE!!!!
+	Status   projectStatus
 	TypeInfo projectTypeInfo
 
 	link           *string
@@ -51,7 +51,7 @@ type Project struct {
 	Technologies   utils.Set[string]
 	Platforms      utils.Set[string]
 	MiscSkills     utils.Set[string]
-	// TODO: MORE!
+
 	RelatedInterests utils.Set[string]
 	SubjectMatters   utils.Set[SubjectMatter]
 	Tags             utils.Set[Tag]
@@ -324,7 +324,6 @@ func (p *Project) WithCloudProvider(name string, services ...string) *Project {
 	return p
 }
 func (p *Project) WithDbs(names ...string) *Project {
-	// TODO: Aurora, DynamoDB, DocumentDB, RDS should all point to the AWS service!!!!??? (probably not)
 	for _, dbName := range names {
 		if !p.Dbs.Contains(dbName) {
 			p.Dbs.Add(dbName)
@@ -742,24 +741,24 @@ func initProjectsFinal() {
 		WithSubjectMatters(smGeospatial, smCiCd, smContainerization, smIAC, smClusterComputing, smDistributedComputing, smLinearAlgebra, smBackend).
 		finalize()
 	rasterRenderProject = rasterRenderProject. // TODO: this whole thing!
-		WithSummary("Tile renderer API service cluster. Later replaced by the Render Cluster"). // TODO: link to render cluster
-		WithLang("Scala", Extensively).
-		WithLang("Terraform", Regularly).
-		WithLang("Bash", Some).
-		WithStatus(statusComplete).
-		WithPlatforms("DroneCI", "Rally").
-		WithSubjectMatters(smBackend).
-		WithCloudProvider("AWS", "ECS", "EC2", "API Gateway", "IAM", "ELB", "ALB").
-		finalize()
+							WithSummary("Tile renderer API service cluster. Later replaced by the Render Cluster"). // TODO: link to render cluster
+							WithLang("Scala", Extensively).
+							WithLang("Terraform", Regularly).
+							WithLang("Bash", Some).
+							WithStatus(statusComplete).
+							WithPlatforms("DroneCI", "Rally").
+							WithSubjectMatters(smBackend).
+							WithCloudProvider("AWS", "ECS", "EC2", "API Gateway", "IAM", "ELB", "ALB").
+							finalize()
 	simpsonUnivProject = simpsonUnivProject.WithStatus(statusComplete). // TODO: MORE!
-		WithSummary("SUMMARY HERE"). // TODO: MORE!
-		WithLang("Html", Regularly).
-		WithLang("CSS", Regularly).
-		WithLang("Javascript", Some).
-		WithSubjectMatters(smFrontend).
-		WithTechnologies("Drupal").
-		WithPlatforms("Confluence").
-		finalize()
+										WithSummary("SUMMARY HERE"). // TODO: MORE!
+										WithLang("Html", Regularly).
+										WithLang("CSS", Regularly).
+										WithLang("Javascript", Some).
+										WithSubjectMatters(smFrontend).
+										WithTechnologies("Drupal").
+										WithPlatforms("Confluence").
+										finalize()
 	mushDbProject = mushDbProject.WithStatus(statusBuilding).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!
 		WithLang("Go", Extensively).
