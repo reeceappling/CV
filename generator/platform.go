@@ -68,4 +68,6 @@ func setupPlatformSubjectMatters() {
 		WithSubjectMatters(smCommunication)
 	NewPlatform("Small Improvements"). // TODO: USE
 		WithSubjectMatters(smObservability)
+	NewPlatform("Teams").
+		WithSubjectMatters(smCommunication)
 }

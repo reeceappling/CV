@@ -650,7 +650,7 @@ func initProjectsFinal() {
 			"ECS", "S3", "EC2", "IAM", "SecretsManager", "Cloudwatch", "Lambda", "ECR", "Route53", // Route53 add networking sm
 		).
 		WithTechnologies("Github Actions").
-		WithPlatforms("Datadog", "Logcentral", "Github", "Azure DevOps", "Jira", "Confluence").
+		WithPlatforms("Datadog", "Logcentral", "Github", "Azure DevOps", "Jira", "Confluence", "Teams").
 		WithSubjectMatters(smBackend, smCiCd, smDevOps, smContainerization, smIAC, smCiCd).
 		finalize()
 	ogreProject = ogreProject.WithStatus(statusBuilding).
