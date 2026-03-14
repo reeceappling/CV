@@ -742,24 +742,24 @@ func initProjectsFinal() {
 		WithSubjectMatters(smGeospatial, smCiCd, smContainerization, smIAC, smClusterComputing, smDistributedComputing, smLinearAlgebra, smBackend).
 		finalize()
 	rasterRenderProject = rasterRenderProject. // TODO: this whole thing!
-							WithSummary("Tile renderer API service cluster. Later replaced by the Render Cluster"). // TODO: link to render cluster
-							WithLang("Scala", Extensively).
-							WithLang("Terraform", Regularly).
-							WithLang("Bash", Some).
-							WithStatus(statusComplete).
-							WithPlatforms("DroneCI", "Rally").
-							WithSubjectMatters(smBackend).
-							WithCloudProvider("AWS", "ECS", "EC2", "API Gateway", "IAM", "ELB", "ALB").
-							finalize()
+		WithSummary("Tile renderer API service cluster. Later replaced by the Render Cluster"). // TODO: link to render cluster
+		WithLang("Scala", Extensively).
+		WithLang("Terraform", Regularly).
+		WithLang("Bash", Some).
+		WithStatus(statusComplete).
+		WithPlatforms("DroneCI", "Rally").
+		WithSubjectMatters(smBackend).
+		WithCloudProvider("AWS", "ECS", "EC2", "API Gateway", "IAM", "ELB", "ALB").
+		finalize()
 	simpsonUnivProject = simpsonUnivProject.WithStatus(statusComplete). // TODO: MORE!
-										WithSummary("SUMMARY HERE"). // TODO: MORE!
-										WithLang("Html", Regularly).
-										WithLang("CSS", Regularly).
-										WithLang("Javascript", Some).
-										WithSubjectMatters(smFrontend).
-										WithTechnologies("Drupal").
-										WithPlatforms("Confluence").
-										finalize()
+		WithSummary("SUMMARY HERE"). // TODO: MORE!
+		WithLang("Html", Regularly).
+		WithLang("CSS", Regularly).
+		WithLang("Javascript", Some).
+		WithSubjectMatters(smFrontend).
+		WithTechnologies("Drupal").
+		WithPlatforms("Confluence").
+		finalize()
 	mushDbProject = mushDbProject.WithStatus(statusBuilding).
 		WithSummary("SUMMARY HERE"). // TODO: MORE!
 		WithLang("Go", Extensively).
@@ -997,6 +997,7 @@ func initProjectsFinal() {
 		WithTechnologies("Spring", "REST API").
 		WithSubjectMatters(smApi, smFullStack).
 		WithTechnologies("Github Actions").
+		WithCloudProvider("AWS", "Route53"). // TODO: add route53 everywhere needed
 		finalize()
 }
 
