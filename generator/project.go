@@ -486,6 +486,7 @@ var (
 	scudsProject                   = NewProfessionalProject("Scuds API", fixmeLink, jdClient, nil)
 	ufoProject                     = NewProfessionalProject("UFO API", fixmeLink, jdClient, nil)
 	goweProject                    = NewProfessionalProject("Gowe Builder", fixmeLink, jdClient, nil)
+	rasterRenderProject            = NewProfessionalProject("Raster Render", fixmeLink, jdClient, nil)
 	simpsonUnivProject             = NewProfessionalProject("Simpson University", fixmeLink, simpsonUniversityClient, nil) // TODO: MORE!
 	jamfProject                    = NewProfessionalProject("JAMF companywide setup", fixmeLink, sourceAlliesClient, nil)
 	smallImprovementsProject       = NewProfessionalProject("Small Improvements Bot", fixmeLink, sourceAlliesClient, nil)
@@ -737,6 +738,12 @@ func initProjectsFinal() {
 		WithPlatforms("Datadog", "Logcentral", "Github", "ServiceNow", "Azure DevOps", "Jira", "Confluence").
 		WithSubjectMatters(smGeospatial, smCiCd, smContainerization, smIAC, smClusterComputing, smDistributedComputing, smLinearAlgebra, smBackend).
 		finalize()
+	rasterRenderProject = rasterRenderProject. // TODO: this whole thing!
+							WithStatus(statusComplete).
+							WithSummary(fixmeLink).
+							WithPlatforms("DroneCI").
+							WithSubjectMatters(smBackend).
+							finalize()
 	simpsonUnivProject = simpsonUnivProject.WithStatus(statusComplete). // TODO: MORE!
 										WithSummary("SUMMARY HERE"). // TODO: MORE!
 										WithLang("Html", Regularly).
@@ -907,6 +914,7 @@ func initProjectsFinal() {
 		WithLang("Java", Some, smBackend).
 		WithLang("Javascript", Often, smFrontend).
 		WithLang("Typescript", Often, smFullStack).
+		WithLang("Kotlin", Rarely, smBackend).
 		WithTechnologies("Kubernetes").
 		WithSubjectMatters(smApi, smCryptocurrency).
 		finalize()

@@ -75,4 +75,6 @@ func setupPlatformSubjectMatters() {
 		WithSubjectMatters(smCommunication)
 	NewPlatform("Jamf").
 		WithSubjectMatters(smCybersecurity)
+	NewPlatform("DroneCI").
+		WithSubjectMatters(smCiCd)
 }

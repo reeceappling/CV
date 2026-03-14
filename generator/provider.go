@@ -79,6 +79,7 @@ func NewCloudProvider(name string, services ...string) *CloudProviderPage {
 	}
 	subjectMatters[smCloudComputing][prov.EntryType()].Add() // TODO: ok?
 	providers[name] = prov
+	addLinkable(name, prov)
 	return prov
 }
 

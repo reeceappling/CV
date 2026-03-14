@@ -10,6 +10,9 @@ var subjectMatters = map[SubjectMatter]map[string]utils.Set[string]{} // Map of 
 type SubjectMatter string
 
 func (sm SubjectMatter) Link() string {
+	if string(sm) == "CI-CD" {
+		return linkFor("CI/CD", "cv", "subjectMatter", withoutSpaces(string(sm)))
+	}
 	return linkFor(string(sm), "cv", "subjectMatter", withoutSpaces(string(sm)))
 }
 func (pg SubjectMatter) EntryType() string {
@@ -121,4 +124,6 @@ func setupSubjectMatters() {
 	setupServiceSubjectMatters()
 	setupTechSubjectMatters()
 	setupPlatformSubjectMatters()
+	linkables["cicd"] = smCiCd
+	linkables["ci/cd"] = smCiCd
 }

@@ -197,12 +197,12 @@ func initClientsAfterProjectsComplete() {
 		"Designed "+lookup("CUDA").Link()+" "+lookup("C").Link()+"/[C++](cv/language/Cpp) Kernels used through "+lookup("CGo").Link()+" for statistics and image processing via GPU",
 		"Improved a mission-critical image manipulation API from 65% reliability to 99.9999% success rate",
 		"Spearheaded implementation of an "+lookup("ECS").Link()+" cluster using an advanced "+lookup("topology").Link()+" algorithm (from a PhD thesis), achieving >100x performance gains over its original implementation on TB-scale datasets",
-		"Built a Go-based compiler that transformed nested JSON instructions into machine-executable operations across EC2 clusters for for retrieving and manipulating geospatial agricultural data",
+		"Built a "+lookup("Go").Link()+"-based compiler that transformed nested JSON instructions into machine-executable operations across clusters of "+lookup("EC2").Link()+" instances for for retrieving and manipulating geospatial agricultural data",
 		"__Saved \\$18M of a \\$28M budget (64%)__ in 2024, while still increasing service stability and throughput",
-		"Ensured maximum service uptime via careful design and rollout of CI/CD pipelines operated via self-hosted GitHub Actions runners, in conjunction with Infrastructure as Code via Terraform",
+		"Ensured maximum service uptime via careful design and rollout of [CI/CD](cv/subjectMatter/CI-CD) pipelines operated via self-hosted GitHub Actions runners, in conjunction with Infrastructure as Code via "+lookup("Terraform").Link(),
 		"Setup  monitoring, dashboards, alerting, traces, and profiling (Datadog/Grafana/CloudWatch)",
 		"Responsible for educating engineers on infrastructure, codebase, domain, and best practices",
-		"Utilized primarily Go, Terraform, Bash, and Docker on AWS, but also used Scala, Github Actions, C/C++ with CUDA, DroneCI, python, javascript, typescript, Kotlin, and more",
+		"Utilized primarily "+lookup("Go").Link()+", "+lookup("Terraform").Link()+", "+lookup("Bash").Link()+", and "+lookup("Docker").Link()+" on "+lookup("AWS").Link()+", but also used "+lookup("Scala").Link()+", "+lookup("Github Actions").Link()+", "+lookup("C").Link()+"/[C++](cv/language/Cpp) with "+lookup("CUDA").Link()+", "+lookup("DroneCI").Link()+", "+lookup("Python").Link()+", "+lookup("Javascript").Link()+", "+lookup("Typescript").Link()+", "+lookup("Kotlin").Link()+", and more",
 		"Platforms utilized:  AWS (>30 separate services), Datadog, LogCentral, Rally, Azure DevOps, Github, DroneCI, Grafana, Prometheus, Confluence, and more")
 	sourceAlliesClient = sourceAlliesClient.
 		WithProjects(jamfProject, smallImprovementsProject, internalResumeGeneratorProject). // TODO: USE OTHERS
