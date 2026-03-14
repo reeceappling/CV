@@ -129,16 +129,29 @@ func (pg *Project) EntryType() string {
 
 func (pg *Project) Bytes() []byte {
 	builder := strings.Builder{}
-	builder.WriteString(frontmatterFor(pg.Name, "Project"))
+	pgTags := []string{"Project"}
+	t := pg.TypeInfo.Type()
+	switch t {
+	case projectTypeSchool:
+		pgTags = append(pgTags, "Project/Coursework Related")
+		builder.WriteString("Coursework-related Project\n\n")
+	case projectTypeProfessional:
+		pgTags = append(pgTags, "Project/Professional")
+	case projectTypePersonal:
+		pgTags = append(pgTags, "Project/Personal")
+	default:
+		panic("unknown project type: " + string(t))
+	}
+	builder.WriteString(frontmatterFor(pg.Name, pgTags...)) // TODO; do these tags need both Project and Project/*?
 	// PERSONAL/Professional
 	t := pg.TypeInfo.Type()
 	switch t {
 	case projectTypeSchool:
-		builder.WriteString("Coursework-related Project\n")
+		builder.WriteString("Coursework-related Project\n\n")
 	case projectTypeProfessional:
-		builder.WriteString("Professional Project\n")
+		builder.WriteString("Professional Project\n\n")
 	case projectTypePersonal:
-		builder.WriteString("Personal Project\n")
+		builder.WriteString("Personal Project\n\n")
 	default:
 		panic("unknown project type: " + string(t))
 	}
