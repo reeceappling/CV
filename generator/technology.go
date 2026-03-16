@@ -60,10 +60,10 @@ func setupTechSubjectMatters() {
 	NewTechnology("LLM", smAI)
 	NewTechnology("AI", smAI)
 	NewTechnology("AI Agents", smAI)
-	NewTechnology("OpenAI API spec", smAI, smBackend)
+	NewTechnology("OpenAI API spec", smAI, smBackend).WithTags("API")
 	NewTechnology("CUDA", smGPU, smGraphics)
 	NewTechnology("CGo", smBackend)
-	NewTechnology("REST API", smBackend, smApi) // TODO: use this everywhere necessary...
+	NewTechnology("REST API", smBackend, smApi).WithTags("API") // TODO: use this everywhere necessary...
 	NewTechnology("Avro", smBackend).WithTags("DataFormat")
 	NewTechnology("Parquet", smBackend).WithTags("DataFormat")
 	NewTechnology("JSON", smFullStack).WithTags("DataFormat")
@@ -103,8 +103,8 @@ func setupTechSubjectMatters() {
 	NewTechnology("Arduino", smEmbeddedSystems, smElectronics, smRobotics)
 	NewTechnology("PWM", smEmbeddedSystems, smElectronics, smRobotics)
 	NewTechnology("G and M codes", smElectronics, smRobotics)
-	NewTechnology("OpenApi", smDocumentation) // TODO: USE
-	NewTechnology("Swagger", smDocumentation) // TODO: USE
+	NewTechnology("OpenApi", smDocumentation).WithTags("API") // TODO: USE
+	NewTechnology("Swagger", smDocumentation).WithTags("API") // TODO: USE
 	NewTechnology("Spring", smBackend)
 }
 
