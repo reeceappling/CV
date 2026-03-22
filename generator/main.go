@@ -1,6 +1,7 @@
 package main
 
 import (
+	"appli.ng/cv/generator/utils"
 	"fmt"
 	"maps"
 	"os"
@@ -18,6 +19,9 @@ import (
 // TODO: sort projects on projects page? (maybe chronological?) (alphabetical?)
 // TODO: backlinks only on the subject matter pages????
 // TODO: PUT TAGS ALL OVER PROJECTS???!!!!!!
+// TODO: Folder page should alphabetize contents on list
+
+// TODO: add TDD? OOP? functional?
 
 func main() {
 	for _, dir := range []string{"cv", "blog", "note"} {
@@ -42,8 +46,8 @@ func main() {
 	initClientsAfterProjectsComplete() // Sets client on projects as well
 	initPositionsAfterProjects()
 	initCompaniesAfterPositions() // Must be done after positions and project setup, but before projects pages. What about clients?
-
 	// TODO: POPULATE SUBJECT MATTERS ON TECHS, SERVICES, MISCSKILLS?
+	initAliases() // TODO: ok ????
 
 	// Start creating actual pages
 	createLanguagesPages()
@@ -96,16 +100,19 @@ func createMainCVPage() { // TODO: TAGS EVERYWHERE????
 	// TODO: https://quartz.jzhao.xyz/configuration PAGE TITLE
 	// TODO: THEMEING // https://quartz.jzhao.xyz/configuration
 	// TODO: FORCE DARK MODE
+	// TODO: figure out how to change rich text preview (when sent via discord, snapchat, or RCS
+	// TODO: ADD QR CODES????
+	// TODO: MODIFY FAVICON
+	// TODO: MODIFY TAB TITLES
 	b := strings.Builder{}
 	b.WriteString(frontmatterFor("CV"))
 	// TODO: HEADER AREA FOR LINKS TO CV, RESUME, BLOG, NOTES?
 
-	b.WriteString("Welcome to my CV! It is a living document that is updated occasionally.\n\n")                     // Why does this need 2 newlines? // TODO: move down?
-	b.WriteString("Looking for a resume instead? [Download it here](Resume.pdf)ENSURE WORKING\n\n")                  // TODO: ENSURE OK
-	b.WriteString("Feel free to check out the [source code](https://github.com/reeceappling/CV) for this website\n") // TODO: ENSURE OK
+	b.WriteString("Welcome to my CV! It is a living document that is updated occasionally.\n\n")                         // Why does this need 2 newlines?
+	b.WriteString("Looking for a resume instead? [Download it here](static/Resume_Reece_Appling.pdf)ENSURE WORKING\n\n") // TODO: ENSURE OK
+	b.WriteString("Feel free to check out the [source code](https://github.com/reeceappling/CV) for this website\n")
 
 	b.WriteString("# About\n")
-
 	b.WriteString(fixmeLink + "\n") // TODO: SUMMARY/About
 
 	b.WriteString("# Work History ([Companies](companies.md), [Positions](positions.md))\n") // TODO: RENAME
@@ -117,7 +124,7 @@ func createMainCVPage() { // TODO: TAGS EVERYWHERE????
 		if endDate == "current" {
 			endDate = ""
 		}
-		b.WriteString(fmt.Sprintf("%s | %s | %s | %s\n", company.Positions[0].Name, company.Link(), company.Positions[len(company.Positions)-1].Start.String(), endDate))
+		b.WriteString(fmt.Sprintf("%s | %s | %s | %s\n", company.Positions[0].Name, Link(company), company.Positions[len(company.Positions)-1].Start.String(), endDate))
 	}
 
 	b.WriteString("# Education\n")
@@ -130,7 +137,7 @@ func createMainCVPage() { // TODO: TAGS EVERYWHERE????
 		for i, d := range school.Degrees {
 			temp[i] = d.StringShort()
 		}
-		b.WriteString(fmt.Sprintf("- %s %s\n", school.Link(), strings.Join(temp, ", ")))
+		b.WriteString(fmt.Sprintf("- %s %s\n", Link(school), strings.Join(temp, ", ")))
 	}
 
 	b.WriteString("# Certifications\n")
@@ -152,31 +159,33 @@ func createMainCVPage() { // TODO: TAGS EVERYWHERE????
 	b.WriteString("[see all languages LINK BROKEN](language/)\n") // TODO: delete?
 	b.WriteString("## Preferred (in order)\n")
 	for _, name := range []string{"Go", "Typescript", "Terraform", "Bash"} {
-		b.WriteString(fmt.Sprintf("- %s\n", langs[name].Link()))
+		b.WriteString(fmt.Sprintf("- %s\n", Link(langs[name])))
 	}
 	b.WriteString("## All\n")
 	b.WriteString(alphabetizedLinksCompressed(langs, "language"))
 
-	b.WriteString("# Databases\n[Full Page](dbs.md)\n\n") // TODO: why does this take 2 newlines??
+	b.WriteString("# Databases\n[Full Page](dbs.md)\n\n")
 	b.WriteString(alphabetizedLinksCompressed(dbs, "db"))
 
-	b.WriteString("# Caches\n[Full Page](caches.md)\n\n") // TODO: why does this take 2 newlines??
+	b.WriteString("# Caches\n[Full Page](caches.md)\n\n")
 	b.WriteString(alphabetizedLinksCompressed(caches, "cache"))
 
 	b.WriteString("# Cloud Providers\n[Full Page](providers.md)\n")
 	b.WriteString("## Preferred\n")
 	for _, name := range []string{"AWS"} {
-		b.WriteString(fmt.Sprintf("- %s\n", providers[name].Link()))
+		b.WriteString(fmt.Sprintf("- %s\n", Link(providers[name])))
 	}
 	b.WriteString("## All\n")
 	b.WriteString(alphabetizedLinksCompressed(providers, "provider"))
 	// TODO: ADD GCP! Azure!
 
 	b.WriteString("# Technologies and Libraries\n[Full Page](technologies.md)\n\n") // TODO: why does this take 2 newlines??
-	b.WriteString(alphabetizedLinksCompressed(techs, "technology"))                 // TODO: dir correct?
+	b.WriteString(alphabetizedLinksCompressed(techs, "technology"))
 
-	b.WriteString("## Containerization\n\n")      // TODO: why does this take 2 newlines??
-	b.WriteString("## Distributed Computing\n\n") // TODO: why does this take 2 newlines??
+	b.WriteString("## Containerization\n\n")
+	b.WriteString(fixmeLink + "\n") // TODO: this!
+	b.WriteString("## Distributed Computing\n\n")
+	b.WriteString(fixmeLink + "\n") // TODO: this!
 
 	// TODO: POPULATE THIS AREA!!!!!!!!!!!!!
 
@@ -225,7 +234,7 @@ func createMainCVPage() { // TODO: TAGS EVERYWHERE????
 	alphabetizedSkills := slices.Collect(maps.Keys(miscSkills))
 	sort.Strings(alphabetizedSkills)
 	for _, name := range alphabetizedSkills {
-		b.WriteString(fmt.Sprintf("- %s\n", miscSkills[name].Link()))
+		b.WriteString(fmt.Sprintf("- %s\n", Link(miscSkills[name])))
 	}
 	b.WriteString("# Interests\n") // TODO: move????
 	alphabetizedInterests := slices.Collect(maps.Keys(interests))
@@ -239,7 +248,7 @@ func createMainCVPage() { // TODO: TAGS EVERYWHERE????
 		return string(alphabetizedSms[i]) < string(alphabetizedSms[j])
 	})
 	for _, name := range alphabetizedSms {
-		b.WriteString(fmt.Sprintf("- %s\n", name.Link()))
+		b.WriteString(fmt.Sprintf("- %s\n", Link(name)))
 	}
 	WriteFile("cv.md", b.String())
 }
@@ -257,7 +266,7 @@ func createLanguagesPages() {
 	b.WriteString("# Preferred (in order)\n")
 	for _, name := range []string{"Go", "Typescript", "Terraform", "Bash"} {
 		l := langs[name]
-		b.WriteString(fmt.Sprintf("- %s\n", l.Link()))
+		b.WriteString(fmt.Sprintf("- %s\n", Link(l)))
 	}
 	b.WriteString("# All\n")
 	b.WriteString("[see all languages](language/)\n") // TODO: delete?
@@ -293,21 +302,21 @@ func createProjectsPages() {
 	for _, proj := range projects {
 		switch proj.TypeInfo.Type() {
 		case projectTypePersonal:
-			bPersonal.WriteString(fmt.Sprintf("- %s\n", proj.Link()))
+			bPersonal.WriteString(fmt.Sprintf("- %s\n", Link(proj)))
 		case projectTypeProfessional:
-			pr := proj.Link()
+			pr := Link(proj)
 			var co, cl = "none", "none"
 			client := proj.TypeInfo.getClient()
 			if client != nil {
-				cl = client.Link()
+				cl = Link(client)
 				if client.company != nil {
-					co = client.company.Link()
+					co = Link(client.company)
 				}
 			}
 
 			bProfessional.WriteString(fmt.Sprintf("%s | %s | %s\n", pr, co, cl))
 		case projectTypeSchool:
-			bSchool.WriteString(fmt.Sprintf("- %s\n", proj.Link())) // TODO: school link???
+			bSchool.WriteString(fmt.Sprintf("- %s\n", Link(proj))) // TODO: school link???
 		default:
 			panic("unknown project type")
 
@@ -334,7 +343,7 @@ func createSchoolsPages() {
 	b := strings.Builder{}
 	b.WriteString(frontmatterFor("Schools"))
 	for _, school := range schools {
-		b.WriteString(fmt.Sprintf("# %s\n", school.Link()))
+		b.WriteString(fmt.Sprintf("# %s\n", Link(school)))
 		// Write all degrees
 		b.WriteString("- Degrees:")
 		for i, deg := range school.Degrees {
@@ -347,7 +356,7 @@ func createSchoolsPages() {
 		// Write all projects
 		b.WriteString("- Projects:\n")
 		for _, proj := range school.Projects {
-			b.WriteString(fmt.Sprintf("- - %s\n", proj.Link()))
+			b.WriteString(fmt.Sprintf("- - %s\n", Link(proj)))
 		}
 		b.WriteString("- Extracurriculars:\n")
 		// Write all extracurriculars
@@ -397,7 +406,7 @@ func createPositionsPages() {
 		if end == "current" {
 			end = ""
 		}
-		b.WriteString(fmt.Sprintf(" %s | %s | %s | %s\n", pos.Link(), pos.company.Name, pos.Start.String(), end))
+		b.WriteString(fmt.Sprintf(" %s | %s | %s | %s\n", Link(pos), pos.company.Name, pos.Start.String(), end))
 	}
 	b.WriteString("Earliest")
 
@@ -424,9 +433,9 @@ func createClientsPages() {
 		client := clients[clientName]
 		compLink := linkFor(client.Name, "cv", "company", withoutSpaces(client.Name))
 		if client.company != nil {
-			compLink = client.company.Link()
+			compLink = Link(client.company)
 		}
-		b.WriteString(fmt.Sprintf("%s | %s \n", client.Link(), compLink))
+		b.WriteString(fmt.Sprintf("%s | %s \n", Link(client), compLink))
 	}
 	err := os.WriteFile(root+"clients.md", []byte(b.String()), 777)
 	if err != nil {
@@ -452,7 +461,7 @@ func createCompaniesPages() {
 	for _, companyName := range companiesOrder {
 		// TODO: Consider linking every position from here, but on separate lines
 		company := companies[companyName]
-		b.WriteString(fmt.Sprintf("%s | %s | %s | %s\n", company.Positions[0].Name, company.Link(), company.Start.String(), company.End.String()))
+		b.WriteString(fmt.Sprintf("%s | %s | %s | %s\n", company.Positions[0].Name, Link(company), company.Start.String(), company.End.String()))
 	}
 	err := os.WriteFile(root+"companies.md", []byte(b.String()), 777)
 	if err != nil {
@@ -476,7 +485,7 @@ func createPlatformsPages() {
 	sort.Strings(alphabetizedPlatforms)
 	for _, platName := range alphabetizedPlatforms {
 		platform := platforms[platName]
-		b.WriteString(fmt.Sprintf("- %s\n", platform.Link()))
+		b.WriteString(fmt.Sprintf("- %s\n", Link(platform)))
 	}
 	err := os.WriteFile(root+"platforms.md", []byte(b.String()), 777)
 	if err != nil {
@@ -491,7 +500,7 @@ func createPlatformsPages() {
 		if len(platform.SubjectMatters) == 0 {
 			panic("no subject matter on platform " + name)
 		}
-		WriteCVFile("platform/"+withoutSpaces(name)+".md", string(platform.Bytes(name, "Platform")))
+		WriteCVFile("platform/"+withoutSpaces(name)+".md", string(platform.Bytes(name, nil, "Platform")))
 	}
 }
 
@@ -503,7 +512,7 @@ func createDbsPages() {
 	sort.Strings(alphabetized)
 	for _, name := range alphabetized {
 		db := dbs[name]
-		b.WriteString(fmt.Sprintf("- %s\n", db.Link()))
+		b.WriteString(fmt.Sprintf("- %s\n", Link(db)))
 	}
 	err := os.WriteFile(root+"dbs.md", []byte(b.String()), 777)
 	if err != nil {
@@ -515,7 +524,8 @@ func createDbsPages() {
 		}
 	}
 	for name, db := range dbs {
-		WriteCVFile("db/"+withoutSpaces(name)+".md", string(db.Bytes(name, "Database")))
+
+		WriteCVFile("db/"+withoutSpaces(name)+".md", string(db.Bytes(name, utils.Pointer(smDatabase), "Database")))
 	}
 }
 func createCachesPages() {
@@ -526,7 +536,7 @@ func createCachesPages() {
 	sort.Strings(alphabetized)
 	for _, name := range alphabetized {
 		cache := caches[name]
-		b.WriteString(fmt.Sprintf("- %s\n", cache.Link()))
+		b.WriteString(fmt.Sprintf("- %s\n", Link(cache)))
 	}
 	err := os.WriteFile(root+"caches.md", []byte(b.String()), 777)
 	if err != nil {
@@ -538,7 +548,7 @@ func createCachesPages() {
 		}
 	}
 	for name, cache := range caches {
-		WriteCVFile("cache/"+withoutSpaces(name)+".md", string(cache.Bytes(name, "Cache")))
+		WriteCVFile("cache/"+withoutSpaces(name)+".md", string(cache.Bytes(name, utils.Pointer(smCaching), "Cache")))
 	}
 }
 
@@ -550,7 +560,7 @@ func createProvidersPages() {
 	b.WriteString("# Preferred (in order)\n")
 	for _, name := range []string{"AWS"} {
 		provider := providers[name]
-		b.WriteString(fmt.Sprintf("- %s\n", provider.Link()))
+		b.WriteString(fmt.Sprintf("- %s\n", Link(provider)))
 		// TODO: SUB-SERVICES!!!!!
 	}
 	b.WriteString("# All\n")
@@ -576,7 +586,7 @@ func createServicesPages() {
 	b.WriteString("Service | Provider\n")
 	b.WriteString(":-- | :--\n")
 	for _, service := range cloudServices { // TODO: alphabetize?!!!!!
-		b.WriteString(fmt.Sprintf("%s | %s\n", service.Link(), service.provider))
+		b.WriteString(fmt.Sprintf("%s | %s\n", Link(service), service.provider))
 	}
 	err := os.WriteFile(root+"services.md", []byte(b.String()), 777)
 	if err != nil {
@@ -588,7 +598,7 @@ func createServicesPages() {
 		}
 	}
 	for name, service := range cloudServices {
-		WriteCVFile("service/"+withoutSpaces(name)+".md", string(service.Bytes(name, "Cloud Service")))
+		WriteCVFile("service/"+withoutSpaces(name)+".md", string(service.Bytes(name, nil, "Cloud Service")))
 	}
 }
 
@@ -600,7 +610,7 @@ func createTechnologiesPages() {
 	sort.Strings(alphabetized)
 	for _, name := range alphabetized {
 		tech := techs[name]
-		b.WriteString(fmt.Sprintf("- %s\n", tech.Link()))
+		b.WriteString(fmt.Sprintf("- %s\n", Link(tech)))
 	}
 	err := os.WriteFile(root+"technologies.md", []byte(b.String()), 777)
 	if err != nil {
@@ -615,7 +625,8 @@ func createTechnologiesPages() {
 		if len(tech.SubjectMatters) == 0 {
 			panic("no subject matter on technology " + name)
 		}
-		WriteCVFile("technology/"+withoutSpaces(name)+".md", string(tech.Bytes(name, "Technology")))
+		typePlusTags := append([]string{"Technology"}, tech.Tags.AsSlice()...)
+		WriteCVFile("technology/"+withoutSpaces(name)+".md", string(tech.Bytes(name, nil, typePlusTags...)))
 	}
 }
 
@@ -627,7 +638,7 @@ func createMiscSkillsPages() {
 	sort.Strings(alphabetized)
 	for _, name := range alphabetized {
 		skill := miscSkills[name]
-		b.WriteString(fmt.Sprintf("- %s\n", skill.Link()))
+		b.WriteString(fmt.Sprintf("- %s\n", Link(skill)))
 	}
 	err := os.WriteFile(root+"miscSkills.md", []byte(b.String()), 777)
 	if err != nil {
@@ -639,7 +650,7 @@ func createMiscSkillsPages() {
 		}
 	}
 	for name, skill := range miscSkills {
-		WriteCVFile("miscSkill/"+withoutSpaces(name)+".md", string(skill.Bytes(name, "Misc Skill")))
+		WriteCVFile("miscSkill/"+withoutSpaces(name)+".md", string(skill.Bytes(name, nil, "Misc Skill")))
 	}
 }
 func createInterestsPages() {
@@ -660,7 +671,7 @@ func createInterestsPages() {
 		}
 	}
 	for name, interest := range interests {
-		WriteCVFile("interest/"+withoutSpaces(name)+".md", string(interest.Bytes(name, "Interest")))
+		WriteCVFile("interest/"+withoutSpaces(name)+".md", string(interest.Bytes(name, nil, "Interest")))
 	}
 }
 func createSubjectMatterPages() {
@@ -672,7 +683,7 @@ func createSubjectMatterPages() {
 		return string(alphabetizedSms[i]) < string(alphabetizedSms[j])
 	})
 	for _, name := range alphabetizedSms {
-		b.WriteString(fmt.Sprintf("- %s\n", name.Link()))
+		b.WriteString(fmt.Sprintf("- %s\n", Link(name)))
 	}
 	err := os.WriteFile(root+"subjectMatters.md", []byte(b.String()), 777)
 	if err != nil {

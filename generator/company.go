@@ -41,16 +41,21 @@ type CompanyPage struct {
 	//Languages []string // Calculated later
 }
 
+func (pg *CompanyPage) Dst() string {
+	return dstFor("cv", "company", withoutSpaces(pg.Name))
+}
+
+func (pg *CompanyPage) Title() string {
+	if pg == nil {
+		return noLinkText
+	}
+	return pg.Name
+}
+
 func (pg *CompanyPage) NameValue() string {
 	return pg.Name
 }
 
-func (pg *CompanyPage) Link() string {
-	if pg == nil {
-		return "NO_LINK"
-	}
-	return linkFor(pg.Name, "cv", "company", withoutSpaces(pg.Name))
-}
 func (pg *CompanyPage) EntryType() string {
 	return "Company"
 }
@@ -75,6 +80,7 @@ func NewCompany(name string, startMo, startYr int, endMo, endYr *int) *CompanyPa
 		}
 	}
 	companies[name] = out
+	addLinkable(strings.ToLower(name), out)
 	companiesOrder = append(companiesOrder, name)
 	return out
 }
@@ -88,7 +94,7 @@ func (pg *CompanyPage) Bytes() []byte {
 			// TODO: NOT PROPERLY SORTED
 			// TODO: ORDERING?
 			// TODO: POS NOT WORKING ON DEERE CLIENT PAGE
-			builder.WriteString(fmt.Sprintf("- %s\n", pos.Link()))
+			builder.WriteString(fmt.Sprintf("- %s\n", Link(pos)))
 		}
 	}
 	clis := pg.Clients()
@@ -96,7 +102,7 @@ func (pg *CompanyPage) Bytes() []byte {
 	if clis != nil && len(clis) > 0 {
 		builder.WriteString("# Clients\n")
 		for _, client := range clis {
-			builder.WriteString(fmt.Sprintf("- %s\n", client.Link()))
+			builder.WriteString(fmt.Sprintf("- %s\n", Link(client)))
 		}
 	}
 	// resolve projects
@@ -104,7 +110,7 @@ func (pg *CompanyPage) Bytes() []byte {
 	if len(ps) > 0 {
 		builder.WriteString("# Projects\n")
 		for _, proj := range ps {
-			builder.WriteString(fmt.Sprintf("- %s\n", proj.Link()))
+			builder.WriteString(fmt.Sprintf("- %s\n", Link(proj)))
 		}
 	}
 	// Resolve languages
@@ -122,7 +128,7 @@ func (pg *CompanyPage) Bytes() []byte {
 		}
 		for f := 5; f >= 0; f-- {
 			for _, name := range freqs[Frequency(f)] {
-				builder.WriteString(fmt.Sprintf("- %s\n", langs[name].Link()))
+				builder.WriteString(fmt.Sprintf("- %s\n", Link(langs[name])))
 			}
 		}
 	}
@@ -216,7 +222,7 @@ func (pg *CompanyPage) GetAllLowest() (outCaches map[string]*CachePage, outDbs m
 
 func initCompaniesAfterPositions() {
 	_ = NewCompany("Source Allies", 5, 2022, nil, nil).
-		WithPositions(sai1, sai2, sai3)
+		WithPositions(sai1, sai2, sai3) // TODO: SAI not showing SAI as a client
 	_ = NewCompany("Freelance", 1, 2012, utils.Pointer(6), utils.Pointer(2022)). // TODO: RENAME
 											WithPositions(freelancePosition)
 	_ = NewCompany("TEI", 1, 2019, utils.Pointer(3), utils.Pointer(2020)). // TODO: ENSURE DATES ARE RIGHT

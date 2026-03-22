@@ -1,5 +1,7 @@
 package main
 
+import "strings"
+
 var caches = map[string]*CachePage{}
 
 type CachePage struct {
@@ -7,11 +9,25 @@ type CachePage struct {
 	*tracked
 }
 
-func (pg *CachePage) Link() string {
+func Link(linkable Linkable) string {
+	return linkFor(linkable.Title(), linkable.Dst())
+}
+
+func (pg *CachePage) Dst() string {
 	if pg == nil {
 		return "NO_LINK"
 	}
-	return linkFor(pg.Name, "cv", "cache", withoutSpaces(pg.Name))
+	return dstFor("cv", "cache", withoutSpaces(pg.Name))
+}
+
+func (pg *CachePage) Title() string {
+	if pg == nil {
+		return "NO_TITLE"
+	}
+	return pg.Name
+}
+func dstFor(elems ...string) string {
+	return strings.Join(elems, "/")
 }
 func (pg *CachePage) EntryType() string {
 	return "Cache"
@@ -23,5 +39,6 @@ func NewCache(name string) *CachePage {
 		tracked: newTracked(),
 	}
 	caches[name] = out
+	addLinkable(strings.ToLower(name), out)
 	return out
 }

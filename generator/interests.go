@@ -1,5 +1,7 @@
 package main
 
+import "strings"
+
 var interests = map[string]*Interest{}
 
 type Interest struct {
@@ -13,6 +15,7 @@ func NewInterest(name string) *Interest {
 		tracked: newTracked(),
 	}
 	interests[name] = out
+	addLinkable(strings.ToLower(name), out)
 	return out
 }
 
@@ -20,8 +23,15 @@ func (pg *Interest) EntryType() string {
 	return "Interest"
 }
 
-func (i *Interest) Link() string {
-	return linkForInterest(i.Name)
+func (pg *Interest) Dst() string {
+	return dstFor("cv", "interest", withoutSpaces(pg.Name))
+}
+
+func (pg *Interest) Title() string {
+	if pg == nil {
+		return noLinkText
+	}
+	return pg.Name
 }
 
 func linkForInterest(name string) string {

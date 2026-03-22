@@ -54,6 +54,9 @@ func (post BlogPost) Bytes() []byte {
 func (post BlogPost) Link() string {
 	return fmt.Sprintf(`[%s](blog/%s)`, post.Title, withoutSpaces(post.Title))
 }
+func (pg BlogPost) Dst() string {
+	return dstFor("blog", withoutSpaces(pg.Title))
+}
 
 const blogPostDir = "blogPosts/"
 

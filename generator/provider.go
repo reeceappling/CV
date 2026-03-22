@@ -37,20 +37,24 @@ func (pg *CloudProviderPage) Bytes() []byte {
 	b.WriteString(frontmatterFor(pg.Name, "Cloud Provider"))
 	b.WriteString("# Services\n")
 	for _, svc := range pg.Services {
-		b.WriteString(fmt.Sprintf("- %s\n", svc.Link()))
+		b.WriteString(fmt.Sprintf("- %s\n", Link(svc)))
 	}
-	b.WriteString("\n" + string(pg.tracked.Bytes("", "")))
+	b.WriteString("\n" + string(pg.tracked.Bytes("", nil, ""))) // TODO: ok?
 	return []byte(b.String())
 }
 
-func (pg *CloudProviderPage) Link() string {
-	if pg == nil {
-		return "NO_LINK"
-	}
-	return linkFor(pg.Name, "cv", "provider", withoutSpaces(pg.Name))
-}
 func (pg *CloudProviderPage) EntryType() string {
 	return "Cloud Provider"
+}
+func (pg *CloudProviderPage) Dst() string {
+	return dstFor("cv", "provider", withoutSpaces(pg.Name))
+}
+
+func (pg *CloudProviderPage) Title() string {
+	if pg == nil {
+		return noLinkText
+	}
+	return pg.Name
 }
 
 func NewCloudProvider(name string, services ...string) *CloudProviderPage {
@@ -60,9 +64,6 @@ func NewCloudProvider(name string, services ...string) *CloudProviderPage {
 	}
 	svcs := make(map[string]*CloudServicePage, len(services))
 	for _, svc := range services {
-		if svc == "Fargate" {
-			println("fargate found")
-		}
 		serv, existing := cloudServices[svc]
 		if !existing || serv == nil {
 			serv = NewService(svc, name)
@@ -79,6 +80,7 @@ func NewCloudProvider(name string, services ...string) *CloudProviderPage {
 	}
 	subjectMatters[smCloudComputing][prov.EntryType()].Add() // TODO: ok?
 	providers[name] = prov
+	addLinkable(name, prov)
 	return prov
 }
 

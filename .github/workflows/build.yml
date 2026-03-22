@@ -1,7 +1,6 @@
 name: Build and Deploy
 run-name:  ${{ github.ref_name }} - "${{ github.event.head_commit.message }}"
 on:
-  # TODO: other environments?
   pull_request:
     paths:
       - 'generator/**'
@@ -83,6 +82,7 @@ jobs:
         with:
           sparse-checkout: |
             quartzModified
+            scripts
       - name: Clone Quartz 4
         run: git clone https://github.com/jackyzha0/quartz.git
       - uses: actions/setup-node@v4
@@ -126,13 +126,45 @@ jobs:
           compression-level: 6
           overwrite: true
           include-hidden-files: false
-
+#  clean-bucket:
+#    needs: [build-quartz, generate-markdown]
+#    if: |
+#      contains(github.event.pull_request.labels.*.name, 'clean bucket')
+#      && always() && !cancelled()
+#      && (needs.generate-markdown.result == 'success')
+#      && needs.build-quartz.result == 'success'
+#    runs-on: ubuntu-latest
+#    permissions:
+#      id-token: write
+#      contents: read
+#      actions: write
+#    steps:
+#      #      - uses: actions/checkout@v4
+#      #        with:
+#      #          sparse-checkout: |
+#      #            terraform
+#      #            static
+#      #      - name: Setup Terraform
+#      #        uses: hashicorp/setup-terraform@v3
+#      #        with:
+#      #          terraform_version: "1.14.6"
+#      - name: Configure AWS Credentials
+#        uses: aws-actions/configure-aws-credentials@v6.0.0
+#        with:
+#          role-to-assume: ${{ secrets.AWS_RUNNER_ROLE }}
+#          aws-region: ${{ env.AWS_REGION }}
+#          role-session-name: reeceSubdomainBucketCleanup
+#        # TODO: ensure this does not mess up the terraform!
+#      - name: clean out s3 bucket # Do not do this often because it is more expensive
+#        run: aws s3 rm s3://${{ env.TF_VAR_subdomain }}.${{ env.TF_VAR_domain }} --recursive
   deploy:
     needs: [build-quartz, generate-markdown]
     if: |
-      always() && !cancelled()
+      (github.ref == 'refs/heads/main' || contains(github.event.pull_request.labels.*.name, 'force deploy'))
+      && always() && !cancelled()
       && (needs.generate-markdown.result == 'success')
       && needs.build-quartz.result == 'success'
+#      && (needs.clean-bucket.result == 'success' || needs.clean-bucket.result == 'skipped')
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -167,13 +199,15 @@ jobs:
               mv -f static/* terraform/public/static/
             fi
           fi
-      # TODO: ONLY REPLACE FILES THAT HAVE CHANGED!
+      - name: Change file timestamps
+        run: go run scripts/changeTimestamps/... -path=quartz/public -date=03-22-2026 # TODO: ensure works correctly
       - name: initialize terraform
         run: terraform init -backend-config='bucket=${{ vars.TERRAFORM_STATE_BUCKET }}' -backend-config='region=${{ env.AWS_REGION }}'
         working-directory: terraform
       - name: plan terraform
         run: terraform plan -var-file='deploy.tfvars' -var 'cloudflare_api_token=${{secrets.CLOUDFLARE_API_TOKEN}}' -var 'cloudflare_zone_id=${{secrets.CLOUDFLARE_ZONE_ID}}' -var 'aws_region=${{env.AWS_REGION}}' -out=plan.tf
         working-directory: terraform
+        # TODO: ensure changed fileNames actually delete the old files! (should but unsure with terraform resources on s3 objects specifically)
       - name: apply terraform
         run: terraform apply -auto-approve plan.tf
         working-directory: terraform

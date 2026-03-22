@@ -9,10 +9,18 @@ var subjectMatters = map[SubjectMatter]map[string]utils.Set[string]{} // Map of 
 
 type SubjectMatter string
 
-func (sm SubjectMatter) Link() string {
-	return linkFor(string(sm), "cv", "subjectMatter", withoutSpaces(string(sm)))
+func (sm SubjectMatter) Dst() string {
+	if string(sm) == "CI-CD" {
+		dstFor("cv", "subjectMatter", withoutSpaces(string(sm)))
+		return linkFor("CI-CD", "cv", "subjectMatter", withoutSpaces(string(sm))) // TODO; FIX SO IT SAYS CI/CD
+	}
+	return dstFor("cv", "subjectMatter", withoutSpaces(string(sm)))
 }
-func (pg *SubjectMatter) EntryType() string {
+
+func (sm SubjectMatter) Title() string {
+	return string(sm)
+}
+func (pg SubjectMatter) EntryType() string {
 	return "Subject Matter"
 }
 func (sm SubjectMatter) Bytes() []byte {
@@ -28,6 +36,7 @@ func NewSubjectMatter(sm string) SubjectMatter {
 	if _, exists := subjectMatters[out]; !exists {
 		subjectMatters[out] = map[string]utils.Set[string]{}
 	}
+	addLinkable(strings.ToLower(sm), out)
 	return out
 }
 
@@ -48,15 +57,15 @@ func withSubjectMatters(pg Linkable, setIn utils.Set[SubjectMatter], sms ...Subj
 		if current, exists := subjectMatters[sm]; exists {
 			newInternalMap := current
 			if currentSet, setExists := current[pg.EntryType()]; setExists {
-				currentSet.Add(pg.Link())
+				currentSet.Add(Link(pg))
 				newInternalMap[pg.EntryType()] = currentSet // TODO: use new set?
 			} else {
-				newInternalMap[pg.EntryType()] = utils.SetFrom(pg.Link())
+				newInternalMap[pg.EntryType()] = utils.SetFrom(Link(pg))
 			}
 			subjectMatters[sm] = newInternalMap
 		} else {
 			subjectMatters[sm] = map[string]utils.Set[string]{
-				pg.EntryType(): utils.SetFrom(pg.Link()),
+				pg.EntryType(): utils.SetFrom(Link(pg)),
 			}
 		}
 	}
@@ -71,7 +80,7 @@ var (
 	smDistributedComputing  = NewSubjectMatter("Distributed Computing")
 	smContainerization      = NewSubjectMatter("Containerization")
 	smIAC                   = NewSubjectMatter("Infrastructure As Code")
-	smDevOps                = NewSubjectMatter("DevOps")
+	smDevSecOps             = NewSubjectMatter("DevSecOps")
 	smCiCd                  = NewSubjectMatter("CI-CD")
 	smStatistics            = NewSubjectMatter("Statistics")
 	smTopology              = NewSubjectMatter("Topology")
@@ -92,10 +101,12 @@ var (
 	smMycology              = NewSubjectMatter("Mycology")
 	smFrontend              = NewSubjectMatter("Frontend")
 	smBackend               = NewSubjectMatter("Backend")
+	smApi                   = NewSubjectMatter("API") // TODO: USE THIS EVERYWHERE
 	smFullStack             = NewSubjectMatter("Full Stack")
 	smCloudComputing        = NewSubjectMatter("Cloud Computing")
 	smObservability         = NewSubjectMatter("Observability")
 	smServerless            = NewSubjectMatter("Serverless")
+	smDatabase              = NewSubjectMatter("Serverless")
 	smLogging               = NewSubjectMatter("Logging")
 	smFirstAid              = NewSubjectMatter("First Aid")
 	smScripting             = NewSubjectMatter("Scripting")
@@ -104,6 +115,9 @@ var (
 	smNetworking            = NewSubjectMatter("Networking") // TODO: maybe get rid of
 	smChemistry             = NewSubjectMatter("Chemistry")
 	smDocumentation         = NewSubjectMatter("Documentation")
+	smGeospatial            = NewSubjectMatter("Geospatial")
+	smCommunication         = NewSubjectMatter("Communication")
+	smCaching               = NewSubjectMatter("Caching")
 )
 
 func setupSubjectMatters() {
@@ -117,4 +131,6 @@ func setupSubjectMatters() {
 	setupServiceSubjectMatters()
 	setupTechSubjectMatters()
 	setupPlatformSubjectMatters()
+	linkables["cicd"] = smCiCd
+	linkables["ci/cd"] = smCiCd
 }

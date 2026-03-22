@@ -75,32 +75,32 @@ func bytesForAll(item showAll, showFrequencies bool) string {
 		}
 		for f := 5; f >= 0; f-- {
 			for _, name := range freqs[Frequency(f)] {
-				b.WriteString(fmt.Sprintf("%s | %s\n", langs[name].Link(), Frequency(f).String()))
+				b.WriteString(fmt.Sprintf("%s | %s\n", Link(langs[name]), Frequency(f).String()))
 			}
 		}
 	}
 	if len(tempC) > 0 {
 		b.WriteString("# Caches\n")
 		for name, _ := range tempC {
-			b.WriteString(fmt.Sprintf("%s\n", caches[name].Link()))
+			b.WriteString(fmt.Sprintf("%s\n", Link(caches[name])))
 		}
 	}
 	if len(tempD) > 0 {
 		b.WriteString("# Databases\n")
 		for name, _ := range tempD {
-			b.WriteString(fmt.Sprintf("%s\n", dbs[name].Link()))
+			b.WriteString(fmt.Sprintf("%s\n", Link(dbs[name])))
 		}
 	}
 	if len(tempP) > 0 {
 		b.WriteString("# Platforms\n")
 		for name, _ := range tempP {
-			b.WriteString(fmt.Sprintf("%s\n", platforms[name].Link()))
+			b.WriteString(fmt.Sprintf("%s\n", Link(platforms[name])))
 		}
 	}
 	if len(tempT) > 0 {
 		b.WriteString("# Technologies\n")
 		for name, _ := range tempT {
-			b.WriteString(fmt.Sprintf("%s\n", techs[name].Link()))
+			b.WriteString(fmt.Sprintf("%s\n", Link(techs[name])))
 		}
 	}
 	if len(tempS) > 0 {
@@ -108,9 +108,9 @@ func bytesForAll(item showAll, showFrequencies bool) string {
 		for name, svcs := range tempS {
 			tempSvcs := make([]string, len(svcs))
 			for i, svc := range slices.Collect(maps.Keys(svcs)) {
-				tempSvcs[i] = fmt.Sprintf("%s\n", cloudServices[svc].Link())
+				tempSvcs[i] = fmt.Sprintf("%s\n", Link(cloudServices[svc]))
 			}
-			b.WriteString(fmt.Sprintf("%s: %s\n", providers[name].Link(), strings.Join(tempSvcs, ", ")))
+			b.WriteString(fmt.Sprintf("%s: %s\n", Link(providers[name]), strings.Join(tempSvcs, ", ")))
 		}
 	}
 	if showFrequencies {
@@ -148,28 +148,28 @@ func newTracked() *tracked {
 		Tags:      utils.Set[string]{},
 	}
 }
-func (pg *tracked) Bytes(title string, typ string) []byte {
+func (pg *tracked) Bytes(title string, sm *SubjectMatter, tags ...string) []byte {
 	builder := strings.Builder{}
 	if title != "" {
-		builder.WriteString(frontmatterFor(title, typ))
+		builder.WriteString(frontmatterFor(title, tags...))
 	}
 
 	if pg.Companies != nil && len(pg.Companies) > 0 {
 		builder.WriteString("# Companies\n")
 		for _, com := range pg.Companies {
-			builder.WriteString(fmt.Sprintf("- %s\n", com.Link()))
+			builder.WriteString(fmt.Sprintf("- %s\n", Link(com)))
 		}
 	}
 	if pg.Positions != nil && len(pg.Positions) > 0 {
 		builder.WriteString("# Positions\n")
 		for _, pos := range pg.Positions {
-			builder.WriteString(fmt.Sprintf("- %s\n", pos.Link()))
+			builder.WriteString(fmt.Sprintf("- %s\n", Link(pos)))
 		}
 	}
 	if pg.Clients != nil && len(pg.Clients) > 0 {
 		builder.WriteString("# Clients\n")
 		for _, cli := range pg.Clients {
-			builder.WriteString(fmt.Sprintf("- %s\n", cli.Link()))
+			builder.WriteString(fmt.Sprintf("- %s\n", Link(cli)))
 		}
 	}
 	if pg.Projects != nil && len(pg.Projects) > 0 {
@@ -177,8 +177,12 @@ func (pg *tracked) Bytes(title string, typ string) []byte {
 		//builder.WriteString("Project | Usage Frequency | Project Type\n")
 		//builder.WriteString(":-- | :--: | :--\n")
 		for _, proj := range pg.Projects {
-			builder.WriteString(fmt.Sprintf("- %s\n", proj.Link()))
+			builder.WriteString(fmt.Sprintf("- %s\n", Link(proj)))
 		}
+	}
+	if sm != nil {
+		builder.WriteString("\n\nSubject Matter: (HIDE THIS STRING)" + sm.Dst() + "\n")
+		sm.Dst()
 	}
 	return []byte(builder.String())
 }
@@ -208,25 +212,25 @@ func (tr *tracked) String() string {
 	if tr.Projects != nil {
 		b.WriteString("# Projects\n")
 		for _, proj := range tr.Projects {
-			b.WriteString(fmt.Sprintf("- %s\n", proj.Link()))
+			b.WriteString(fmt.Sprintf("- %s\n", Link(proj)))
 		}
 	}
 	if tr.Positions != nil {
 		b.WriteString("# Positions\n")
 		for _, pos := range tr.Positions { // TODO: ENSURE THESE ARE IN ORDER
-			b.WriteString(fmt.Sprintf("- %s at %s\n", pos.Link(), pos.company.Link()))
+			b.WriteString(fmt.Sprintf("- %s at %s\n", Link(pos), Link(pos.company)))
 		}
 	}
 	if tr.Companies != nil {
 		b.WriteString("# Companies\n")
 		for _, item := range tr.Companies {
-			b.WriteString(fmt.Sprintf("- %s\n", item.Link()))
+			b.WriteString(fmt.Sprintf("- %s\n", Link(item)))
 		}
 	}
 	if tr.Clients != nil {
 		b.WriteString("# Clients\n")
 		for _, client := range tr.Clients {
-			b.WriteString(fmt.Sprintf("- %s\n", client.Link()))
+			b.WriteString(fmt.Sprintf("- %s\n", Link(client)))
 		}
 	}
 	return b.String()
@@ -305,7 +309,59 @@ func FrequencyFromString(s string) Frequency {
 	}
 }
 
+var (
+	_ Linkable = &CachePage{}
+	_ Linkable = &Client{}
+	_ Linkable = NoLinkable{}
+	_ Linkable = &CompanyPage{}
+	_ Linkable = &DbPage{}
+	_ Linkable = &SchoolPage{}
+	_ Linkable = &Interest{} // TODO: ptr ok?
+	_ Linkable = &LanguagePage{}
+	_ Linkable = &MiscSkill{}
+	_ Linkable = &PlatformPage{}
+	_ Linkable = &Position{}
+	_ Linkable = &Project{}
+	_ Linkable = &CloudProviderPage{}
+	_ Linkable = &CloudServicePage{}
+	_ Linkable = SubjectMatter("")
+	_ Linkable = &TechologyPage{}
+)
+
 type Linkable interface { // TODO: use???
 	EntryType() string
-	Link() string
+	// Link() string
+	Dst() string // TODO: impl
+	Title() string
+}
+
+var linkables = map[string]Linkable{} // TODO: USE THIS
+type NoLinkable struct{}
+
+func (n NoLinkable) Dst() string {
+	return "error.md" // TODO: ok?
+}
+
+func (n NoLinkable) Title() string {
+	return "FIX_ME"
+}
+
+func (n NoLinkable) EntryType() string {
+	panic("nilEntryType")
+}
+
+func (n NoLinkable) Link() string {
+	return fixmeLink
+}
+
+func addLinkable(name string, item Linkable) {
+	linkables[strings.ToLower(name)] = item
+}
+
+func lookup(name string) Linkable {
+	if item, ok := linkables[strings.ToLower(name)]; ok {
+		return item
+	}
+	panic("lookup failed for " + name) // TODO: del?
+	return NoLinkable{}
 }

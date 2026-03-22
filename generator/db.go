@@ -1,5 +1,7 @@
 package main
 
+import "strings"
+
 var dbs = map[string]*DbPage{}
 
 type DbPage struct {
@@ -7,11 +9,15 @@ type DbPage struct {
 	*tracked
 }
 
-func (pg *DbPage) Link() string {
+func (pg *DbPage) Dst() string {
+	return dstFor("cv", "db", withoutSpaces(pg.Name))
+}
+
+func (pg *DbPage) Title() string {
 	if pg == nil {
-		return "NO_LINK"
+		return noLinkText
 	}
-	return linkFor(pg.Name, "cv", "db", withoutSpaces(pg.Name))
+	return pg.Name
 }
 
 func (pg *DbPage) EntryType() string {
@@ -27,6 +33,7 @@ func NewDb(name string) *DbPage {
 	//	out.EquivalentLink = cloudServices[name].Link() // TODO: ?????????
 	//}
 	dbs[name] = out
+	addLinkable(strings.ToLower(name), out) // TODO: will services like DynamoDB overwrite this?
 	return out
 }
 
