@@ -23,8 +23,15 @@ func (pg *Interest) EntryType() string {
 	return "Interest"
 }
 
-func (i *Interest) Link() string {
-	return linkForInterest(i.Name)
+func (pg *Interest) Dst() string {
+	return dstFor("cv", "interest", withoutSpaces(pg.Name))
+}
+
+func (pg *Interest) Title() string {
+	if pg == nil {
+		return noLinkText
+	}
+	return pg.Name
 }
 
 func linkForInterest(name string) string {

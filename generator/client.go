@@ -1,6 +1,7 @@
 package main
 
 import (
+	"appli.ng/cv/generator/tags"
 	"appli.ng/cv/generator/utils"
 	"fmt"
 	"maps"
@@ -13,12 +14,25 @@ var clientsOrder = []string{}
 
 type Client struct {
 	Name        string
+	Description string   // TODO: ADD THIS?
 	Info        []string // Information points on a client. // TODO: ADD INFO TO ALL CLIENTS AND DISPLAY
 	Projects    []*Project
 	projectsSet utils.Set[string]
 	//Languages []string // Calculated later
 	// Parent
 	company *CompanyPage
+	Tags    tags.Field
+}
+
+func (pg *Client) Title() string {
+	if pg == nil {
+		return "NO_NAME"
+	}
+	return pg.Name
+}
+func (pg *Client) WithTags(tags ...tags.Tag) *Client {
+	pg.Tags = append(pg.Tags, tags...)
+	return pg
 }
 
 func (pg *Client) NameValue() string {
@@ -29,11 +43,13 @@ func (pg *Client) ProjectTypeInfo() projectTypeInfo {
 	return professionalProjectTypeInfo{client: pg}
 }
 
-func (pg *Client) Link() string {
+const noLinkText = "NO_LINK"
+
+func (pg *Client) Dst() string {
 	if pg == nil {
-		return "NO_LINK"
+		return noLinkText
 	}
-	return linkFor(pg.Name, "cv", "client", withoutSpaces(pg.Name))
+	return dstFor("cv", "client", withoutSpaces(pg.Name))
 }
 func (pg *Client) EntryType() string {
 	return "Client"
@@ -67,14 +83,13 @@ func (pg *Client) Bytes() []byte {
 	if pg.Projects != nil && len(pg.Projects) > 0 {
 		builder.WriteString("# Projects\n")
 		for _, proj := range pg.Projects {
-			builder.WriteString(fmt.Sprintf("- %s\n", proj.Link()))
+			builder.WriteString(fmt.Sprintf("- %s\n", Link(proj)))
 		}
 	}
 	ls := languagesFor(pg.Projects)
 	if len(ls) > 0 {
 		builder.WriteString("# Languages\n")
 		builder.WriteString("Language | Usage Frequency[[" + withoutSpaces(pg.Name) + "#^usageFrequencies\\|*]]\n")
-		// TODO: remove frequency???
 		builder.WriteString(":-- | :--\n")
 		freqs := make(map[Frequency][]string, 6)
 		for name, freq := range ls {
@@ -86,7 +101,7 @@ func (pg *Client) Bytes() []byte {
 		}
 		for f := 5; f >= 0; f-- {
 			for _, name := range freqs[Frequency(f)] {
-				builder.WriteString(fmt.Sprintf("%s | %s\n", langs[name].Link(), Frequency(f).String()))
+				builder.WriteString(fmt.Sprintf("%s | %s\n", Link(langs[name]), Frequency(f).String()))
 			}
 		}
 	}
@@ -125,7 +140,7 @@ func (c *Client) WithProjects(projs ...*Project) *Client {
 			techs[l].AddClient(c)
 		}
 		for l := range maps.Keys(proj.CloudProviders) {
-			providers[l].AddClient(c) // TODO: cloud services?
+			providers[l].AddClient(c)
 		}
 		for l := range maps.Keys(proj.Platforms) {
 			platforms[l].AddClient(c)
@@ -193,53 +208,61 @@ func initClientsAfterProjectsComplete() {
 		WithProjects(polygonBuilderProject, ogreProject, renderProject, statsProject, billingProject, explorerProject, wqdbProject, supportProject, scudsProject, ufoProject, goweProject, tileGenProject, GhaRunnersProject).WithInfo(
 		"Most senior consulting engineer on a high-performance, global-scale, team of 4-8 at John Deere’s Intelligent Solutions Group; responsible for architecture, implementation, testing, optimization, and support of a complex set of diverse cloud services utilizing geospatiotemporal agribusiness data",
 		"Architected, implemented, and maintained cloud infrastructure and services for ingest, distributed processing, storage, manipulation, and retrieval of data for, datastores totalling over 50PB",
-		"Created multiple "+lookup("ECS").Link()+" clusters for use in, and consuming data from, John Deere "+lookup("AI").Link()+" platforms",
-		"Designed "+lookup("CUDA").Link()+" "+lookup("C").Link()+"/[C++](cv/language/Cpp) Kernels used through "+lookup("CGo").Link()+" for statistics and image processing via GPU",
+		"Created multiple "+Link(lookup("ECS"))+" clusters for use in, and consuming data from, John Deere "+Link(lookup("AI"))+" platforms",
+		"Designed "+Link(lookup("CUDA"))+" "+Link(lookup("C"))+"/[C++](cv/language/Cpp) Kernels used through "+Link(lookup("CGo"))+" for statistics and image processing via GPU",
 		"Improved a mission-critical image manipulation API from 65% reliability to 99.9999% success rate",
-		"Spearheaded implementation of an "+lookup("ECS").Link()+" cluster using an advanced "+lookup("topology").Link()+" algorithm (from a PhD thesis), achieving >100x performance gains over its original implementation on TB-scale datasets",
-		"Built a "+lookup("Go").Link()+"-based compiler that transformed nested "+lookup("JSON").Link()+" instructions into machine-executable operations across clusters of "+lookup("EC2").Link()+" instances for for retrieving and manipulating geospatial agricultural data",
+		"Spearheaded implementation of an "+Link(lookup("ECS"))+" cluster using an advanced "+Link(lookup("topology"))+" algorithm (from a PhD thesis), achieving >100x performance gains over its original implementation on TB-scale datasets",
+		"Built a "+Link(lookup("Go"))+"-based compiler that transformed nested "+Link(lookup("JSON"))+" instructions into machine-executable operations across clusters of "+Link(lookup("EC2"))+" instances for for retrieving and manipulating geospatial agricultural data",
 		"__Saved \\$18M of a \\$28M budget (64%)__ in 2024, while still increasing service stability and throughput",
-		"Ensured maximum service uptime via careful design and rollout of "+lookup("CI-CD").Link()+" pipelines operated via self-hosted GitHub Actions runners, in conjunction with Infrastructure as Code via "+lookup("Terraform").Link(),
-		"Setup monitoring, dashboards, alerting, traces, and profiling ("+lookup("Datadog").Link()+"/"+lookup("Grafana").Link()+"/"+lookup("Cloudwatch").Link()+")",
+		"Ensured maximum service uptime via careful design and rollout of "+Link(lookup("CI-CD"))+" pipelines operated via self-hosted GitHub Actions runners, in conjunction with Infrastructure as Code via "+Link(lookup("Terraform")),
+		"Setup monitoring, dashboards, alerting, traces, and profiling ("+Link(lookup("Datadog"))+"/"+Link(lookup("Grafana"))+"/"+Link(lookup("Cloudwatch"))+")",
 		"Responsible for educating engineers on infrastructure, codebase, domain, and best practices",
-		"Utilized primarily "+lookup("Go").Link()+", "+lookup("Terraform").Link()+", "+lookup("Bash").Link()+", and "+lookup("Docker").Link()+" on "+lookup("AWS").Link()+", but also used "+lookup("Scala").Link()+", "+lookup("Github Actions").Link()+", "+lookup("C").Link()+"/[C++](cv/language/Cpp) with "+lookup("CUDA").Link()+", "+lookup("DroneCI").Link()+", "+lookup("Python").Link()+", "+lookup("Javascript").Link()+", "+lookup("Typescript").Link()+", "+lookup("Kotlin").Link()+", and more",
-		"Platforms utilized:  AWS (>30 separate services), "+lookup("Datadog").Link()+", "+lookup("LogCentral").Link()+", "+lookup("Rally").Link()+", "+lookup("Azure DevOps").Link()+", "+lookup("Github").Link()+", "+lookup("DroneCI").Link()+", "+lookup("Grafana").Link()+", "+lookup("Prometheus").Link()+", "+lookup("Confluence").Link()+", and more")
+		"Utilized primarily "+Link(lookup("Go"))+", "+Link(lookup("Terraform"))+", "+Link(lookup("Bash"))+", and "+Link(lookup("Docker"))+" on "+Link(lookup("AWS"))+", but also used "+Link(lookup("Scala"))+", "+Link(lookup("Github Actions"))+", "+Link(lookup("C"))+"/[C++](cv/language/Cpp) with "+Link(lookup("CUDA"))+", "+Link(lookup("DroneCI"))+", "+Link(lookup("Python"))+", "+Link(lookup("Javascript"))+", "+Link(lookup("Typescript"))+", "+Link(lookup("Kotlin"))+", and more",
+		"Platforms utilized:  AWS (>30 separate services), "+Link(lookup("Datadog"))+", "+Link(lookup("LogCentral"))+", "+Link(lookup("Rally"))+", "+Link(lookup("Azure DevOps"))+", "+Link(lookup("Github"))+", "+Link(lookup("DroneCI"))+", "+Link(lookup("Grafana"))+", "+Link(lookup("Prometheus"))+", "+Link(lookup("Confluence"))+", and more").
+		WithTags(tags.AgTech)
 	sourceAlliesClient = sourceAlliesClient.
 		WithProjects(jamfProject, smallImprovementsProject, internalResumeGeneratorProject). // TODO: USE OTHERS
 		WithInfo(
 			"Source Allies internal projects",
-			"Upgraded company internal payment gateway to a newer version of "+lookup("Java").Link()+" "+lookup("Spring").Link(),
-			"Secured all company machines via "+lookup("JAMF").Link()+" to ensure the protection of company and client data",
-			"Designed and created a "+lookup("Slack").Link()+" bot integration with "+lookup("Small Improvements").Link()+" to automate monthly announcements, and employee creation and completion of personal and professional goals",
-			"Redesigned "+lookup("Jira").Link()+" workflows streamlining the hiring process and onboarding systems for remote coworkers",
-		)
+			"Upgraded company internal payment gateway to a newer version of "+Link(lookup("Java"))+" "+Link(lookup("Spring")),
+			"Secured all company machines via "+Link(lookup("JAMF"))+" to ensure the protection of company and client data",
+			"Designed and created a "+Link(lookup("Slack"))+" bot integration with "+Link(lookup("Small Improvements"))+" to automate monthly announcements, and employee creation and completion of personal and professional goals",
+			"Redesigned "+Link(lookup("Jira"))+" workflows streamlining the hiring process and onboarding systems for remote coworkers",
+		).
+		WithTags(tags.Consulting)
 	simpsonUniversityClient = simpsonUniversityClient.
 		WithProjects(simpsonUnivProject).
-		WithInfo("Upgraded the University’s payment and donation gateway. Remediated resulting bugs")
-	// TODO: SIMPSON COLLEGE // TODO: USE!
+		WithInfo("Upgraded the University’s payment and donation gateway. Remediated resulting bugs").
+		WithTags(tags.Education)
 	critColaClient = critColaClient.
 		WithProjects(CritColaProject).
 		WithInfo(
-			// TODO; link to discord
-			"Consulted on hosting game servers and "+lookup("Discord").Link()+" bots for a large online community such that they could be deployed or destroyed, on short notice with persistent game data utilizing "+lookup("Gitlab CI").Link()+", "+lookup("Terraform").Link()+", "+lookup("Cloudflare").Link()+", and "+lookup("AWS").Link()+" ("+lookup("EC2").Link()+", "+lookup("EBS").Link()+", "+lookup("IAM").Link()+")",
+			"Consulted on hosting game servers and "+Link(lookup("Discord"))+" bots for a large online community such that they could be deployed or destroyed, on short notice with persistent game data utilizing "+Link(lookup("Gitlab CI"))+", "+Link(lookup("Terraform"))+", "+Link(lookup("Cloudflare"))+", and "+Link(lookup("AWS"))+" ("+Link(lookup("EC2"))+", "+Link(lookup("EBS"))+", "+Link(lookup("IAM"))+")",
 			"Created a final product with a spin-up time of approximately 3 minutes",
-		)
+		).WithTags(tags.Entertainment)
 	wellAwareClient = wellAwareClient.WithProjects(WellAwareProject).
-		WithInfo("Designed, created, and hosted a website for Well Aware NC, a University of North Carolina Chapel Hill affiliated nonprofit focused on the testing of well water contaminants within North Carolina")
+		WithInfo("Designed, created, and hosted a website for Well Aware NC, a University of North Carolina Chapel Hill affiliated nonprofit focused on the testing of well water contaminants within North Carolina").
+		WithTags(tags.PublicHealth, tags.Education)
 	clarkClient = clarkClient.WithProjects(MastersDataAnalysisProject).
-		WithInfo("Created programs for a student doing research for his Masters Degree in Public Health. Provided data on E.Coli samples from different waterways, the programs checked the statistical validity on different E.Coli indicating kits")
+		WithInfo("Created programs for a student doing research for his Masters Degree in Public Health. Provided data on E.Coli samples from different waterways, the programs checked the statistical validity on different E.Coli indicating kits").
+		WithTags(tags.PublicHealth, tags.Education)
 	charityClient = charityClient.WithProjects(CharityProject).
-		WithInfo("Designed, created, and hosted a website for an undisclosed local charity")
+		WithInfo("Designed, created, and hosted a website for an undisclosed local charity").
+		WithTags(tags.Charity)
 	teiClient = teiClient.WithProjects(teiProjects).
-		WithInfo("Internal company work for TEI") // TODO: WEBSITE?      // TODO: add projects (like NM, TX, IA, NC?)
+		WithInfo("Internal company work for TEI"). // TODO: WEBSITE?      // TODO: add projects (like NM, TX, IA, NC?)
+		WithTags(tags.Telecom)
 	taeClient = taeClient.WithProjects(taePhotoImporter).
-		WithInfo("Internal company work for Talley Associates of Engineering")
+		WithInfo("Internal company work for Talley Associates of Engineering").
+		WithTags(tags.Telecom)
 	mafcClient = mafcClient.WithProjects(mafcProjects).
-		WithInfo("Lifeguarding work, both at the indoor and outdoor pools of the fitness center") // TODO: Indoor and outdoor pool?
-	// TODO: links in text for everything below this
+		WithInfo("Lifeguarding work, both at the indoor and outdoor pools of the fitness center"). // TODO: Indoor and outdoor pool?
+		WithTags(tags.FirstAid)
 	arrowNailClient = arrowNailClient.WithProjects(ArrowNailProject).
-		WithInfo("Used "+lookup("Serverless").Link()+" services on "+lookup("AWS").Link()+" to support a "+lookup("React").Link()+" geospatial web app, Node API via "+lookup("lambda").Link()+" functions, and an "+lookup("Aurora").Link()+" database. Provided IT and Systems Administration Support",
-			"Set up "+lookup("CI-CD").Link()+" pipeline in "+lookup("Gitlab CI").Link()+" to make future deployments seamless")
+		WithInfo("Used "+Link(lookup("Serverless"))+" services on "+Link(lookup("AWS"))+" to support a "+Link(lookup("React"))+" geospatial web app, Node API via "+Link(lookup("lambda"))+" functions, and an "+Link(lookup("Aurora"))+" database. Provided IT and Systems Administration Support",
+			"Set up "+Link(lookup("CI-CD"))+" pipeline in "+Link(lookup("Gitlab CI"))+" to make future deployments seamless").
+		WithTags(tags.Construction)
 	wildlifeRClient = wildlifeRClient.WithProjects(WildlifeRProject).
-		WithInfo("Utilized spatiotemporal data for wildlife in a specified area over a specified date range in order to produce population density maps")
+		WithInfo("Utilized spatiotemporal data for wildlife in a specified area over a specified date range in order to produce population density maps").
+		WithTags(tags.Ecology)
 }

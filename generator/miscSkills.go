@@ -7,11 +7,15 @@ type MiscSkill struct {
 	*tracked
 }
 
-func (pg *MiscSkill) Link() string {
+func (pg *MiscSkill) Dst() string {
+	return dstFor("cv", "miscSkill", withoutSpaces(pg.Name))
+}
+
+func (pg *MiscSkill) Title() string {
 	if pg == nil {
-		return "NO_LINK"
+		return noLinkText
 	}
-	return linkFor(pg.Name, "cv", "miscSkill", withoutSpaces(pg.Name)) // TODO: plural??
+	return pg.Name
 }
 
 func (pg *MiscSkill) EntryType() string {

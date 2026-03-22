@@ -1,6 +1,7 @@
 package main
 
 import (
+	"appli.ng/cv/generator/tags"
 	"appli.ng/cv/generator/utils"
 	"fmt"
 	"strings"
@@ -9,30 +10,34 @@ import (
 var positionsMap = map[string]*Position{} // Map of companyName+positionName to position
 
 type Position struct {
-	Name  string
-	Start monthYr
-	End   *monthYr // None == current
-	//Clients  []*Client // clients may contain projects which are outside of this position
+	Name     string
+	Start    monthYr
+	End      *monthYr // None == current
 	Projects map[string]*Project
 	// Parent
 	company        *CompanyPage
-	miscSkills     utils.Set[string]        // TODO: MISC SKILLS??????
+	miscSkills     utils.Set[string]        // TODO: DISPLAY????
 	SubjectMatters utils.Set[SubjectMatter] // TODO: DISPLAY THIS??? // TODO: maybe dont have this on here
+	Tags           tags.Field
 }
 
 func (pg *Position) NameValue() string { // The name to be used on the link. NOT the URL
-	return pg.Name // TODO: or mapName?
+	return pg.Name
 }
 
 func (pg *Position) EntryType() string {
 	return "Position"
 }
 
-func (pg *Position) Link() string {
+func (pg *Position) Dst() string {
+	return dstFor("cv", "position", withoutSpaces(pg.Name))
+}
+
+func (pg *Position) Title() string {
 	if pg == nil {
-		return "NO_LINK"
+		return noLinkText
 	}
-	return linkFor(pg.Name, "cv", "position", withoutSpaces(pg.MapName()))
+	return pg.Name
 }
 func (pg *Position) WithMiscSkills(skills ...string) *Position {
 	if pg == nil {
@@ -87,16 +92,16 @@ func NewPosition(name string, startMo, startYr int, endMo, endYr *int) *Position
 
 func (pg *Position) Bytes() []byte {
 	builder := strings.Builder{}
-	builder.WriteString(frontmatterFor(pg.Name))
+	builder.WriteString(frontmatterFor(pg.Name, pg.Tags.AsStrings()...))
 	// TODO: Start/end
 	// Company and clients
-	builder.WriteString(fmt.Sprintf("Company: %s\n", pg.company.Link()))
+	builder.WriteString(fmt.Sprintf("Company: %s\n", Link(pg.company)))
 	if len(pg.Projects) > 0 {
 		builder.WriteString("# Clients and Projects\n")
 		builder.WriteString("Client | Project\n")
 		builder.WriteString(":-- | :--\n")
 		for _, pr := range pg.Projects {
-			builder.WriteString(fmt.Sprintf("%s | %s\n", pr.TypeInfo.getClient().Link(), pr.Link()))
+			builder.WriteString(fmt.Sprintf("%s | %s\n", Link(pr.TypeInfo.getClient()), Link(pr)))
 		}
 	} else {
 		builder.WriteString("NO CLIENTS FOUND. FIXME\n ")
@@ -105,14 +110,14 @@ func (pg *Position) Bytes() []byte {
 	if len(pg.miscSkills) > 0 {
 		builder.WriteString("# Misc Skills\n")
 		for skill, _ := range pg.miscSkills {
-			builder.WriteString(fmt.Sprintf("- %s\n", miscSkills[skill].Link()))
+			builder.WriteString(fmt.Sprintf("- %s\n", Link(miscSkills[skill])))
 		}
 	}
 	// SubjectMatters
 	if len(pg.SubjectMatters) > 0 {
 		builder.WriteString("# Related Subject Matters\n")
 		for sm, _ := range pg.SubjectMatters {
-			builder.WriteString(fmt.Sprintf("- %s\n", sm.Link()))
+			builder.WriteString(fmt.Sprintf("- %s\n", Link(sm)))
 		}
 	}
 
@@ -127,6 +132,11 @@ func (pg *Position) MapName() string {
 		panic("no company name!")
 	}
 	return pg.company.Name + " " + pg.Name
+}
+
+func (pg *Position) WithTags(tags ...tags.Tag) *Position {
+	pg.Tags = append(pg.Tags, tags...)
+	return pg
 }
 
 func (pg *Position) WithProjects(projs ...*Project) *Position {
@@ -225,30 +235,37 @@ var (
 func initPositionsAfterProjects() {
 	// TODO: ANY MISC SKILLS
 	positionLifeguard = NewPosition("Lifeguard", 1, 2013, utils.Pointer(6), utils.Pointer(2014)). // TODO: ensure dates are right
-		WithSubjectMatters(smFirstAid).
-		WithProjects() // TODO: THIS!
+													WithSubjectMatters(smFirstAid).
+													WithProjects(mafcProjects).
+													WithTags(tags.FirstAid)
 	positionSeniorLifeguard = NewPosition("Senior Lifeguard", 6, 2014, utils.Pointer(8), utils.Pointer(2016)). // TODO: ensure dates are right
-		WithSubjectMatters(smFirstAid).
-		WithProjects() // TODO: THIS!
+															WithSubjectMatters(smFirstAid).
+															WithProjects(mafcProjects).
+															WithTags(tags.FirstAid)
 	positionTAE = NewPosition("Civil Structural Engineer and Tower Climber", 5, 2017, utils.Pointer(3), utils.Pointer(2018)). // TODO: ensure dates are right
-		WithMiscSkills("Excel", "Climbing", "AutoDesk Inventor", "AutoCAD", "Autodesk Revit", "Drafting").
-		WithSubjectMatters(smCivilEngineering, smStructuralEngineering, smStatics).
-		WithProjects() // TODO: THIS!
+																	WithMiscSkills("Excel", "Climbing", "AutoDesk Inventor", "AutoCAD", "Autodesk Revit", "Drafting").
+																	WithSubjectMatters(smCivilEngineering, smStructuralEngineering, smStatics).
+																	WithProjects(taePhotoImporter).
+																	WithTags(tags.CivilEngineering, tags.StructuralEngineering, tags.Telecom)
 	positionTEI = NewPosition("Cell Tower Inspector and Tower Climber", 1, 2019, utils.Pointer(3), utils.Pointer(2020)). // TODO: ensure dates are right
-		WithMiscSkills("Climbing", "Drafting").
-		WithSubjectMatters(smCivilEngineering, smStructuralEngineering, smStatics).
-		WithProjects() // TODO: THIS!
+																WithMiscSkills("Climbing", "Drafting").
+																WithSubjectMatters(smCivilEngineering, smStructuralEngineering, smStatics).
+																WithProjects(teiProjects).
+																WithTags(tags.CivilEngineering, tags.StructuralEngineering, tags.Telecom)
 	freelancePosition = NewPosition("Software Engineer", 1, 2012, utils.Pointer(5), utils.Pointer(2022)).
 		WithSubjectMatters(smFullStack).
-		WithProjects(WellAwareProject, CharityProject, CritColaProject, MastersDataAnalysisProject, WildlifeRProject, ArrowNailProject)
+		WithProjects(WellAwareProject, CharityProject, CritColaProject, MastersDataAnalysisProject, WildlifeRProject, ArrowNailProject).
+		WithTags(tags.SWE)
 	sai1 = NewPosition("Software Engineer", 5, 2022, utils.Pointer(6), utils.Pointer(2023)).
 		WithSubjectMatters(smFullStack).
-		WithProjects(rasterRenderProject, explorerProject, supportProject, scudsProject, simpsonUnivProject, jamfProject, smallImprovementsProject, internalResumeGeneratorProject) // TODO: MOVE PROJECTS AROUND
+		WithProjects(explorerProject, supportProject, scudsProject, simpsonUnivProject, jamfProject, smallImprovementsProject, internalResumeGeneratorProject).
+		WithTags(tags.SWE) // TODO: can the same project be on multiple positions?
 	sai2 = NewPosition("Senior Software Engineer", 6, 2023, utils.Pointer(2), utils.Pointer(2025)).
 		WithSubjectMatters(smBackend).
-		WithProjects(tileGenProject, polygonBuilderProject, GhaRunnersProject, statsProject, ufoProject, renderProject)
+		WithProjects(tileGenProject, rasterRenderProject, polygonBuilderProject, GhaRunnersProject, statsProject, ufoProject, renderProject).
+		WithTags(tags.SWE)
 	sai3 = NewPosition("Senior Software Engineer and Tech Lead", 2, 2025, nil, nil).
 		WithSubjectMatters(smBackend).
-		WithProjects(ogreProject, billingProject, goweProject, wqdbProject)
-
+		WithProjects(ogreProject, billingProject, goweProject, wqdbProject).
+		WithTags(tags.SWE)
 }

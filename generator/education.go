@@ -52,11 +52,15 @@ func (pg *SchoolPage) ProjectTypeInfo() projectTypeInfo {
 	return schoolProjectTypeInfo{school: pg}
 }
 
-func (pg *SchoolPage) Link() string {
+func (pg *SchoolPage) Dst() string {
+	return dstFor("cv", "school", withoutSpaces(pg.Name))
+}
+
+func (pg *SchoolPage) Title() string {
 	if pg == nil {
-		return "NO_LINK"
+		return noLinkText
 	}
-	return linkFor(pg.Name, "cv", "school", withoutSpaces(pg.Name))
+	return pg.Name
 }
 
 func (pg *SchoolPage) EntryType() string {
@@ -78,7 +82,7 @@ func (sp *SchoolPage) Bytes() []byte {
 	// Write all projects
 	b.WriteString("# Projects\n")
 	for _, proj := range sp.Projects {
-		b.WriteString(fmt.Sprintf("- %s\n", proj.Link()))
+		b.WriteString(fmt.Sprintf("- %s\n", Link(proj)))
 	}
 	// Write all extracurriculars
 	b.WriteString("# Extracurriculars and positions held\n")
@@ -97,7 +101,7 @@ func (sp *SchoolPage) Bytes() []byte {
 	if len(sp.SubjectMatters) > 0 {
 		b.WriteString("# Related Subject Matters\n")
 		for sm, _ := range sp.SubjectMatters {
-			b.WriteString(fmt.Sprintf("- %s\n", sm.Link()))
+			b.WriteString(fmt.Sprintf("- %s\n", Link(sm)))
 		}
 	}
 
@@ -166,10 +170,10 @@ func NewEcPosition(title, notes string) EcPosition {
 
 var (
 	schoolCata = NewSchool("Central Academy of Technology and Arts").
-		WithSummary("Magnet High School, Engineering").
-		WithSubjectMatters(smEducation, smStatics, smElectronics).
-		WithDegree(DegHS).
-		WithExtracurriculars(
+			WithSummary("Magnet High School, Engineering").
+			WithSubjectMatters(smEducation, smStatics, smElectronics).
+			WithDegree(DegHS).
+			WithExtracurriculars(
 			NewExtracurricular("Soccer", fixmeLink,
 				NewEcPosition("Varsity", "Sophomore-Senior year"),
 				NewEcPosition("Junior Varsity", "Freshman year"),
@@ -191,11 +195,11 @@ var (
 			NewExtracurricular("Beta club", fixmeLink),
 		)
 	schoolNCSU = NewSchool("North Carolina State University").
-		WithSummary("Undergraduate studies").
-		WithDegree(DegNE).
-		WithDegree(DegMath).
-		WithSubjectMatters(smNuclearEngineering, smParticlePhysics, smFluidMechanics, smThermodynamics, smEducation, smStatics, smElectronics).
-		WithExtracurriculars(
+			WithSummary("Undergraduate studies").
+			WithDegree(DegNE).
+			WithDegree(DegMath).
+			WithSubjectMatters(smNuclearEngineering, smParticlePhysics, smFluidMechanics, smThermodynamics, smEducation, smStatics, smElectronics).
+			WithExtracurriculars(
 			NewExtracurricular("American Nuclear Society", fixmeLink),
 			NewExtracurricular("88.1 WKNC FM HD1 Raleigh", fixmeLink,
 				NewEcPosition("DJ", "Sophomore-Junior years"),

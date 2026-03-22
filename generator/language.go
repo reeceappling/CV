@@ -30,14 +30,18 @@ func (pg *LanguagePage) WithSubjectMatters(sms ...SubjectMatter) *LanguagePage {
 	return pg
 }
 
-func (pg *LanguagePage) Link() string {
+func (pg *LanguagePage) Dst() string {
+	return dstFor("cv", "language", withoutSpaces(pg.Name))
+}
+
+func (pg *LanguagePage) Title() string {
 	if pg == nil {
-		return "NO_LINK"
+		return noLinkText
 	}
 	if pg.Name == "Cpp" {
-		return linkFor("C++", "cv", "language", withoutSpaces(pg.Name)) // TODO; will this need escaping on the plusses?
+		return "C++" // TODO: escape plusses?
 	}
-	return linkFor(pg.Name, "cv", "language", withoutSpaces(pg.Name))
+	return pg.Name
 }
 
 func (pg *LanguagePage) Bytes() []byte {
@@ -47,13 +51,13 @@ func (pg *LanguagePage) Bytes() []byte {
 		builder.WriteString("# Companies\n")
 		for companyName := range pg.Companies {
 
-			builder.WriteString(fmt.Sprintf("- %s\n", companies[companyName].Link()))
+			builder.WriteString(fmt.Sprintf("- %s\n", Link(companies[companyName])))
 		}
 	}
 	if pg.Clients != nil && len(pg.Clients) > 0 {
 		builder.WriteString("# Clients\n")
 		for name := range pg.Clients {
-			builder.WriteString(fmt.Sprintf("- %s\n", clients[name].Link()))
+			builder.WriteString(fmt.Sprintf("- %s\n", Link(clients[name])))
 		}
 	}
 	if pg.Projects != nil && len(pg.Projects) > 0 {
@@ -83,7 +87,7 @@ func (pg *LanguagePage) Bytes() []byte {
 					panic("unknown project type: " + v)
 				}
 
-				builder.WriteString(fmt.Sprintf("%s | %s | %s\n", projects[name].Link(), Frequency(f).String(), projTypeStr))
+				builder.WriteString(fmt.Sprintf("%s | %s | %s\n", Link(projects[name]), Frequency(f).String(), projTypeStr))
 			}
 		}
 	}

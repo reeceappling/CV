@@ -13,11 +13,15 @@ type TechologyPage struct { // React, Github actions, etc
 	SubjectMatters utils.Set[SubjectMatter]
 }
 
-func (pg *TechologyPage) Link() string {
+func (pg *TechologyPage) Dst() string {
+	return dstFor("cv", "technology", withoutSpaces(pg.Name))
+}
+
+func (pg *TechologyPage) Title() string {
 	if pg == nil {
-		return "NO_LINK"
+		return noLinkText
 	}
-	return linkFor(pg.Name, "cv", "technology", withoutSpaces(pg.Name))
+	return pg.Name
 }
 
 func (pg *TechologyPage) EntryType() string {
@@ -97,15 +101,20 @@ func setupTechSubjectMatters() {
 	NewTechnology("SIMULATE3", smNuclearEngineering, smParticlePhysics)
 	NewTechnology("CASMO4e", smNuclearEngineering, smParticlePhysics)
 	NewTechnology("Pub-Sub", smBackend, smNetworking)
-	NewTechnology("Git", smFullStack, smDevOps)
+	NewTechnology("Git", smFullStack, smDevSecOps)
 	NewTechnology("Webhooks", smFullStack, smNetworking)
 	NewTechnology("JQuery", smFrontend)
 	NewTechnology("Arduino", smEmbeddedSystems, smElectronics, smRobotics)
 	NewTechnology("PWM", smEmbeddedSystems, smElectronics, smRobotics)
 	NewTechnology("G and M codes", smElectronics, smRobotics)
-	NewTechnology("OpenApi", smDocumentation).WithTags("API") // TODO: USE
-	NewTechnology("Swagger", smDocumentation).WithTags("API") // TODO: USE
+	NewTechnology("OpenApi", smDocumentation).WithTags("API")
+	NewTechnology("Swagger", smDocumentation).WithTags("API")
 	NewTechnology("Spring", smBackend)
+	//NewTechnology("Spark", smBackend) // TODO: apache arrow
+	//NewTechnology("Arrow", smBackend) // TODO: apache arrow
+	//NewTechnology("ORC", smBackend) // TODO: apache ORC
+	NewTechnology("Kafka", smBackend) // TODO: event driven?
+	//
 }
 
 // TODO: list all backlinks????

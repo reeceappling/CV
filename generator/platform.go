@@ -14,11 +14,15 @@ func (pg *PlatformPage) EntryType() string {
 	return "Platform"
 }
 
-func (pg *PlatformPage) Link() string {
+func (pg *PlatformPage) Dst() string {
+	return dstFor("cv", "platform", withoutSpaces(pg.Name))
+}
+
+func (pg *PlatformPage) Title() string {
 	if pg == nil {
-		return "NO_LINK"
+		return noLinkText
 	}
-	return linkFor(pg.Name, "cv", "platform", withoutSpaces(pg.Name))
+	return pg.Name
 }
 
 func (pg *PlatformPage) WithSubjectMatters(sms ...SubjectMatter) *PlatformPage {
@@ -61,16 +65,16 @@ func setupPlatformSubjectMatters() {
 		WithSubjectMatters(smBackend, smNetworking)
 	NewPlatform("Gitlab").
 		WithSubjectMatters(smCiCd)
-	NewPlatform("Azure DevOps"). // TODO: USE
-					WithSubjectMatters(smDevOps)
-	NewPlatform("Jira"). // TODO: USE
-				WithSubjectMatters(smDevOps)
-	NewPlatform("Confluence"). // TODO: USE
-					WithSubjectMatters(smDocumentation)
-	NewPlatform("Slack"). // TODO: USE
-				WithSubjectMatters(smCommunication)
-	NewPlatform("Small Improvements"). // TODO: USE
-						WithSubjectMatters(smObservability)
+	NewPlatform("Azure DevOps").
+		WithSubjectMatters(smDevSecOps)
+	NewPlatform("Jira").
+		WithSubjectMatters(smDevSecOps)
+	NewPlatform("Confluence").
+		WithSubjectMatters(smDocumentation)
+	NewPlatform("Slack").
+		WithSubjectMatters(smCommunication)
+	NewPlatform("Small Improvements").
+		WithSubjectMatters(smObservability)
 	NewPlatform("Teams").
 		WithSubjectMatters(smCommunication)
 	NewPlatform("Jamf").
