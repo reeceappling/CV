@@ -1,11 +1,12 @@
 package main
 
 import (
-	"appli.ng/cv/generator/utils"
 	"fmt"
 	"maps"
 	"slices"
 	"strings"
+
+	"appli.ng/cv/generator/utils"
 )
 
 var companies = map[string]*CompanyPage{}
@@ -215,7 +216,9 @@ func (pg *CompanyPage) GetAllLowest() (outCaches map[string]*CachePage, outDbs m
 }
 
 func initCompaniesAfterPositions() {
-	_ = NewCompany("Source Allies", 5, 2022, nil, nil).
+	_ = NewCompany("Dracoe", 11, 2026, nil, nil).
+		WithPositions(dracoe1)
+	_ = NewCompany("Source Allies", 5, 2022, utils.Pointer(11), utils.Pointer(2026)).
 		WithPositions(sai1, sai2, sai3)
 	_ = NewCompany("Freelance", 1, 2012, utils.Pointer(6), utils.Pointer(2022)). // TODO: RENAME
 											WithPositions(freelancePosition)

@@ -1,9 +1,10 @@
 package main
 
 import (
-	"appli.ng/cv/generator/utils"
 	"fmt"
 	"strings"
+
+	"appli.ng/cv/generator/utils"
 )
 
 var positionsMap = map[string]*Position{} // Map of companyName+positionName to position
@@ -218,7 +219,7 @@ func (pg *Position) GetAllLowest() (outCaches map[string]*CachePage, outDbs map[
 }
 
 var (
-	sai1, sai2, sai3, freelancePosition, positionTEI, positionTAE, positionSeniorLifeguard, positionLifeguard *Position
+	dracoe1, sai1, sai2, sai3, freelancePosition, positionTEI, positionTAE, positionSeniorLifeguard, positionLifeguard *Position
 )
 
 func initPositionsAfterProjects() {
@@ -242,8 +243,11 @@ func initPositionsAfterProjects() {
 	sai2 = NewPosition("Senior Software Engineer", 6, 2023, utils.Pointer(2), utils.Pointer(2025)).
 		WithSubjectMatters(smBackend).
 		WithProjects(polygonBuilderProject, GhaRunnersProject)
-	sai3 = NewPosition("Senior Software Engineer and Tech Lead", 2, 2025, nil, nil).
+	sai3 = NewPosition("Senior Software Engineer and Tech Lead", 2, 2025, utils.Pointer(11), utils.Pointer(2026)).
 		WithSubjectMatters(smBackend).
 		WithProjects(ogreProject, billingProject)
+	dracoe1 = NewPosition("Senior Software Engineer", 11, 2026, nil, nil).
+		WithSubjectMatters(smBackend, smCiCd, smCloudComputing, smContainerization, smDevOps, smDocumentation, smEmbeddedSystems, smRobotics, smAerospace, smDefense).
+		WithProjects(vanguardProject)
 
 }

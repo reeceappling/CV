@@ -1,11 +1,12 @@
 package main
 
 import (
-	"appli.ng/cv/generator/utils"
 	"fmt"
 	"maps"
 	"slices"
 	"strings"
+
+	"appli.ng/cv/generator/utils"
 )
 
 var clients = map[string]*Client{}
@@ -165,7 +166,8 @@ func (pg *Client) GetAllLowest() (outCaches map[string]*CachePage, outDbs map[st
 }
 
 var (
-	jdClient = NewClient("John Deere",
+	dracoeClient = NewClient("Dracoe", "Drone startup (design and manufacturing)")
+	jdClient     = NewClient("John Deere",
 		"Fortune 100 Agricultural Business (Think: Green Tractors)", // TODO: FIX ALL POINTS
 	)
 	sourceAlliesClient = NewClient("Source Allies",

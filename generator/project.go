@@ -1,11 +1,12 @@
 package main
 
 import (
-	"appli.ng/cv/generator/utils"
 	"fmt"
 	"maps"
 	"slices"
 	"strings"
+
+	"appli.ng/cv/generator/utils"
 )
 
 var projects = map[string]*Project{}
@@ -584,6 +585,7 @@ var (
 	cncLaserCutterProject      = NewSchoolProject("CNC Laser Cutter", fixmeLink, schoolCata, nil)
 	aerospaceFinalProject      = NewSchoolProject("Aerospace senior design course", "Designed, created, and tested a rocket from scratch", schoolCata, nil)
 	miscSmallPersonalProjects  = NewPersonalProject("Misc small personal projects", "A conglomeration of personal projects which did not each deserve their own entry", nil)
+	vanguardProject            = NewProfessionalProject("Vanguard", fixmeLink, dracoeClient, utils.Pointer("https://www.dracoe.tech/spear#VANGUARD"))
 )
 
 func initProjectsFinal() {
@@ -993,5 +995,15 @@ func initProjectsFinal() {
 	mafcProjects = mafcProjects.
 		WithSummary("Lifeguarding stuff, I guess.").
 		WithStatus(statusComplete).
+		WithLang("Terraform", Regularly, smIAC).
+		WithLang("Docker", Regularly, smContainerization).
+		WithLang("Go", Extensively, smAerospace, smBackend, smDefense).
+		WithLang("Bash", Some, smScripting).
+		WithLang("C", Some, smEmbeddedSystems).
+		WithLang("Cpp", Some, smEmbeddedSystems).
+		WithLang("SQL", Some, smBackend).
+		WithTechnologies("Kubernetes").
 		WithSubjectMatters(smFirstAid)
+	vanguardProject = vanguardProject.
+		WithSummary(fixmeLink).WithStatus(statusBuilding).WithSubjectMatters(smRobotics, smEmbeddedSystems, smDevOps, smDocumentation, smContainerization, smAerospace, smBackend, smCryptography, smCiCd, smElectronics, smTopology, smLinearAlgebra, smGraphics, smFluidMechanics)
 }

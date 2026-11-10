@@ -1,8 +1,9 @@
 package main
 
 import (
-	"appli.ng/cv/generator/utils"
 	"strings"
+
+	"appli.ng/cv/generator/utils"
 )
 
 var subjectMatters = map[SubjectMatter]map[string]utils.Set[string]{} // Map of SM to map of linkType to []link
@@ -104,6 +105,8 @@ var (
 	smNetworking            = NewSubjectMatter("Networking") // TODO: maybe get rid of
 	smChemistry             = NewSubjectMatter("Chemistry")
 	smDocumentation         = NewSubjectMatter("Documentation")
+	smAerospace             = NewSubjectMatter("Aerospace")
+	smDefense               = NewSubjectMatter("Defense")
 )
 
 func setupSubjectMatters() {
