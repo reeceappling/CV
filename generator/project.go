@@ -1036,7 +1036,7 @@ func initProjectsFinal() {
 		WithPlatforms("Airtable").
 		finalize()
 	vanguardGcsProject = vanguardGcsProject.
-		WithSummary(fixmeLink).
+		WithSummary("Building post-manufacturing quality control software for ensuring the Ground Control Station properly interacts with assets, GCS radios, the Vanguard application, and the Red Box (the big red button for emergency manual controls)").
 		WithStatus(statusBuilding).
 		WithSubjectMatters(smElectronics, smEmbeddedSystems, smDevOps, smDocumentation, smContainerization, smAerospace, smBackend, smCiCd, smLinearAlgebra, smGraphics).
 		WithLang("Ansible", Regularly, smBackend, smIAC, smDevOps, smAerospace, smCiCd).
@@ -1060,7 +1060,7 @@ func initProjectsFinal() {
 		finalize()
 	tailNumberGeneratorProject = tailNumberGeneratorProject.
 		WithSummary(fixmeLink).
-		WithStatus(statusMaintaining).
+		WithStatus(statusComplete).
 		WithSubjectMatters(smDevOps, smDocumentation, smAerospace, smCiCd, smScripting).
 		WithLang("Go", Extensively, smBackend, smCryptography).
 		WithTechnologies("Github Actions").
