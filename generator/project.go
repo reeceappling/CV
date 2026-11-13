@@ -586,6 +586,10 @@ var (
 	aerospaceFinalProject      = NewSchoolProject("Aerospace senior design course", "Designed, created, and tested a rocket from scratch", schoolCata, nil)
 	miscSmallPersonalProjects  = NewPersonalProject("Misc small personal projects", "A conglomeration of personal projects which did not each deserve their own entry", nil)
 	vanguardProject            = NewProfessionalProject("Vanguard", fixmeLink, dracoeClient, utils.Pointer("https://www.dracoe.tech/spear#VANGUARD"))
+	vanguardGcsProject         = NewProfessionalProject("Vanguard Ground Control Station", fixmeLink, dracoeClient, nil)
+	gcsTestingProject          = NewProfessionalProject("Ground Control Station Testing", fixmeLink, dracoeClient, nil)
+	sitlAssetSimulationProject = NewProfessionalProject("SITL asset simulation through Docker", fixmeLink, dracoeClient, nil)
+	tailNumberGeneratorProject = NewProfessionalProject("Aircraft Tail Number Generator", fixmeLink, dracoeClient, nil)
 )
 
 func initProjectsFinal() {
@@ -987,11 +991,13 @@ func initProjectsFinal() {
 	teiProjects = teiProjects.
 		WithSummary("A catch-all for all projects at my position at TEI.").
 		WithStatus(statusComplete).
-		WithSubjectMatters(smStructuralEngineering, smCivilEngineering)
+		WithSubjectMatters(smStructuralEngineering, smCivilEngineering).
+		finalize()
 	taeProjects = taeProjects.
 		WithSummary("A catch-all for all projects at my position at Talley Associates of Engineering.").
 		WithStatus(statusComplete).
-		WithSubjectMatters(smStructuralEngineering, smCivilEngineering)
+		WithSubjectMatters(smStructuralEngineering, smCivilEngineering).
+		finalize()
 	mafcProjects = mafcProjects.
 		WithSummary("Lifeguarding stuff, I guess.").
 		WithStatus(statusComplete).
@@ -1002,8 +1008,56 @@ func initProjectsFinal() {
 		WithLang("C", Some, smEmbeddedSystems).
 		WithLang("Cpp", Some, smEmbeddedSystems).
 		WithLang("SQL", Some, smBackend).
-		WithTechnologies("Kubernetes").
-		WithSubjectMatters(smFirstAid)
+		WithDbs("Postgres").
+		WithCaches("Redis").
+		WithCloudProvider("Azure", "ACR", "Blob Storage", "AKS", "Azure Functions", "Azure Container Apps", "Entra ID", "Azure Database", "Key Vault", "Azure Virtual Machines").
+		WithTechnologies("Kubernetes", "MAVLink", "arduPilot", "React").
+		WithSubjectMatters(smFirstAid).
+		finalize()
 	vanguardProject = vanguardProject.
-		WithSummary(fixmeLink).WithStatus(statusBuilding).WithSubjectMatters(smRobotics, smEmbeddedSystems, smDevOps, smDocumentation, smContainerization, smAerospace, smBackend, smCryptography, smCiCd, smElectronics, smTopology, smLinearAlgebra, smGraphics, smFluidMechanics)
+		WithSummary(fixmeLink).
+		WithStatus(statusBuilding).
+		WithSubjectMatters(smRobotics, smEmbeddedSystems, smDevOps, smDocumentation, smContainerization, smAerospace, smBackend, smCryptography, smCiCd, smElectronics, smTopology, smLinearAlgebra, smGraphics, smFluidMechanics).
+		finalize()
+	gcsTestingProject = gcsTestingProject.
+		WithSummary(fixmeLink).
+		WithStatus(statusBuilding).
+		WithSubjectMatters(smElectronics, smEmbeddedSystems, smDevOps, smDocumentation, smContainerization, smAerospace, smBackend, smCiCd, smLinearAlgebra, smGraphics).
+		WithLang("Go", Regularly, smBackend).
+		WithLang("Bash", Extensively, smBackend, smScripting, smEmbeddedSystems, smContainerization).
+		WithLang("Typescript", Often, smFrontend, smScripting).
+		WithLang("Docker", Often, smContainerization).
+		WithLang("CSS", Rarely, smFrontend).
+		WithLang("HTML", Rarely, smFrontend, smAerospace).
+		WithTechnologies("React", "Kubernetes", "gRPC", "MAVLink", "arduPilot", "SITL").
+		WithPlatforms("Airtable").
+		finalize()
+	vanguardGcsProject = vanguardGcsProject.
+		WithSummary(fixmeLink).
+		WithStatus(statusBuilding).
+		WithSubjectMatters(smElectronics, smEmbeddedSystems, smDevOps, smDocumentation, smContainerization, smAerospace, smBackend, smCiCd, smLinearAlgebra, smGraphics).
+		WithLang("Ansible", Regularly, smBackend, smIAC, smDevOps, smAerospace, smCiCd).
+		WithLang("Terraform", Extensively, smEmbeddedSystems, smDevOps, smElectronics, smAerospace, smCiCd, smIAC).
+		WithLang("Bash", Often, smScripting).
+		// TODO: any more?
+		finalize()
+	sitlAssetSimulationProject = sitlAssetSimulationProject.
+		WithSummary(fixmeLink).
+		WithStatus(statusMaintaining).
+		WithSubjectMatters(smElectronics, smEmbeddedSystems, smDevOps, smDocumentation, smContainerization, smAerospace, smBackend, smCiCd, smLinearAlgebra, smGraphics).
+		WithLang("Go", Regularly, smBackend).
+		WithLang("Bash", Extensively, smBackend, smScripting, smEmbeddedSystems, smContainerization).
+		WithLang("Typescript", Often, smFrontend, smScripting).
+		WithLang("Docker", Often, smContainerization).
+		WithLang("CSS", Rarely, smFrontend).
+		WithLang("HTML", Rarely, smFrontend).
+		WithPlatforms("Airtable").
+		WithTechnologies("React", "Kubernetes", "gRPC", "MAVLink", "arduPilot", "SITL").
+		finalize()
+	tailNumberGeneratorProject = tailNumberGeneratorProject.
+		WithSummary(fixmeLink).
+		WithStatus(statusMaintaining).
+		WithSubjectMatters(smDevOps, smDocumentation, smAerospace, smCiCd, smScripting).
+		WithLang("Go", Extensively, smBackend, smCryptography).
+		finalize()
 }
