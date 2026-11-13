@@ -166,34 +166,16 @@ func (pg *Client) GetAllLowest() (outCaches map[string]*CachePage, outDbs map[st
 }
 
 var (
-	dracoeClient = NewClient("Dracoe", "Drone startup (design and manufacturing)")
-	jdClient     = NewClient("John Deere",
-		"Fortune 100 Agricultural Business (Think: Green Tractors)", // TODO: FIX ALL POINTS
-	)
-	sourceAlliesClient = NewClient("Source Allies",
-		"Source Allies internal projects", // TODO: FIX ALL POINTS
-	)
-	critColaClient = NewClient("CritCola",
-		"ADD SUMMARY POINTS", // TODO: FIX ALL POINTS
-	)
-	wellAwareClient = NewClient("Well Aware NC",
-		"ADD SUMMARY POINTS", // TODO: FIX ALL POINTS
-	)
-	clarkClient = NewClient("Chapel Hill Masters Student in Public Health",
-		"ADD SUMMARY POINTS", // TODO: FIX ALL POINTS
-	)
-	charityClient = NewClient("Undisclosed Charity",
-		"ADD SUMMARY POINTS", // TODO: FIX ALL POINTS
-	)
-	teiClient = NewClient("TEI",
-		"ADD SUMMARY POINTS", // TODO: FIX ALL POINTS
-	)
-	taeClient = NewClient("Talley Associates of Engineering", // TODO: JS photo parser
-		"ADD SUMMARY POINTS", // TODO: FIX ALL POINTS
-	)
-	mafcClient = NewClient("Monroe Aquatics and Fitness Center",
-		"ADD SUMMARY POINTS", // TODO: FIX ALL POINTS
-	)
+	dracoeClient       = NewClient("Dracoe", "Designs and manufactures Unmanned Aerial Vehicles (UAVs) and related software to control groups of assets for defense and consumer purposes")
+	jdClient           = NewClient("John Deere", "Fortune 100 Agricultural Business (Think: Green Tractors)") // TODO: FIX ALL POINTS
+	sourceAlliesClient = NewClient("Source Allies", "Source Allies internal projects")                        // TODO: FIX ALL POINTS
+	critColaClient     = NewClient("CritCola", "ADD SUMMARY POINTS")                                          // TODO: FIX ALL POINTS
+	wellAwareClient    = NewClient("Well Aware NC", "ADD SUMMARY POINTS")                                     // TODO: FIX ALL POINTS
+	clarkClient        = NewClient("Chapel Hill Masters Student in Public Health", "ADD SUMMARY POINTS")      // TODO: FIX ALL POINTS
+	charityClient      = NewClient("Undisclosed Charity", "ADD SUMMARY POINTS")                               // TODO: FIX ALL POINTS
+	teiClient          = NewClient("TEI", "ADD SUMMARY POINTS")                                               // TODO: FIX ALL POINTS
+	taeClient          = NewClient("Talley Associates of Engineering", "ADD SUMMARY POINTS")                  // TODO: FIX ALL POINTS // TODO: JS photo parser
+	mafcClient         = NewClient("Monroe Aquatics and Fitness Center", "ADD SUMMARY POINTS")                // TODO: FIX ALL POINTS
 )
 
 func initClientsAfterProjectsComplete() {
