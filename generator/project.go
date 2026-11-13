@@ -1001,6 +1001,12 @@ func initProjectsFinal() {
 	mafcProjects = mafcProjects.
 		WithSummary("Lifeguarding stuff, I guess.").
 		WithStatus(statusComplete).
+		WithSubjectMatters(smFirstAid).
+		finalize()
+	vanguardProject = vanguardProject.
+		WithSummary(fixmeLink).
+		WithStatus(statusBuilding).
+		WithSubjectMatters(smRobotics, smEmbeddedSystems, smDevOps, smDocumentation, smContainerization, smAerospace, smBackend, smCryptography, smCiCd, smElectronics, smTopology, smLinearAlgebra, smGraphics, smFluidMechanics).
 		WithLang("Terraform", Regularly, smIAC).
 		WithLang("Docker", Regularly, smContainerization).
 		WithLang("Go", Extensively, smAerospace, smBackend, smDefense).
@@ -1008,28 +1014,25 @@ func initProjectsFinal() {
 		WithLang("C", Some, smEmbeddedSystems).
 		WithLang("Cpp", Some, smEmbeddedSystems).
 		WithLang("SQL", Some, smBackend).
+		WithLang("Ansible", Regularly, smCiCd).
 		WithDbs("Postgres").
 		WithCaches("Redis").
 		WithCloudProvider("Azure", "ACR", "Blob Storage", "AKS", "Azure Functions", "Azure Container Apps", "Entra ID", "Azure Database", "Key Vault", "Azure Virtual Machines").
-		WithTechnologies("Kubernetes", "MAVLink", "arduPilot", "React").
-		WithSubjectMatters(smFirstAid).
-		finalize()
-	vanguardProject = vanguardProject.
-		WithSummary(fixmeLink).
-		WithStatus(statusBuilding).
-		WithSubjectMatters(smRobotics, smEmbeddedSystems, smDevOps, smDocumentation, smContainerization, smAerospace, smBackend, smCryptography, smCiCd, smElectronics, smTopology, smLinearAlgebra, smGraphics, smFluidMechanics).
+		WithTechnologies("Kubernetes", "k3s", "kind", "gRPC", "MAVLink", "arduPilot", "SITL", "React", "Github Actions").
+		WithPlatforms("Airtable").
 		finalize()
 	gcsTestingProject = gcsTestingProject.
 		WithSummary(fixmeLink).
 		WithStatus(statusBuilding).
-		WithSubjectMatters(smElectronics, smEmbeddedSystems, smDevOps, smDocumentation, smContainerization, smAerospace, smBackend, smCiCd, smLinearAlgebra, smGraphics).
+		WithSubjectMatters(smElectronics, smEmbeddedSystems, smDevOps, smDocumentation, smContainerization, smAerospace, smBackend, smCiCd).
 		WithLang("Go", Regularly, smBackend).
 		WithLang("Bash", Extensively, smBackend, smScripting, smEmbeddedSystems, smContainerization).
 		WithLang("Typescript", Often, smFrontend, smScripting).
 		WithLang("Docker", Often, smContainerization).
 		WithLang("CSS", Rarely, smFrontend).
 		WithLang("HTML", Rarely, smFrontend, smAerospace).
-		WithTechnologies("React", "Kubernetes", "gRPC", "MAVLink", "arduPilot", "SITL").
+		WithLang("Ansible", Regularly, smCiCd).
+		WithTechnologies("React", "Kubernetes", "k3s", "kind", "gRPC", "MAVLink", "arduPilot", "SITL", "Github Actions").
 		WithPlatforms("Airtable").
 		finalize()
 	vanguardGcsProject = vanguardGcsProject.
@@ -1039,6 +1042,7 @@ func initProjectsFinal() {
 		WithLang("Ansible", Regularly, smBackend, smIAC, smDevOps, smAerospace, smCiCd).
 		WithLang("Terraform", Extensively, smEmbeddedSystems, smDevOps, smElectronics, smAerospace, smCiCd, smIAC).
 		WithLang("Bash", Often, smScripting).
+		WithTechnologies("Github Actions").
 		// TODO: any more?
 		finalize()
 	sitlAssetSimulationProject = sitlAssetSimulationProject.
@@ -1046,18 +1050,19 @@ func initProjectsFinal() {
 		WithStatus(statusMaintaining).
 		WithSubjectMatters(smElectronics, smEmbeddedSystems, smDevOps, smDocumentation, smContainerization, smAerospace, smBackend, smCiCd, smLinearAlgebra, smGraphics).
 		WithLang("Go", Regularly, smBackend).
-		WithLang("Bash", Extensively, smBackend, smScripting, smEmbeddedSystems, smContainerization).
+		WithLang("Bash", Extensively, smBackend, smScripting, smContainerization).
 		WithLang("Typescript", Often, smFrontend, smScripting).
 		WithLang("Docker", Often, smContainerization).
 		WithLang("CSS", Rarely, smFrontend).
 		WithLang("HTML", Rarely, smFrontend).
 		WithPlatforms("Airtable").
-		WithTechnologies("React", "Kubernetes", "gRPC", "MAVLink", "arduPilot", "SITL").
+		WithTechnologies("React", "Kubernetes", "gRPC", "MAVLink", "arduPilot", "SITL", "Github Actions").
 		finalize()
 	tailNumberGeneratorProject = tailNumberGeneratorProject.
 		WithSummary(fixmeLink).
 		WithStatus(statusMaintaining).
 		WithSubjectMatters(smDevOps, smDocumentation, smAerospace, smCiCd, smScripting).
 		WithLang("Go", Extensively, smBackend, smCryptography).
+		WithTechnologies("Github Actions").
 		finalize()
 }
